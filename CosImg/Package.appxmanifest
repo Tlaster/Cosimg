@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
+  <Identity Name="51945Tlaster.CosImg" Publisher="CN=F82B0EE7-EF8D-4515-BEAB-DD968D07D67F" Version="0.0.0.7" />
+  <mp:PhoneIdentity PhoneProductId="379e6b57-55a2-4c02-8857-b1a73cdda16c" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Properties>
+    <DisplayName>CosImg</DisplayName>
+    <PublisherDisplayName>Tlaster</PublisherDisplayName>
+    <Logo>Assets\120x120.png</Logo>
+  </Properties>
+  <Prerequisites>
+    <OSMinVersion>6.3.1</OSMinVersion>
+    <OSMaxVersionTested>6.3.1</OSMaxVersionTested>
+  </Prerequisites>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="CosImg.App">
+      <m3:VisualElements DisplayName="CosImg" Square150x150Logo="Assets\360x360.png" Square44x44Logo="Assets\106x106.png" Description="CosImg" ForegroundText="light" BackgroundColor="transparent">
+        <m3:DefaultTile Square71x71Logo="Assets\170x170.png">
+        </m3:DefaultTile>
+        <m3:InitialRotationPreference>
+          <m3:Rotation Preference="portrait" />
+        </m3:InitialRotationPreference>
+      </m3:VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClientServer" />
+    <Capability Name="picturesLibrary" />
+  </Capabilities>
+</Package>

@@ -1,0 +1,24 @@
+﻿<Page
+    x:Class="CosImg.CosImg.View.ImagePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CosImg.CosImg.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton HorizontalAlignment="Center" Label="保存" Icon="Save" Click="AppBarButton_Click"/>
+            <AppBarButton Icon="Shuffle" Label="分享" Click="AppBarButton_Click_1"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+
+    <Grid x:Name="imageGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <ProgressRing x:Name="proRing"/>
+        <ScrollViewer ZoomMode="Enabled" MinZoomFactor="1" MaxZoomFactor="50" HorizontalScrollBarVisibility="Visible">
+            <Image x:Name="BigImage"/>
+        </ScrollViewer>
+    </Grid>
+</Page>

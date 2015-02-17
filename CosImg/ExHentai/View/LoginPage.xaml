@@ -1,0 +1,39 @@
+﻿<Page
+    x:Class="CosImg.ExHentai.View.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CosImg.ExHentai.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <TextBlock Style="{StaticResource MessageDialogTitleStyle}">OK Welcome,Hentai</TextBlock>
+            <TextBox Name="userName" Header="User Name"/>
+            <PasswordBox  Name="password" Header="Password"/>
+
+            <!-- 内容主体 -->
+            <TextBlock Name="body" Style="{StaticResource MessageDialogContentStyle}" TextWrapping="Wrap">
+                But you MUST login before you use ExHentaiViewer
+                <LineBreak/>
+                Please login with your E-Hentai Forums account
+            </TextBlock>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Click="Button_Click" Margin="8,0" HorizontalAlignment="Stretch">Login</Button>
+            <Button Click="Button_Click_1" Margin="8,0" Grid.Column="1" HorizontalAlignment="Stretch">Cancel</Button>
+        </Grid>
+
+
+    </Grid>
+</Page>

@@ -1,0 +1,63 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:toolkit="clr-namespace:ExHentaiViewer.WPF.Toolkit"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" x:Class="ExHentaiViewer.WPF.MainWindow"
+        Title="MainWindow" Height="550" Width="900" 
+        Background="{DynamicResource BackgroundColor}" WindowStartupLocation="CenterScreen" 
+        BorderBrush="#7F000000" BorderThickness="2"
+        AllowsTransparency="True" WindowStyle="None" Foreground="#FF333334"
+        MouseDown="Window_MouseDown"
+        ResizeMode="NoResize"
+    >
+    <Window.Resources>
+
+        <DataTemplate x:Key="ListTemple">
+        	<Border Margin="2,4" BorderBrush="{StaticResource MenuBackgroundColor}" BorderThickness="1" CornerRadius="5" Background="#FF43464E">
+        		<Grid Margin="4">
+        			<Grid.RowDefinitions>
+        				<RowDefinition Height="Auto"/>
+        				<RowDefinition Height="*"/>
+        				<RowDefinition Height="Auto"/>
+        			</Grid.RowDefinitions>
+        			<TextBlock TextWrapping="NoWrap" Text="{Binding Title}" Foreground="White" FontSize="15" TextTrimming="CharacterEllipsis" />
+        			<Image MaxHeight="200" Source="{Binding ImageView}" Grid.Row="1" Stretch="Uniform"/>
+        			<TextBlock Text="{Binding FliesCount}" Grid.Row="2" Foreground="White" FontSize="10"/>
+        		</Grid>
+        	</Border>
+        </DataTemplate>
+
+    </Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<Grid>
+			<toolkit:SearchBox  Command="{Binding SearchClick}" SearchBoxFontSize="15" Width="180" HorizontalAlignment="Right" Margin="0,0,56,15"/>
+            <Border x:Name="border" Background="Red" Visibility="{Binding OnErrorBorderVisibility,Mode=OneWay}">
+				<TextBlock FontSize="25" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"><Run Text="LoadError!"/></TextBlock>
+			</Border>
+			<ProgressBar IsIndeterminate="{Binding isOnLoading, Mode=OneWay}" Visibility="{Binding ProgressBarVisibility, Mode=OneWay}" BorderBrush="Transparent" BorderThickness="4" Background="Transparent" Foreground="#FF007ACC" />
+			<StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,0,0,15" >
+				<Button x:Name="MiniButton" ContentTemplate="{DynamicResource MiniButtonContent}" Style="{DynamicResource CommonButtonStyle}" Click="MiniButton_Click"/>
+				<Button x:Name="ExitButton" ContentTemplate="{DynamicResource ExitButtonContent}" Style="{DynamicResource CommonButtonStyle}" Click="ExitButton_Click"/>
+			</StackPanel>
+			<TextBlock Margin="14,10" FontSize="15" Foreground="Gray" HorizontalAlignment="Left" ><Run Text="ExHentaiViewer"/></TextBlock>
+		</Grid>
+        <Border Background="{DynamicResource ListBackgroundColor}" Grid.Row="1" BorderBrush="{DynamicResource AppTheme}" BorderThickness="0,2,0,0">
+            <ListView ItemsSource="{Binding MainList}" ItemTemplate="{DynamicResource ListTemple}" Margin="4,4,0,0" BorderThickness="0" x:Name="MainListView" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Stretch" Style="{DynamicResource ListViewStyle1}" ItemContainerStyle="{DynamicResource ListViewItemStyle1}" >
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="5"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding ListItemClick}" CommandParameter="{Binding ElementName=MainListView,Path=SelectedItem}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListView>
+        </Border>
+    </Grid>
+</Window>
