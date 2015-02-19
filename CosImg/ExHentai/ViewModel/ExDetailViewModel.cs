@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using TBase;
 using TBase.RT;
+using Windows.UI.Popups;
 
 namespace CosImg.ExHentai.ViewModel
 {
@@ -76,7 +77,9 @@ namespace CosImg.ExHentai.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    App.rootFrame.Navigate(typeof(ReadingPage), this.Link);
+                    MessageDialog dialog = new MessageDialog("Now Buliding", "Sorry");
+                    dialog.ShowAsync();
+                    //App.rootFrame.Navigate(typeof(ReadingPage), this.Link);
                 });
             }
         }

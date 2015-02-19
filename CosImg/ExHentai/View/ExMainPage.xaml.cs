@@ -1,8 +1,11 @@
-﻿using System;
+﻿using CosImg.ExHentai.ViewModel;
+using ExHentaiLib.Common;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TBase.RT;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -17,7 +20,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace CosImg.ExHentai.View
 {
-    /// <summary>
+    /// <summary>   
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
     public sealed partial class ExMainPage : Page
@@ -27,7 +30,7 @@ namespace CosImg.ExHentai.View
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
             this.DataContext = new ExHentai.ViewModel.ExMainPageViewModel();
-        }
+        } 
 
         /// <summary>
         /// 在此页将要在 Frame 中显示时进行调用。
@@ -42,18 +45,21 @@ namespace CosImg.ExHentai.View
                 {
                     App.rootFrame.BackStack.RemoveAt(0);
                     App.rootFrame.BackStack.RemoveAt(0);
+                    App.rootFrame.BackStack.RemoveAt(0);
                 }
                 catch (Exception)
                 {
                 }
                 this.RequestedTheme = ElementTheme.Dark;
             }
+            UmengSDK.UmengAnalytics.TrackEvent("HentaiModeExChanged");
             UmengSDK.UmengAnalytics.TrackPageStart("ExHnetaiMainPage");
 
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            base.OnNavigatedFrom(e);
             UmengSDK.UmengAnalytics.TrackPageEnd("ExHnetaiMainPage");
         }
 

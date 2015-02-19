@@ -34,17 +34,6 @@ namespace CosImg.CosImg.Model
                     if (str == "I AM HENTAI")
 #endif
                     {
-#if DEBUG
-                        try
-                        {
-                            SettingHelpers.GetSetting<string>("cookie", true);
-                            App.rootFrame.Navigate(typeof(ExHentai.View.ExMainPage));
-                        }
-                        catch (SettingException)
-                        {
-                            App.rootFrame.Navigate(typeof(ExHentai.View.LoginPage));
-                        }
-#else
                         MessageDialog dialog = new MessageDialog("Sure?");
                         dialog.Commands.Add(new UICommand("Yes", (action) =>
                         {
@@ -60,7 +49,6 @@ namespace CosImg.CosImg.Model
                         }));
                         dialog.Commands.Add(new UICommand("No"));
                         await dialog.ShowAsync();
-#endif
                     }
 
                     Link = "http://worldcosplay.net/api/photo/search?q=" + str;

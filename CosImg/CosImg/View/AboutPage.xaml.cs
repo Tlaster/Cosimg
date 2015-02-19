@@ -26,26 +26,6 @@ namespace CosImg.CosImg.View
     /// </summary>
     public sealed partial class AboutPage : Page
     {
-        private int goint = 0;
-
-        public int Goint
-        {
-            get 
-            { 
-                return goint;
-            }
-            set 
-            { 
-                goint = value;
-                if (goint==4)
-                {
-                    MessageDialog dialog = new MessageDialog("什么！？你还想吃鸡肋！？");
-                    dialog.Commands.Add(new UICommand("不吃了",wowGoGoGO));
-                    dialog.Commands.Add(new UICommand("不吃了"));
-                    dialog.ShowAsync();
-                }
-            }
-        }
 
         private async void wowGoGoGO(IUICommand command)
         {
@@ -76,14 +56,6 @@ namespace CosImg.CosImg.View
 
         }
 
-        private void Rectangle_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            var rectangle = sender as Rectangle;
-            if (rectangle.Tag.ToString()==goint.ToString())
-            {
-                Goint++;
-            }
-        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

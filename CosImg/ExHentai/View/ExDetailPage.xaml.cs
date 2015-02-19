@@ -36,7 +36,10 @@ namespace CosImg.ExHentai.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.RequestedTheme = ElementTheme.Dark;
-            this.DataContext = new ExDetailViewModel((e.Parameter as ExHentaiLib.Prop.MainListProp).Link);
+            if (e.NavigationMode == NavigationMode.New)
+            {
+                this.DataContext = new ExDetailViewModel((e.Parameter as ExHentaiLib.Prop.MainListProp).Link);
+            }
         }
     }
 }

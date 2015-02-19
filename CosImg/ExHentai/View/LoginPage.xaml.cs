@@ -49,7 +49,6 @@ namespace CosImg.ExHentai.View
                 SettingHelpers.SetSetting<string>("cookie",loginCookie);
                 new ToastPrompt("Login Succeed").Show();
                 App.rootFrame.Navigate(typeof(ExMainPage));
-                App.rootFrame.BackStack.RemoveAt(0);
             }
             catch (LoginException)
             {

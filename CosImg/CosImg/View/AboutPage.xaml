@@ -17,10 +17,10 @@
             <TextBlock FontSize="30" Text="关于为什么写这个APP这件事"/>
         </Border>
         <Grid Grid.Row="1">
-            <Rectangle Fill="White" Tag="0" Tapped="Rectangle_Tapped" Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <!--<Rectangle Fill="White" Tag="0" Tapped="Rectangle_Tapped" Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <Rectangle Fill="White" Tag="1" Tapped="Rectangle_Tapped" Width="50" Height="50" HorizontalAlignment="Right" VerticalAlignment="Top"/>
             <Rectangle Fill="White" Tag="2" Tapped="Rectangle_Tapped" Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-            <Rectangle Fill="White" Tag="3" Tapped="Rectangle_Tapped" Width="50" Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+            <Rectangle Fill="White" Tag="3" Tapped="Rectangle_Tapped" Width="50" Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>-->
             <TextBlock Foreground="Black" Margin="50" FontSize="40" TextWrapping="Wrap">
                 这真是一个食之无味弃之可惜的APP啊
             </TextBlock>

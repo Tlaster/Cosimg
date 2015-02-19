@@ -13,6 +13,8 @@ namespace ExHentaiLib.Common
 {
     public static class ParseHelper
     {
+        const string unconfig = ";uconfig=tl_m-uh_y-rc_0-cats_0-xns_0-ts_l-tr_2-prn_y-dm_t-ar_0-rx_0-ry_0-ms_n-mt_n-cs_a-to_a-sa_y-oi_n-qb_n-tf_n-hp_-hk_-xl_";
+
         public static int GetMaxImageCount(string Str)
         {
             var mates = Regex.Matches(Str, "[0-9][0-9]{0,}");
@@ -70,7 +72,7 @@ namespace ExHentaiLib.Common
 
         public async static Task<DetailProp> GetDetailAsync(string uri, string cookie)
         {
-            string htmlstring = await HttpHelper.HttpReadStringWithCookie(uri, cookie + ";" + ExHentaiLib.Properties.Resources.uconfig);
+            string htmlstring = await HttpHelper.HttpReadStringWithCookie(uri, cookie + unconfig);
             return String2Detail(htmlstring);
         }
 
@@ -110,10 +112,9 @@ namespace ExHentaiLib.Common
                                           }).ToList<ImageListInfo>(),
                          };
         }
-
         public async static Task<ObservableCollection<MainListProp>> GetMainListAsync(string uri, string cookie)
         {
-            string htmlstring = await HttpHelper.HttpReadStringWithCookie(uri, cookie + ";" + ExHentaiLib.Properties.Resources.uconfig);
+            string htmlstring = await HttpHelper.HttpReadStringWithCookie(uri, cookie + unconfig);
             return MainString2List(htmlstring);
         }
         private static ObservableCollection<MainListProp> MainString2List(string htmlstring)

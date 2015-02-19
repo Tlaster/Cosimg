@@ -5,9 +5,8 @@
     xmlns:local="using:CosImg.ExHentai.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:Media="using:Microsoft.Xaml.Interactions.Media"
-
+    mc:Ignorable="d"    
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
@@ -38,18 +37,7 @@
         <Pivot SelectedIndex="{Binding PivotSelectedIndex, Mode=TwoWay}" x:Name="pivot" Margin="0,-40,0,0" Grid.Row="1">
             <PivotItem DataContext="{Binding MainItemModel}" Margin="0">
                 <Grid x:Name="grid" Margin="8">
-                    <GridView x:Name="gridView" ItemsSource="{Binding List}" IsItemClickEnabled="True">
-                        <GridView.Resources>
-                            <ItemsPanelTemplate x:Key="ItemsPanelTemplate1">
-                                <ItemsWrapGrid Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </ItemsPanelTemplate>
-                        </GridView.Resources>
-                        <GridView.ItemTemplate>
-                            <StaticResource ResourceKey="ListTemple"/>
-                        </GridView.ItemTemplate>
-                        <GridView.ItemsPanel>
-                            <StaticResource ResourceKey="ItemsPanelTemplate1"/>
-                        </GridView.ItemsPanel>
+                    <GridView ItemTemplate="{StaticResource ListTemple}" x:Name="gridView" ItemsSource="{Binding List}" IsItemClickEnabled="True">
                         <GridView.Footer>
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -88,18 +76,7 @@
                         <TextBox Margin="8" x:Name="searchTextBox"/>
                         <AppBarButton Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=searchTextBox,Path=Text}" Grid.Column="1" IsCompact="True" Icon="Find"/>
                     </Grid>
-                    <GridView Grid.Row="1" x:Name="searchGridView" ItemsSource="{Binding List}" IsItemClickEnabled="True">
-                        <GridView.Resources>
-                            <ItemsPanelTemplate x:Key="ItemsPanelTemplate1">
-                                <ItemsWrapGrid Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </ItemsPanelTemplate>
-                        </GridView.Resources>
-                        <GridView.ItemTemplate>
-                            <StaticResource ResourceKey="ListTemple"/>
-                        </GridView.ItemTemplate>
-                        <GridView.ItemsPanel>
-                            <StaticResource ResourceKey="ItemsPanelTemplate1"/>
-                        </GridView.ItemsPanel>
+                    <GridView ItemTemplate="{StaticResource ListTemple}" Grid.Row="1" x:Name="searchGridView" ItemsSource="{Binding List}" IsItemClickEnabled="True">
                         <GridView.Footer>
                             <Grid>
                                 <Grid.RowDefinitions>

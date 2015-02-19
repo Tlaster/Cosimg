@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using TBase.RT;
-using UmengSDK;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -37,13 +36,8 @@ namespace CosImg
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
-#if WINDOWS_PHONE_APP
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
-#endif
         }
-
-
-#if WINDOWS_PHONE_APP
         bool isExit = false;
         void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
         {
@@ -68,7 +62,8 @@ namespace CosImg
                 e.Handled = true;
             }
         }
-#endif
+
+
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。
         /// 当启动应用程序以打开特定的文件或显示搜索结果等操作时，
@@ -85,6 +80,7 @@ namespace CosImg
             UmengSDK.UmengAnalytics.IsDebug = true;
 #endif
 
+            //UmengSDK.UmengAnalytics.IsDebug = true;
             rootFrame = Window.Current.Content as Frame;
 
             // 不要在窗口已包含内容时重复应用程序初始化，
@@ -108,13 +104,8 @@ namespace CosImg
 
             if (rootFrame.Content == null)
             {
-                // 删除用于启动的旋转门导航。
 
                 rootFrame.ContentTransitions = null;
-
-                // 当导航堆栈尚未还原时，导航到第一页，
-                // 并通过将所需信息作为导航参数传入来配置
-                // 新页面
                 if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
@@ -123,14 +114,16 @@ namespace CosImg
 
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
-            await UmengAnalytics.StartTrackAsync("549eb88bfd98c51269000c35", "channel");
+            await UmengSDK.UmengAnalytics.StartTrackAsync("549eb88bfd98c51269000c35", "channel");
             
         }
+
+
 
         protected async override void OnActivated(IActivatedEventArgs args)
         {
             base.OnActivated(args);
-            await UmengAnalytics.StartTrackAsync("549eb88bfd98c51269000c35", "channel");
+            await UmengSDK.UmengAnalytics.StartTrackAsync("549eb88bfd98c51269000c35", "channel");
         }
 
         /// <summary>
@@ -145,7 +138,7 @@ namespace CosImg
             var deferral = e.SuspendingOperation.GetDeferral();
 
             // TODO: 保存应用程序状态并停止任何后台活动
-            await UmengAnalytics.EndTrackAsync();
+            await UmengSDK.UmengAnalytics.EndTrackAsync();
             deferral.Complete();
         }
     }

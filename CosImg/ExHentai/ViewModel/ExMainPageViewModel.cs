@@ -30,117 +30,11 @@ namespace CosImg.ExHentai.ViewModel
         public PivotItemModel MainItemModel { get; set; }
         public SearchModel SearchItemModel { get; set; }
 
-        //private ObservableCollection<MainListProp> _list;
-
-        //public ObservableCollection<MainListProp> List
-        //{
-        //    get { return _list; }
-        //    set { _list = value; OnPropertyChanged("List"); }
-        //}
-
-        //public string Link { get; set; }
-
         public ExMainPageViewModel()
         {
             MainItemModel = new PivotItemModel("http://exhentai.org/?");
             SearchItemModel = new SearchModel();
-            //Link = "http://exhentai.org/?";
-            //OnLoaded(Link);
         }
 
-
-        //public async void OnLoaded(string uri)
-        //{
-        //    try
-        //    {
-        //        isOnLoading = true;
-        //        List = await ParseHelper.GetMainListAsync(uri, SettingHelpers.GetSetting<string>("cookie"));
-        //        isOnLoading = false;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        isLoadFail = true;
-        //        isOnLoading = false;
-        //    }
-        //}
-
-        //public async void LoadMore(string uri)
-        //{
-        //    try
-        //    {
-        //        isOnLoading = true;
-        //        var morelist = await ParseHelper.GetMainListAsync(uri, SettingHelpers.GetSetting<string>("cookie"));
-        //        for (int i = 0; i < morelist.Count; i++)
-        //        {
-        //            List.Add(morelist[i]);
-        //        }
-        //        isOnLoading = false;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        isOnLoading = false;
-        //        new ToastPrompt("Load Failed").Show();
-        //    }
-        //}
-
-
-        //public System.Windows.Input.ICommand LoadMoreCommand
-        //{
-        //    get
-        //    {
-        //        return new DelegateCommand(() =>
-        //        {
-        //            if (List.Count % 25 != 0)
-        //            {
-        //                return;
-        //            }
-        //            else
-        //            {
-        //                var a = List.Count / 25;
-        //                LoadMore(Link + "&page=" + (a).ToString());
-        //            }
-        //        });
-        //    }
-        //}
-
-
-
-
-
-
-        //public System.Windows.Input.ICommand ReTryCommand
-        //{
-        //    get
-        //    {
-        //        return new DelegateCommand(() =>
-        //        {
-        //            isLoadFail = false;
-        //            OnLoaded(Link);
-        //        });
-        //    }
-        //}
-
-        //public ICommand Refresh
-        //{
-        //    get
-        //    {
-        //        return new DelegateCommand(() =>
-        //        {
-        //            List = new System.Collections.ObjectModel.ObservableCollection<MainListProp>();
-        //            OnLoaded(Link);
-        //        });
-        //    }
-        //}
-
-        //public System.Windows.Input.ICommand ItemClick
-        //{
-        //    get
-        //    {
-        //        return new DelegateCommand<ItemClickEventArgs>((e) =>
-        //        {
-        //            App.rootFrame.Navigate(typeof(ExDetailPage), e.ClickedItem);
-        //        });
-        //    }
-        //}
     }
 }

@@ -83,7 +83,7 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <GridView Grid.Row="1" ItemsSource="{Binding Detail.ImageList}">
+                    <GridView Grid.Row="1" ItemsSource="{Binding Detail.ImageList,Mode=OneWay}">
                         <GridView.HeaderTemplate>
                             <DataTemplate>
                                 <ProgressRing IsActive="{Binding isImageOnLoading}" Visibility="{Binding isImageOnLoading,Converter={StaticResource BoolToVisibilityConverter}}"/>

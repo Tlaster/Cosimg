@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using TBase.RT;
 using TBase;
-using UmengSocialSDK;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -22,6 +21,7 @@ using Windows.Storage.Streams;
 using System.Threading.Tasks;
 using System.Net;
 using Windows.Web.Http;
+using UmengSocialSDK;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 

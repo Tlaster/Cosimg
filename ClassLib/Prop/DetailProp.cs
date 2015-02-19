@@ -30,7 +30,11 @@ namespace ExHentaiLib.Prop
         public List<ImageListInfo> ImageList
         {
             get { return _imageList; }
-            set { _imageList = value; OnPropertyChanged("ImageList"); }
+            set 
+            {
+                _imageList = value; 
+                OnPropertyChanged("ImageList"); 
+            }
         }
 
 

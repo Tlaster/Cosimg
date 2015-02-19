@@ -1,8 +1,15 @@
-﻿using System;
+﻿using ExHentaiLib.Common;
+using ExHentaiLib.Prop;
+using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using TBase;
+using TBase.RT;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -32,7 +39,7 @@ namespace CosImg.ExHentai.View
         /// </summary>
         /// <param name="e">描述如何访问此页的事件数据。
         /// 此参数通常用于配置页。</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
         }
     }

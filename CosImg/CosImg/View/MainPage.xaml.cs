@@ -29,6 +29,7 @@ namespace CosImg
         {
             this.InitializeComponent();
             this.DataContext = new MainViewModel();
+            System.Diagnostics.Debug.WriteLine("succeed");
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
