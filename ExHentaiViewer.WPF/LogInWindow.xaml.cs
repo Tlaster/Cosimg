@@ -42,6 +42,11 @@ namespace ExHentaiViewer.WPF
                 OnLoging.Visibility = System.Windows.Visibility.Collapsed;
                 new MessageWindow("Error", "Login Error,Please check your account").ShowDialog();
             }
+            catch (LogAccessException)
+            {
+                OnLoging.Visibility = System.Windows.Visibility.Collapsed;
+                new MessageWindow("Error", "Login Error,Maybe your account have no access to exhentai").ShowDialog();
+            }
         }
         private async void Button_Click_1(object sender, RoutedEventArgs e)
         {

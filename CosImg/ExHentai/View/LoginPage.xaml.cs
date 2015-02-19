@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using TBase.RT;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -41,6 +42,7 @@ namespace CosImg.ExHentai.View
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             ToastPrompt toast = new ToastPrompt("Now login,please wait", true);
+            MessageDialog dialog;
             try
             {
                 toast.ShowWithProgressBar();
@@ -52,7 +54,14 @@ namespace CosImg.ExHentai.View
             }
             catch (LoginException)
             {
-                new ToastPrompt("Login Failed,Please check your account and try again").Show();
+                dialog = new MessageDialog("Please check your account and try again", "Login Failed");
+                dialog.ShowAsync();
+                toast.HideWithProgressBar();
+            }
+            catch (LogAccessException)
+            {
+                dialog = new MessageDialog("Maybe your account have no access to exhentai", "Login Failed");
+                dialog.ShowAsync();
                 toast.HideWithProgressBar();
             }
             catch (Exception)

@@ -32,6 +32,15 @@ namespace ExHentaiLib.Common
             {
                 throw new LoginException("Login Error");
             }
+            HttpWebRequest webRequest = HttpWebRequest.Create("http://exhentai.org/") as HttpWebRequest;
+            webRequest.Headers["Cookie"] = memberidStr.Value + ";" + passhashStr.Value;
+            using (HttpWebResponse webResponse = await webRequest.GetResponseAsync() as HttpWebResponse)
+            {
+                if (webResponse.ContentType=="image/gif")
+                {
+                    throw new LogAccessException("No Access");
+                }
+            }
             return memberidStr.Value + ";" + passhashStr.Value;
         }
     }

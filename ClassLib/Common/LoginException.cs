@@ -24,4 +24,10 @@ namespace ExHentaiLib.Common
 
         }
     }
+    public class LogAccessException : Exception
+    {
+        public LogAccessException() { }
+        public LogAccessException(string message) : base(message) { }
+        public LogAccessException(string message, Exception inner) : base(message, inner) { }
+    }
 }
