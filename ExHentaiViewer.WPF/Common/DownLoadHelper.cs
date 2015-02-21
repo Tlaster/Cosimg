@@ -98,9 +98,18 @@ namespace ExHentaiViewer.WPF.Common
             webClient.Headers["Accept-Encoding"] = "gzip, deflate";
             webClient.Headers["Accept-Language"] = "en-US,en;q=0.8,zh-Hans-CN;q=0.6,zh-Hans;q=0.4,ja;q=0.2";
             webClient.Headers["User-Agent"] = "Mozilla/5.0 (MSIE 9.0; Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko";
-            webClient.DownloadFileCompleted += webClient_DownloadFileCompleted;
+            webClient.DownloadFileCompleted += webClient_DownloadFileCompleted; 
             await Task.Delay(1000);
             await webClient.DownloadFileTaskAsync(new Uri(sourceUri), savePathName + System.IO.Path.GetExtension(sourceUri));
+            //To check the download file,but I can not sure it's the right solution
+            for (int i = 0; i < webClient.ResponseHeaders.AllKeys.Length; i++)
+            {
+                if (webClient.ResponseHeaders.Get(i) == "Content-Disposition")
+                {
+                    throw new Exception();
+                }
+            }
+
         }
 
         private void webClient_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)

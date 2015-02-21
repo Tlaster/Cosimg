@@ -1,4 +1,6 @@
-﻿using ExHentaiLib.Common;
+﻿using CosImg.ExHentai.Model;
+using CosImg.ExHentai.ViewModel;
+using ExHentaiLib.Common;
 using ExHentaiLib.Prop;
 using HtmlAgilityPack;
 using System;
@@ -32,6 +34,7 @@ namespace CosImg.ExHentai.View
         public ReadingPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         /// <summary>
@@ -39,8 +42,22 @@ namespace CosImg.ExHentai.View
         /// </summary>
         /// <param name="e">描述如何访问此页的事件数据。
         /// 此参数通常用于配置页。</param>
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            this.RequestedTheme = ElementTheme.Dark;
+            this.DataContext = new ReadingViewModel(e.Parameter as string);
+        }
+
+        private void Grid_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (this.BottomAppBar.Visibility == Windows.UI.Xaml.Visibility.Visible)
+            {
+                this.BottomAppBar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+            else
+            {
+                this.BottomAppBar.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
         }
     }
 }

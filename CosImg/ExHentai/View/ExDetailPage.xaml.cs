@@ -26,6 +26,7 @@ namespace CosImg.ExHentai.View
         public ExDetailPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         /// <summary>

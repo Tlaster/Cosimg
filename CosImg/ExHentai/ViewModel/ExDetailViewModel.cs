@@ -77,9 +77,7 @@ namespace CosImg.ExHentai.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    MessageDialog dialog = new MessageDialog("Now Buliding", "Sorry");
-                    dialog.ShowAsync();
-                    //App.rootFrame.Navigate(typeof(ReadingPage), this.Link);
+                    App.rootFrame.Navigate(typeof(ReadingPage), this.Link);
                 });
             }
         }
@@ -89,7 +87,8 @@ namespace CosImg.ExHentai.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-
+                    MessageDialog dialog = new MessageDialog("Now Buliding", "Sorry");
+                    dialog.ShowAsync();
                 });
             }
         }

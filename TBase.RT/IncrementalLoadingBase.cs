@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Data;
 
 namespace TBase.RT
 {
-    public abstract class IncrementalLoadingBase<T> : IList, IList<T>, ISupportIncrementalLoading, INotifyCollectionChanged
+    public abstract class IncrementalLoadingBase<T> : IList, ISupportIncrementalLoading, INotifyCollectionChanged
     {
         #region IList
 
@@ -207,53 +207,53 @@ namespace TBase.RT
 
         #endregion
 
-        #region IList<T>
-        public int IndexOf(T item)
-        {
-            return _storage.IndexOf(item);
-        }
+        //#region IList<T>
+        //public int IndexOf(T item)
+        //{
+        //    return _storage.IndexOf(item);
+        //}
 
-        public void Insert(int index, T item)
-        {
-            _storage.Insert(index, item);
-        }
+        //public void Insert(int index, T item)
+        //{
+        //    _storage.Insert(index, item);
+        //}
 
-        T IList<T>.this[int index]
-        {
-            get
-            {
-                return _storage[index];
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        //T IList<T>.this[int index]
+        //{
+        //    get
+        //    {
+        //        return _storage[index];
+        //    }
+        //    set
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
 
-        public void Add(T item)
-        {
-            _storage.Add(item);
-        }
+        //public void Add(T item)
+        //{
+        //    _storage.Add(item);
+        //}
 
-        public bool Contains(T item)
-        {
-            return _storage.Contains(item);
-        }
+        //public bool Contains(T item)
+        //{
+        //    return _storage.Contains(item);
+        //}
 
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            _storage.CopyTo(array, arrayIndex);
-        }
+        //public void CopyTo(T[] array, int arrayIndex)
+        //{
+        //    _storage.CopyTo(array, arrayIndex);
+        //}
 
-        public bool Remove(T item)
-        {
-            return _storage.Remove(item);
-        }
+        //public bool Remove(T item)
+        //{
+        //    return _storage.Remove(item);
+        //}
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            return _storage.GetEnumerator();
-        }
-        #endregion
+        //IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        //{
+        //    return _storage.GetEnumerator();
+        //}
+        //#endregion
     }
 }

@@ -172,19 +172,18 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\ClassLib\ExHentaiLib.csproj">
       <Project>{661d6320-3c74-42c9-b60f-7c34ba5dd934}</Project>
       <Name>ExHentaiLib</Name>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\Jades\Documents\Visual Studio 2013\Projects\TBase\TBase\TBase.csproj">
+    <ProjectReference Include="..\TBase\TBase.csproj">
       <Project>{9fd7a70e-4952-4082-9cfb-10f40b916308}</Project>
       <Name>TBase</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

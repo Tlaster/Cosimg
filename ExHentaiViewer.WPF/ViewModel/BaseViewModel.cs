@@ -35,7 +35,7 @@ namespace ExHentaiViewer.WPF.ViewModel
         public string RequestUrl { get; set; }
         public string GetCookie()
         {
-            return File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "cookie.cookie") + ";" + ExHentaiLib.Properties.Resources.uconfig;
+            return File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "cookie.cookie") + ParseHelper.unconfig;
         }
         #region ProgressBarProp
         public Visibility ProgressBarVisibility

@@ -86,6 +86,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\ImageHelper.cs" />
     <Compile Include="Common\SelectedIndexToVisibilityConverter.cs" />
     <Compile Include="CosImg\Common\BaseViewModel.cs" />
     <Compile Include="CosImg\Common\GeneratorIncrementalLoadingClass.cs" />
@@ -107,7 +108,9 @@
     <Compile Include="CosImg\View\SettingPage.xaml.cs">
       <DependentUpon>SettingPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ExHentai\Model\ImageModel.cs" />
     <Compile Include="ExHentai\Model\PivotItemModel.cs" />
+    <Compile Include="ExHentai\ViewModel\ReadingViewModel.cs" />
     <Compile Include="ExHentai\Model\SearchModel.cs" />
     <Compile Include="ExHentai\ViewModel\ExDetailViewModel.cs" />
     <Compile Include="ExHentai\ViewModel\ExMainPageViewModel.cs" />

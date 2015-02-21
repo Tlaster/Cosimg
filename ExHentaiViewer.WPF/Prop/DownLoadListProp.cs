@@ -118,7 +118,7 @@ namespace ExHentaiViewer.WPF.Prop
 
         private string GetCookie()
         {
-            return File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "cookie.cookie") + ";" + ExHentaiLib.Properties.Resources.uconfig;
+            return File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "cookie.cookie") + ParseHelper.unconfig;
         }
         private string PageUri { get; set; }
         private int _maxImageCount;

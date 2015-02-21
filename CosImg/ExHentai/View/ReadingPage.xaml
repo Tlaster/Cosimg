@@ -8,6 +8,32 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Refresh" Label="Refresh" Command="{Binding RefreshCommand}" CommandParameter="{Binding ElementName=flipView}"/>
+            <AppBarButton Icon="Save" Label="Save" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=flipView}"/>
+            <AppBarButton Icon="Shuffle" Label="Share" Command="{Binding ShareCommand}" CommandParameter="{Binding ElementName=flipView}"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+    
+    <Grid Tapped="Grid_Tapped">
+        <FlipView SelectedIndex="{Binding SelectIndex,Mode=TwoWay}" x:Name="flipView" ItemsSource="{Binding ImageList}">
+            <FlipView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <ScrollViewer HorizontalScrollBarVisibility="Visible" MinZoomFactor="1" ZoomMode="Enabled" MaxZoomFactor="50">
+                            <Image Width="{Binding Width}" Source="{Binding Image}"/>
+                        </ScrollViewer>
+                        <ProgressRing IsActive="{Binding isOnLoading}"/>
+                        <StackPanel Visibility="{Binding isLoadFail,Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock FontSize="25" HorizontalAlignment="Center">
+					<Run Text="Load Failed"/>
+                            </TextBlock>
+                            <Button Command="{Binding ReTryCommand}" Content="Click To Reload"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </FlipView.ItemTemplate>
+        </FlipView>
     </Grid>
 </Page>
