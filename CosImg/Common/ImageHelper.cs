@@ -48,26 +48,12 @@ namespace CosImg.Common
             }
         }
 
-        public static async Task SaveImage(BitmapImage bitmapImage)
+        public static async Task SaveImage(string filename,byte[] imagebyte)
         {
             try
             {
-                var urisource = bitmapImage.UriSource;
-                StorageFile destinationFile = await KnownFolders.SavedPictures.CreateFileAsync(Path.GetFileName(urisource.ToString()), CreationCollisionOption.GenerateUniqueName);
-                var sourceFile = RandomAccessStreamReference.CreateFromUri(urisource);
-                using (var sourceStream = await sourceFile.OpenReadAsync())
-                {
-                    using (var sourceInputStream = sourceStream.GetInputStreamAt(0))
-                    {
-                        using (var destinationStream = await destinationFile.OpenAsync(FileAccessMode.ReadWrite))
-                        {
-                            using (var destinationOutputStream = destinationStream.GetOutputStreamAt(0))
-                            {
-                                await RandomAccessStream.CopyAndCloseAsync(sourceInputStream, destinationStream);
-                            }
-                        }
-                    }
-                }
+                StorageFile destinationFile = await KnownFolders.SavedPictures.CreateFileAsync(filename, CreationCollisionOption.GenerateUniqueName);
+                await Windows.Storage.FileIO.WriteBytesAsync(destinationFile, imagebyte);
                 new ToastPrompt("保存成功").Show();
             }
             catch (Exception)
@@ -103,5 +89,21 @@ namespace CosImg.Common
             }
             return bit;
         }
+        public static async Task<byte[]> GetImageByteArrayFromUriAsync(string imgUri,string cookie)
+        {
+            byte[] bit = default(byte[]);
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("Cookie", cookie);
+                client.DefaultRequestHeaders.Accept.TryParseAdd("text/html, application/xhtml+xml, */*");
+                client.DefaultRequestHeaders.AcceptEncoding.TryParseAdd("gzip, deflate");
+                client.DefaultRequestHeaders.AcceptLanguage.TryParseAdd("en-US,en;q=0.8,zh-Hans-CN;q=0.6,zh-Hans;q=0.4,ja;q=0.2");
+                client.DefaultRequestHeaders.UserAgent.TryParseAdd("Mozilla/5.0 (MSIE 9.0; Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
+                bit = await client.GetByteArrayAsync(imgUri);
+            }
+            return bit;
+        }
+
+
     }
 }

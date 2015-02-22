@@ -52,8 +52,8 @@ namespace CosImg.ExHentai.Model
             try
             {
                 isOnLoading = true;
-                var imageuri = await ParseHelper.GetImageAync(uri, TBase.RT.SettingHelpers.GetSetting<string>("cookie"));
-                _imagebyte = await ImageHelper.GetImageByteArrayFromUriAsync(imageuri);
+                _imageuri = await ParseHelper.GetImageAync(uri, SettingHelpers.GetSetting<string>("cookie"));
+                _imagebyte = await ImageHelper.GetImageByteArrayFromUriAsync(_imageuri, SettingHelpers.GetSetting<string>("cookie"));
                 _image = await ImageHelper.ByteArrayToBitmapImage(_imagebyte);
                 isOnLoading = false;
                 OnPropertyChanged("Image");
@@ -74,7 +74,6 @@ namespace CosImg.ExHentai.Model
                 });
             }
         }
-        //public string Image { get; set; }
         public void Refresh()
         {
             _image = null;
@@ -88,7 +87,7 @@ namespace CosImg.ExHentai.Model
                 new ToastPrompt("Please wait while loading the image").Show();
                 return;
             }
-            await ImageHelper.SaveImage(_image);
+            await ImageHelper.SaveImage(Path.GetFileName(_imageuri),_imagebyte);
         }
         public async void Share()
         {
@@ -111,6 +110,7 @@ namespace CosImg.ExHentai.Model
             }
         }
         BitmapImage _image;
+        private string _imageuri;
 
         //public string _image;
     }

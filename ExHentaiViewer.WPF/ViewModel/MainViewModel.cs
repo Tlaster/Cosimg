@@ -5,6 +5,7 @@ using System.Windows.Input;
 using ExHentaiLib.Common;
 using ExHentaiLib.Prop;
 using TBase;
+using ExHentaiViewer.WPF.Common;
 
 namespace ExHentaiViewer.WPF.ViewModel
 {
@@ -13,7 +14,7 @@ namespace ExHentaiViewer.WPF.ViewModel
         public MainViewModel()
         {
             RequestUrl = "http://exhentai.org/?";
-            OnLoaded(RequestUrl, GetCookie());
+            OnLoaded(RequestUrl, CookieHelper.GetCookie());
         }
 
 
@@ -58,7 +59,7 @@ namespace ExHentaiViewer.WPF.ViewModel
                 return new DelegateCommand(() =>
                 {
                     var a = MainList.Count / 25;
-                    LoadMore(RequestUrl + "&page=" + (a).ToString(), GetCookie());
+                    LoadMore(RequestUrl + "&page=" + (a).ToString(), CookieHelper.GetCookie());
                 });
             }
         }
@@ -69,7 +70,7 @@ namespace ExHentaiViewer.WPF.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    OnLoaded(RequestUrl, GetCookie());
+                    OnLoaded(RequestUrl, CookieHelper.GetCookie());
                 });
             }
         }
@@ -81,7 +82,7 @@ namespace ExHentaiViewer.WPF.ViewModel
                 return new DelegateCommand((searchStr) =>
                 {
                     RequestUrl = "http://exhentai.org/?f_doujinshi=1&f_manga=1&f_artistcg=1&f_gamecg=1&f_western=1&f_non-h=1&f_imageset=1&f_cosplay=1&f_asianporn=1&f_misc=1&f_search=" + searchStr + "&f_apply=Apply+Filter";
-                    OnLoaded(RequestUrl, GetCookie());
+                    OnLoaded(RequestUrl, CookieHelper.GetCookie());
                 });
             }
         }

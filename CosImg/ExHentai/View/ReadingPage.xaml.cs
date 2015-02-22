@@ -34,7 +34,6 @@ namespace CosImg.ExHentai.View
         public ReadingPage()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace CosImg.ExHentai.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.RequestedTheme = ElementTheme.Dark;
-            this.DataContext = new ReadingViewModel(e.Parameter as string);
+            this.DataContext = e.Parameter as ReadingViewModel;
         }
 
         private void Grid_Tapped(object sender, TappedRoutedEventArgs e)

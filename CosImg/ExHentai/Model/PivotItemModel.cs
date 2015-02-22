@@ -1,5 +1,6 @@
 ﻿using CosImg.CosImg.Common;
 using CosImg.ExHentai.View;
+using CosImg.ExHentai.ViewModel;
 using ExHentaiLib.Common;
 using ExHentaiLib.Prop;
 using System;
@@ -124,7 +125,7 @@ namespace CosImg.ExHentai.Model
             {
                 return new DelegateCommand<ItemClickEventArgs>((e) =>
                 {
-                    App.rootFrame.Navigate(typeof(ExDetailPage), e.ClickedItem);
+                    App.rootFrame.Navigate(typeof(ExDetailPage), new ExDetailViewModel((e.ClickedItem as MainListProp).Link));
                 });
             }
         }

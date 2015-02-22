@@ -26,7 +26,6 @@ namespace CosImg.ExHentai.View
         public ExDetailPage()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         /// <summary>
@@ -37,10 +36,7 @@ namespace CosImg.ExHentai.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.RequestedTheme = ElementTheme.Dark;
-            if (e.NavigationMode == NavigationMode.New)
-            {
-                this.DataContext = new ExDetailViewModel((e.Parameter as ExHentaiLib.Prop.MainListProp).Link);
-            }
+            this.DataContext = e.Parameter as ExDetailViewModel;
         }
     }
 }

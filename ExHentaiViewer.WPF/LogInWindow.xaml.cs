@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ExHentaiLib.Common;
 using ExHentaiViewer.WPF.Toolkit;
+using ExHentaiViewer.WPF.Common;
 
 namespace ExHentaiViewer.WPF
 {
@@ -32,7 +33,7 @@ namespace ExHentaiViewer.WPF
             {
                 OnLoging.Visibility = System.Windows.Visibility.Visible;
                 var cookie = await LogInHelper.GetLoginCookie(UserNameIn.Text, PasswordIn.Password);
-                SsveCookie(cookie);
+                CookieHelper.SsveCookie(cookie);
                 new MainWindow().Show();
                 OnLoging.Visibility = System.Windows.Visibility.Collapsed;
                 this.Close();
@@ -51,10 +52,6 @@ namespace ExHentaiViewer.WPF
         private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
             await TryLog();
-        }
-        private void SsveCookie(string cookie)
-        {
-            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "cookie.cookie", cookie);
         }
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {

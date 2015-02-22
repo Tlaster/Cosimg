@@ -15,7 +15,7 @@ namespace ExHentaiLib.Common
     {
         public const string unconfig = ";uconfig=tl_m-uh_y-rc_0-cats_0-xns_0-ts_l-tr_2-prn_y-dm_t-ar_0-rx_0-ry_0-ms_n-mt_n-cs_a-to_a-sa_y-oi_n-qb_n-tf_n-hp_-hk_-xl_";
 
-        public static int GetMaxImageCount(string Str)
+        private static int GetMaxImageCount(string Str)
         {
             var mates = Regex.Matches(Str, "[0-9][0-9]{0,}");
             int returnint;
@@ -100,7 +100,8 @@ namespace ExHentaiLib.Common
                                                                       select new StringBuilder((b.InnerText)).ToString()).ToArray<string>(),
                                                          }).ToList<TagInfo>(),
                                           },
-                             ImageCountString = htmldoc.DocumentNode.GetNodebyClassName("ip").InnerText,
+                             //ImageCountString = htmldoc.DocumentNode.GetNodebyClassName("ip").InnerText,
+                             MaxImageCount = GetMaxImageCount(htmldoc.DocumentNode.GetNodebyClassName("ip").InnerText),
                              DetailPageCount = htmldoc.DocumentNode.GetNodebyClassName("ptt").FirstChild.ChildNodes.Count - 2,
                              ImageList = (from a in htmldoc.GetElementbyId("gdt").ChildNodes
                                           where a.HasChildNodes

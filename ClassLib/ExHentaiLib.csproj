@@ -42,12 +42,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Interface\IDownLoadProp2T.cs" />
     <Compile Include="Common\LoginException.cs" />
     <Compile Include="Common\LogInHelper.cs" />
     <Compile Include="Common\ParseHelper.cs" />
-    <Compile Include="Common\ReadingModel.cs" />
-    <Compile Include="Interface\IGetCookie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Prop\DetailProp.cs" />
     <Compile Include="Prop\HeaderInfo.cs" />

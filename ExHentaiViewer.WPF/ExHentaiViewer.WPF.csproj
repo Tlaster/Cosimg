@@ -67,6 +67,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\CookieHelper.cs" />
     <Compile Include="Common\DownLoadHelper.cs">
       <SubType>Component</SubType>
     </Compile>

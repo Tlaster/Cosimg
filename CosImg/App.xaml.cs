@@ -59,7 +59,6 @@ namespace CosImg
             else
             {
                 rootFrame.GoBack();
-                rootFrame.ForwardStack.Clear();
                 e.Handled = true;
             }
         }

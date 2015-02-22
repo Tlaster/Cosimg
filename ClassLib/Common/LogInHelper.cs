@@ -15,7 +15,7 @@ namespace ExHentaiLib.Common
         {
             string postStr = "UserName=" + userName + "&PassWord=" + passWord + "&x=0&y=0";
             byte[] data = Encoding.UTF8.GetBytes(postStr);
-            HttpWebRequest loginRequest = HttpWebRequest.Create("http://forums.e-hentai.org/index.php?act=Login&CODE=01&CookieDate=1 ") as HttpWebRequest;
+            HttpWebRequest loginRequest = HttpWebRequest.CreateHttp("http://forums.e-hentai.org/index.php?act=Login&CODE=01&CookieDate=1 ");
             loginRequest.Method = "POST";
             loginRequest.ContentType = "application/x-www-form-urlencoded";
             using (Stream stream = await loginRequest.GetRequestStreamAsync())
@@ -32,7 +32,7 @@ namespace ExHentaiLib.Common
             {
                 throw new LoginException("Login Error");
             }
-            HttpWebRequest webRequest = HttpWebRequest.Create("http://exhentai.org/") as HttpWebRequest;
+            HttpWebRequest webRequest = HttpWebRequest.CreateHttp("http://exhentai.org/");
             webRequest.Headers["Cookie"] = memberidStr.Value + ";" + passhashStr.Value;
             using (HttpWebResponse webResponse = await webRequest.GetResponseAsync() as HttpWebResponse)
             {

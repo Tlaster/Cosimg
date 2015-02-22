@@ -48,7 +48,7 @@ namespace ExHentaiViewer.WPF.Prop
             CurrentState = "Getting Image Count";
             ItemInfo = await ParseHelper.GetDetailAsync(uri, cookie);
             ImagePageUri = await ParseHelper.GetImagePageListAsync(uri, cookie);
-            MaxImageCount = ParseHelper.GetMaxImageCount(ItemInfo.ImageCountString);
+            MaxImageCount = ItemInfo.MaxImageCount;
         }
         private async void StartDownLoading()
         {

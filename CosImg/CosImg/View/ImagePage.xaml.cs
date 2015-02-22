@@ -36,6 +36,7 @@ namespace CosImg.CosImg.View
     {
         private ListModel Item;
         private byte[] ImageByte;
+        private string link;
         public ImagePage()
         {
             this.InitializeComponent();
@@ -65,8 +66,8 @@ namespace CosImg.CosImg.View
             {
                 node = doc.DocumentNode.GetNodebyClassName("img");
             }
-            var a = node.Attributes["src"].Value;
-            BitmapImage img = new BitmapImage(new Uri(node.Attributes["src"].Value));
+            this.link = node.Attributes["src"].Value;
+            BitmapImage img = new BitmapImage(new Uri(link));
             ImageByte = await ImageHelper.GetImageByteArrayFromUriAsync(node.Attributes["src"].Value);
             this.BigImage.Source = await ImageHelper.ByteArrayToBitmapImage(ImageByte);
             proRing.IsActive = false;
@@ -85,8 +86,13 @@ namespace CosImg.CosImg.View
 
         private async void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
-            BitmapImage bi = this.BigImage.Source as BitmapImage;
-            await ImageHelper.SaveImage(bi);
+            if (ImageByte == null)
+            {
+                new ToastPrompt("Please Wait While The Image Is Loading").Show();
+                return;
+            }
+            var name = Path.GetFileName(link);
+            await ImageHelper.SaveImage(name,ImageByte);
         }
 
     }

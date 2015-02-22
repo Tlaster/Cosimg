@@ -4,6 +4,7 @@ using System.Windows.Input;
 using ExHentaiLib.Common;
 using ExHentaiLib.Prop;
 using TBase;
+using ExHentaiViewer.WPF.Common;
 
 namespace ExHentaiViewer.WPF.ViewModel
 {
@@ -12,7 +13,7 @@ namespace ExHentaiViewer.WPF.ViewModel
         public DetailViewModel(string uri)
         {
             RequestUrl = uri;
-            OnLoaded(RequestUrl, GetCookie());
+            OnLoaded(RequestUrl, CookieHelper.GetCookie());
         }
 
         private async void OnLoaded(string uri, string cookie)
@@ -88,7 +89,7 @@ namespace ExHentaiViewer.WPF.ViewModel
                 return new DelegateCommand(() =>
                 {
                     var a = SelectPage + 1;
-                    LoadMoreImage(RequestUrl + "?p=" + a.ToString(), GetCookie());
+                    LoadMoreImage(RequestUrl + "?p=" + a.ToString(), CookieHelper.GetCookie());
                 });
             }
         }

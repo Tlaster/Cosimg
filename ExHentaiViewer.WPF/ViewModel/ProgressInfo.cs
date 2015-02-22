@@ -1,25 +1,44 @@
 ﻿using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
+using TBase;
 
 namespace ExHentaiViewer.WPF.ViewModel
 {
-    public class ProgressInfo : INotifyPropertyChanged
+    public class ProgressInfo : NotifyPropertyChanged
     {
+
+        public async void OnLoadError()
+        {
+            //I don't know how to begin a storyboard in ViewModel
+            OnErrorBorderVisibility = Visibility.Visible;
+            await Task.Delay(1200);
+            OnErrorBorderVisibility = Visibility.Collapsed;
+        }
+        private Visibility _onErrorBorderVisibility = Visibility.Collapsed;
+        public Visibility OnErrorBorderVisibility
+        {
+            get { return _onErrorBorderVisibility; }
+            set
+            {
+                _onErrorBorderVisibility = value;
+                OnPropertyChanged("OnErrorBorderVisibility");
+            }
+        }
         public Visibility ProgressBarVisibility
         {
             get
             {
-                if (isOnLoading)
-                {
-                    return Visibility.Visible;
-                }
-                else
-                {
-                    return Visibility.Collapsed;
-                }
+                return isOnLoading ? Visibility.Visible : Visibility.Collapsed;
             }
         }
-
+        public Visibility LoadMoreButtonVisibility
+        {
+            get
+            {
+                return isOnLoading ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
 
         private bool _isOnLoading = false;
         public bool isOnLoading
@@ -30,25 +49,10 @@ namespace ExHentaiViewer.WPF.ViewModel
                 _isOnLoading = value;
                 OnPropertyChanged("isOnLoading");
                 OnPropertyChanged("ProgressBarVisibility");
+                OnPropertyChanged("LoadMoreButtonVisibility");
+                OnPropertyChanged("RefreshButtonVisibility");
             }
         }
-
-
-
-        #region INotifyPropertyChanged Members
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChangedEventHandler handler = this.PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        #endregion
 
     }
 }
