@@ -15,8 +15,10 @@ namespace CosImg.ExHentai.ViewModel
     {
         private string Link;
         private List<ExHentaiLib.Prop.ImageListInfo> PageList;
-        public ReadingViewModel(string link)
+        private string HeaderEn;
+        public ReadingViewModel(string link,string headerEn)
         {
+            this.HeaderEn = headerEn;
             this.Link = link;
             ImageList = new List<ImageModel>();
             OnLoaded();
@@ -30,7 +32,9 @@ namespace CosImg.ExHentai.ViewModel
             {
                 temp.Add(new ImageModel() 
                 { 
+                    ImageIndex = i,
                     ImagePage = PageList[i].ImagePage,
+                    SaveFolder = HeaderEn.Replace("\\","").Replace("/","").Replace(":","").Replace("*","").Replace("?","").Replace("\"","").Replace("<","").Replace(">","").Replace("|",""),
                     //Image = await ParseHelper.GetImageAync(PageList[i].ImagePage, TBase.RT.SettingHelpers.GetSetting<string>("cookie")) 
                 });
             }

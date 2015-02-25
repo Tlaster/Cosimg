@@ -17,13 +17,14 @@ using Windows.Storage;
 using TBase.RT;
 using System.Windows.Input;
 using TBase;
+using System.Diagnostics;
 
 namespace CosImg.ExHentai.Model
 {
     public class ImageModel:TBase.NotifyPropertyChanged
     {
-        private byte[] _imagebyte;
 
+        #region StateModel
         private bool _isOnLoading;
 
         public bool isOnLoading
@@ -46,15 +47,25 @@ namespace CosImg.ExHentai.Model
                 return (Window.Current.Content as Frame).ActualWidth;
             }
         }
-        public string ImagePage { get; set; }
+#endregion
+
         async void GetImageBitmapImage(string uri)
         {
             try
             {
                 isOnLoading = true;
-                _imageuri = await ParseHelper.GetImageAync(uri, SettingHelpers.GetSetting<string>("cookie"));
-                _imagebyte = await ImageHelper.GetImageByteArrayFromUriAsync(_imageuri, SettingHelpers.GetSetting<string>("cookie"));
-                _image = await ImageHelper.ByteArrayToBitmapImage(_imagebyte);
+                byte[] _imagebyte = default(byte[]);
+                if (await ImageHelper.CheckCacheImage(SaveFolder, ImageIndex.ToString()))
+                {
+                    _imagebyte = await ImageHelper.GetCacheImage(SaveFolder, ImageIndex.ToString());
+                }
+                else
+                {
+                    _imageuri = await ParseHelper.GetImageAync(uri, SettingHelpers.GetSetting<string>("cookie"));
+                    _imagebyte = await ImageHelper.GetImageByteArrayFromUriAsync(_imageuri, SettingHelpers.GetSetting<string>("cookie"));
+                    await ImageHelper.SaveCacheImage(SaveFolder, ImageIndex.ToString(), _imagebyte);
+                }
+                _image = new WeakReference(await ImageHelper.ByteArrayToBitmapImage(_imagebyte));
                 isOnLoading = false;
                 OnPropertyChanged("Image");
             }
@@ -76,42 +87,60 @@ namespace CosImg.ExHentai.Model
         }
         public void Refresh()
         {
+            isLoadFail = false;
             _image = null;
-            Random random = new Random();
-            GetImageBitmapImage(ImagePage + "?nl=" + random.Next(61, 63).ToString());
+            OnPropertyChanged("Image");
         }
         public async void Save()
         {
-            if (isOnLoading)
+            if (!await ImageHelper.CheckCacheImage(SaveFolder, ImageIndex.ToString()))
             {
                 new ToastPrompt("Please wait while loading the image").Show();
                 return;
             }
-            await ImageHelper.SaveImage(Path.GetFileName(_imageuri),_imagebyte);
+            await ImageHelper.SaveImage(Path.GetFileName(_imageuri) ?? SaveFolder + ImageIndex + ".jpg", await ImageHelper.GetCacheImage(SaveFolder, ImageIndex.ToString()));
         }
         public async void Share()
         {
-            if (isOnLoading)
+            if (!await ImageHelper.CheckCacheImage(SaveFolder, ImageIndex.ToString()))
             {
                 new ToastPrompt("Please wait while loading the image").Show();
                 return;
             }
-            await ImageHelper.ShareImage(_imagebyte);
+            await ImageHelper.ShareImage(await ImageHelper.GetCacheImage(SaveFolder, ImageIndex.ToString()));
         }
+
         public BitmapImage Image
         {
             get
             {
-                if (_image==null)
+                if (_image == null)
                 {
                     GetImageBitmapImage(ImagePage);
+                    Debug.WriteLine("Load");
+                    return null;
                 }
-                return _image;
+                else
+                {
+                    if (_image.IsAlive)
+                    {
+                        Debug.WriteLine("Get");
+                        return (BitmapImage)_image.Target;
+                    }
+                    else
+                    {
+                        GetImageBitmapImage(ImagePage);
+                        Debug.WriteLine("Reload");
+                        return null;
+                    }
+                }
             }
         }
-        BitmapImage _image;
-        private string _imageuri;
 
-        //public string _image;
+        WeakReference _image;
+        private string _imageuri;
+        public string ImagePage;
+        public string SaveFolder;
+        public int ImageIndex;
     }
 }

@@ -77,7 +77,7 @@ namespace CosImg.ExHentai.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this.Link));
+                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this.Link,this.Detail.HeaderInfo.TitleEn));
                 });
             }
         }

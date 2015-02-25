@@ -12,6 +12,7 @@ using System.Net;
 using Windows.Storage;
 using TBase.RT;
 using UmengSocialSDK;
+using System.Diagnostics;
 
 namespace CosImg.Common
 {
@@ -48,6 +49,56 @@ namespace CosImg.Common
             }
         }
 
+
+        public static async Task ClearCache()
+        {
+            var folder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists);
+            await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
+            Debug.WriteLine("cache deleted");
+        }
+
+        public static async Task<bool> CheckCacheImage(string folderName, string fileName)
+        {
+            try
+            {
+                var folder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+                var file = await folder.GetFileAsync(fileName);
+                Debug.WriteLine("have cache");
+                return true;
+            }
+            catch (Exception)
+            {
+                Debug.WriteLine("no cache");
+                return false;
+            }
+        }
+
+
+
+        public static async Task<byte[]> GetCacheImage(string folderName, string fileName)
+        {
+            var folder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+            var file = await folder.GetFileAsync(fileName);
+            var imagebyte = default(byte[]);
+            using (var stream = await file.OpenStreamForReadAsync())
+            {
+                imagebyte = await StreamToBytes(stream);
+            }
+            Debug.WriteLine("get cache");
+            return imagebyte;
+        }
+
+
+        public static async Task SaveCacheImage(string folderName, string fileName, byte[] imagebyte)
+        {
+            var cachefolder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("cache",CreationCollisionOption.OpenIfExists);
+            var folder = await cachefolder.CreateFolderAsync(folderName, CreationCollisionOption.OpenIfExists);
+            var file = await folder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+            await Windows.Storage.FileIO.WriteBytesAsync(file, imagebyte);
+            Debug.WriteLine("cached");
+        }
+
+
         public static async Task SaveImage(string filename,byte[] imagebyte)
         {
             try
@@ -61,17 +112,22 @@ namespace CosImg.Common
                 new ToastPrompt("保存失败").Show();
             }
         }
+
+
         public static async Task<BitmapImage> ByteArrayToBitmapImage(byte[] byteArray)
         {
             var bitmapImage = new BitmapImage();
+            
             using (var stream = new InMemoryRandomAccessStream())
             {
                 await stream.WriteAsync(byteArray.AsBuffer());
                 stream.Seek(0);
-                bitmapImage.SetSource(stream);
+                await bitmapImage.SetSourceAsync(stream);
             }
             return bitmapImage;
         }
+
+
         public static async Task<byte[]> StreamToBytes(Stream input)
         {
             using (MemoryStream ms = new MemoryStream())

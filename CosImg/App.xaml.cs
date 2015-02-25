@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CosImg.Common;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -37,9 +38,12 @@ namespace CosImg
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+#if DEBUG
+            UmengSDK.UmengAnalytics.IsDebug = true;
+#endif
         }
         bool isExit = false;
-        void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        async void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
         {
             if (!rootFrame.CanGoBack)
             {
@@ -77,7 +81,6 @@ namespace CosImg
             {
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
-            UmengSDK.UmengAnalytics.IsDebug = true;
 #endif
 
             //UmengSDK.UmengAnalytics.IsDebug = true;
@@ -114,8 +117,15 @@ namespace CosImg
 
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
-            await UmengSDK.UmengAnalytics.StartTrackAsync("549eb88bfd98c51269000c35", "channel");
-            
+            await UmengSDK.UmengAnalytics.StartTrackAsync("549eb88bfd98c51269000c35");
+
+            var lastLaunchTime = SettingHelpers.GetSetting<string>("LastLaunch");
+            var a = DateTime.Today.ToString();
+            if (lastLaunchTime != DateTime.Today.ToString())
+            {
+                await ImageHelper.ClearCache();
+            }
+            SettingHelpers.SetSetting<string>("LastLaunch", DateTime.Today.ToString());
         }
 
 
@@ -123,7 +133,7 @@ namespace CosImg
         protected async override void OnActivated(IActivatedEventArgs args)
         {
             base.OnActivated(args);
-            await UmengSDK.UmengAnalytics.StartTrackAsync("549eb88bfd98c51269000c35", "channel");
+            await UmengSDK.UmengAnalytics.StartTrackAsync("549eb88bfd98c51269000c35");
         }
 
         /// <summary>
