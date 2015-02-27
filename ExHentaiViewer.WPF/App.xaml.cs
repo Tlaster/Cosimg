@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ExHentaiLib.Common;
+using ExHentaiViewer.WPF.Common;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -24,37 +26,14 @@ namespace ExHentaiViewer.WPF
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
-            if (LogState())
+            try
             {
+                LogInHelper.LogCookieCheck(CookieHelper.GetCookie());
                 new MainWindow().Show();
             }
-            else
+            catch (Exception)
             {
                 new LogInWindow().Show();
-            }
-        }
-        private bool LogState()
-        {
-            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory+"cookie.cookie"))
-            {
-                var logcookie = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "cookie.cookie");
-                string memberidRegex = @"ipb_member_id=([^;]*)";
-                string passhashRegex = @"ipb_pass_hash=([^;]*)";
-                var memberidStr = Regex.Match(logcookie, memberidRegex);
-                var passhashStr = Regex.Match(logcookie, passhashRegex);
-                if (memberidStr.Success && passhashStr.Success)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
             }
         }
     }

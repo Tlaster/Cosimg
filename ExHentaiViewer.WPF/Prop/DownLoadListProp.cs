@@ -54,7 +54,7 @@ namespace ExHentaiViewer.WPF.Prop
         {
             try
             {
-                await GetImagePageListAsync(PageUri, GetCookie());
+                await GetImagePageListAsync(PageUri, CookieHelper.GetCookie());
                 DownloadFromUriList(ImagePageUri);
             }
             catch (Exception)
@@ -79,7 +79,7 @@ namespace ExHentaiViewer.WPF.Prop
         {
             try
             {
-                DownLoadHelper DH = new DownLoadHelper(uri, SavePath + "\\" + fileName, GetCookie());
+                DownLoadHelper DH = new DownLoadHelper(uri, SavePath + "\\" + fileName, CookieHelper.GetCookie());
                 DH.DownLoadCompleted += DH_DownLoadCompleted;
                 DH.DownLoadFailed += DH_DownLoadFailed;
             }
@@ -115,11 +115,6 @@ namespace ExHentaiViewer.WPF.Prop
         }
 
 
-
-        private string GetCookie()
-        {
-            return File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "cookie.cookie") + ParseHelper.unconfig;
-        }
         private string PageUri { get; set; }
         private int _maxImageCount;
 

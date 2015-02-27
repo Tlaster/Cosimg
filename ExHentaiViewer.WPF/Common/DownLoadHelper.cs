@@ -12,7 +12,7 @@ namespace ExHentaiViewer.WPF.Common
 {
     public class DownLoadHelper
     {
-        public WebDownload webClient;
+        public WebClient webClient;
         public event EventHandler<AsyncCompletedEventArgs> DownLoadCompleted;
         public event EventHandler DownLoadFailed;
         private int ReTryCount = 0;
@@ -25,6 +25,9 @@ namespace ExHentaiViewer.WPF.Common
         private async void TryDownLoadAsync(string uri, string savePathName, string cookie)
         {
             Random random = new Random();
+#if DEBUG
+            await DownLoadTaskAsync(uri, savePathName, cookie);
+#else
             try
             {
                 await DownLoadTaskAsync(uri, savePathName,cookie);
@@ -44,30 +47,35 @@ namespace ExHentaiViewer.WPF.Common
                     }
                 }
             }
+#endif
         }
 
         private async Task DownLoadTaskAsync(string uri, string savePathName, string cookie)
         {
             var sourceUri = await ParseHelper.GetImageAync(uri, cookie);
-            webClient = new WebDownload();
-            webClient.Timeout = 10000;
+            webClient = new WebClient();
             webClient.Headers["Cookie"] = cookie;
-            webClient.Headers["Referer"] = uri;
-            webClient.Headers["Accept"] = "text/html, application/xhtml+xml, */*";
-            webClient.Headers["Accept-Encoding"] = "gzip, deflate";
-            webClient.Headers["Accept-Language"] = "en-US,en;q=0.8,zh-Hans-CN;q=0.6,zh-Hans;q=0.4,ja;q=0.2";
-            webClient.Headers["User-Agent"] = "Mozilla/5.0 (MSIE 9.0; Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko";
+            //webClient.Headers["Referer"] = uri;
+            //webClient.Headers["Accept"] = "text/html, application/xhtml+xml, */*";
+            //webClient.Headers["Accept-Encoding"] = "gzip, deflate";
+            //webClient.Headers["Accept-Language"] = "en-US,en;q=0.8,zh-Hans-CN;q=0.6,zh-Hans;q=0.4,ja;q=0.2";
+            //webClient.Headers["User-Agent"] = "Mozilla/5.0 (MSIE 9.0; Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko";
             webClient.DownloadFileCompleted += webClient_DownloadFileCompleted; 
-            await Task.Delay(1000);
+            //await Task.Delay(1000);
             await webClient.DownloadFileTaskAsync(new Uri(sourceUri), savePathName + System.IO.Path.GetExtension(sourceUri));
             //To check the download file,but I can not sure it's the right solution
-            for (int i = 0; i < webClient.ResponseHeaders.AllKeys.Length; i++)
+            var a = webClient.ResponseHeaders["Content-Disposition"];
+            if (webClient.ResponseHeaders["Content-Disposition"] != null)
             {
-                if (webClient.ResponseHeaders.Get(i) == "Content-Disposition")
-                {
-                    throw new Exception();
-                }
+                throw new Exception();
             }
+            //for (int i = 0; i < webClient.ResponseHeaders.AllKeys.Length; i++)
+            //{
+            //    if (webClient.ResponseHeaders.Get(i) == "Content-Disposition")
+            //    {
+            //        throw new Exception();
+            //    }
+            //}
 
         }
 
@@ -82,28 +90,28 @@ namespace ExHentaiViewer.WPF.Common
     }
 
 
-    public class WebDownload : WebClient
-    {
-        /// <summary>
-        /// Time in milliseconds
-        /// </summary>
-        public int Timeout { get; set; }
+    //public class WebDownload : WebClient
+    //{
+    //    /// <summary>
+    //    /// Time in milliseconds
+    //    /// </summary>
+    //    public int Timeout { get; set; }
 
-        public WebDownload() : this(60000) { }
+    //    public WebDownload() : this(60000) { }
 
-        public WebDownload(int timeout)
-        {
-            this.Timeout = timeout;
-        }
+    //    public WebDownload(int timeout)
+    //    {
+    //        this.Timeout = timeout;
+    //    }
 
-        protected override WebRequest GetWebRequest(Uri address)
-        {
-            var request = base.GetWebRequest(address);
-            if (request != null)
-            {
-                request.Timeout = this.Timeout;
-            }
-            return request;
-        }
-    }
+    //    protected override WebRequest GetWebRequest(Uri address)
+    //    {
+    //        var request = base.GetWebRequest(address);
+    //        if (request != null)
+    //        {
+    //            request.Timeout = this.Timeout;
+    //        }
+    //        return request;
+    //    }
+    //}
 }

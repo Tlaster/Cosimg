@@ -30,4 +30,11 @@ namespace ExHentaiLib.Common
         public LogAccessException(string message) : base(message) { }
         public LogAccessException(string message, Exception inner) : base(message, inner) { }
     }
+
+    public class CookieException : Exception
+    {
+        public CookieException() { }
+        public CookieException(string message) : base(message) { }
+        public CookieException(string message, Exception inner) : base(message, inner) { }
+    }
 }

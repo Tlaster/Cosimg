@@ -41,15 +41,7 @@ namespace CosImg.ExHentai.View
         {
             if (e.NavigationMode == NavigationMode.New)
             {
-                try
-                {
-                    App.rootFrame.BackStack.RemoveAt(0);
-                    App.rootFrame.BackStack.RemoveAt(0);
-                    App.rootFrame.BackStack.RemoveAt(0);
-                }
-                catch (Exception)
-                {
-                }
+                App.rootFrame.BackStack.RemoveAt(0);
                 this.RequestedTheme = ElementTheme.Dark;
             }
             UmengSDK.UmengAnalytics.TrackEvent("HentaiModeExChanged");

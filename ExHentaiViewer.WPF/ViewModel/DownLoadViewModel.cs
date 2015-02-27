@@ -38,6 +38,7 @@ namespace ExHentaiViewer.WPF.ViewModel
                 {
                     var index = (int)itemIndex; 
                     DownLoadList[index].CurrentState = "On Parsing...";
+                    
                     DownLoadList[index].OnParse = DownLoadList[index].OnParse == true ? false : true;
                 });
             }

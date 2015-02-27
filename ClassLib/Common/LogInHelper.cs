@@ -11,6 +11,20 @@ namespace ExHentaiLib.Common
 {
     public static class LogInHelper
     {
+        public static void LogCookieCheck(string cookie)
+        {
+            string memberidRegex = @"ipb_member_id=([^;]*)";
+            string passhashRegex = @"ipb_pass_hash=([^;]*)";
+            string igneousRegex = @"igneous=([^;]*)";
+            var memberidStr = Regex.Match(cookie, memberidRegex);
+            var passhashStr = Regex.Match(cookie, passhashRegex);
+            var igneousStr = Regex.Match(cookie, igneousRegex);
+            if (!memberidStr.Success || !passhashStr.Success || !igneousStr.Success)
+            {
+                throw new CookieException("Cookie Error");
+            }
+        }
+
         public static async Task<string> GetLoginCookie(string userName, string passWord)
         {
             string postStr = "UserName=" + userName + "&PassWord=" + passWord + "&x=0&y=0";

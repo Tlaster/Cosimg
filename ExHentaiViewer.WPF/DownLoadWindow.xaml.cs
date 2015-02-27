@@ -50,7 +50,7 @@ namespace ExHentaiViewer.WPF
             var newdownloaditemwindow = new NewDownLoadItemWindow(uri,Detail);
             if (newdownloaditemwindow.ShowDialog()==true)
             {
-                savePath = newdownloaditemwindow.DownLoadPath + newdownloaditemwindow.ItemName;
+                savePath = newdownloaditemwindow.DownLoadPath + newdownloaditemwindow.ItemName.Replace("\\", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("?", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", "");
                 DDM.DownLoadList.Add(new Prop.DownLoadListProp(uri, savePath, newdownloaditemwindow.ItemName));
             }
         }

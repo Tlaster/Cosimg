@@ -1,4 +1,5 @@
 ﻿using CosImg.CosImg.Common;
+using ExHentaiLib.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,10 +40,10 @@ namespace CosImg.CosImg.Model
                         {
                             try
                             {
-                                SettingHelpers.GetSetting<string>("cookie", true);
+                                LogInHelper.LogCookieCheck(SettingHelpers.GetSetting<string>("cookie", true));
                                 App.rootFrame.Navigate(typeof(ExHentai.View.ExMainPage));
                             }
-                            catch (SettingException)
+                            catch (Exception)
                             {
                                 App.rootFrame.Navigate(typeof(ExHentai.View.LoginPage));
                             }
@@ -50,9 +51,11 @@ namespace CosImg.CosImg.Model
                         dialog.Commands.Add(new UICommand("No"));
                         await dialog.ShowAsync();
                     }
-
-                    Link = "http://worldcosplay.net/api/photo/search?q=" + str;
-                    OnLoaded();
+                    else
+                    {
+                        Link = "http://worldcosplay.net/api/photo/search?q=" + str;
+                        OnLoaded();
+                    }
                 });
             }
         }
