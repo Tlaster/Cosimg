@@ -52,7 +52,7 @@
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Image MaxHeight="250" MaxWidth="200" MinHeight="200" MinWidth="150" Source="{Binding Detail.HeaderInfo.HeaderImage}" Margin="0,0,0,8"/>
+                            <Image MaxHeight="250" MaxWidth="200" MinHeight="200" MinWidth="150" Source="{Binding Path=Result}" DataContext="{Binding Detail.HeaderInfo.HeaderImage,Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" Margin="0,0,0,8"/>
                             <StackPanel Orientation="Vertical" Grid.Column="1" Margin="8,0,0,0">
                                 <Button Content="Read" Command="{Binding ReadCommand}"/>
                                 <Button Grid.Column="1" Content="Download" Command="{Binding DownLoadCommand}"/>
@@ -91,7 +91,7 @@
                         </GridView.HeaderTemplate>
                         <GridView.ItemTemplate>
                             <DataTemplate>
-                                <Image Margin="4" Height="146" Width="110" Source="{Binding ImgeSrc}"/>
+                                <Image Margin="4" Height="146" Width="110" DataContext="{Binding ImgeSrc,Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" Source="{Binding Result}"/>
                             </DataTemplate>
                         </GridView.ItemTemplate>
                     </GridView>

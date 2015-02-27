@@ -34,7 +34,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP;RELEASE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -87,6 +87,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\ImageHelper.cs" />
+    <Compile Include="Common\LinkToBitmapImageWitchCookieConverter.cs" />
     <Compile Include="Common\SelectedIndexToVisibilityConverter.cs" />
     <Compile Include="CosImg\Common\BaseViewModel.cs" />
     <Compile Include="CosImg\Common\GeneratorIncrementalLoadingClass.cs" />

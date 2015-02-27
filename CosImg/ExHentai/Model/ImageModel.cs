@@ -1,19 +1,10 @@
 ﻿using ExHentaiLib.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Storage.Streams;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Web.Http;
 using System.IO;
 using CosImg.Common;
-using Windows.Storage;
 using TBase.RT;
 using System.Windows.Input;
 using TBase;
@@ -51,10 +42,12 @@ namespace CosImg.ExHentai.Model
 
         async void GetImageBitmapImage(string uri)
         {
+#if RELEASE
             try
             {
+#endif
                 isOnLoading = true;
-                byte[] _imagebyte = default(byte[]);
+                byte[] _imagebyte;
                 if (await ImageHelper.CheckCacheImage(SaveFolder, ImageIndex.ToString()))
                 {
                     _imagebyte = await ImageHelper.GetCacheImage(SaveFolder, ImageIndex.ToString());
@@ -62,18 +55,20 @@ namespace CosImg.ExHentai.Model
                 else
                 {
                     _imageuri = await ParseHelper.GetImageAync(uri, SettingHelpers.GetSetting<string>("cookie"));
-                    _imagebyte = await ImageHelper.GetImageByteArrayFromUriAsync(_imageuri, SettingHelpers.GetSetting<string>("cookie"));
+                    _imagebyte = await HttpHelper.GetByteArray(_imageuri, SettingHelpers.GetSetting<string>("cookie"));
                     await ImageHelper.SaveCacheImage(SaveFolder, ImageIndex.ToString(), _imagebyte);
                 }
                 _image = new WeakReference(await ImageHelper.ByteArrayToBitmapImage(_imagebyte));
                 isOnLoading = false;
                 OnPropertyChanged("Image");
+#if RELEASE
             }
             catch (Exception)
             {
                 isOnLoading = false;
                 isLoadFail = true;
             }
+#endif
         }
         public ICommand ReTryCommand
         {
@@ -117,25 +112,23 @@ namespace CosImg.ExHentai.Model
                 if (_image == null)
                 {
                     GetImageBitmapImage(ImagePage);
-                    Debug.WriteLine("Load");
                     return null;
                 }
                 else
                 {
                     if (_image.IsAlive)
                     {
-                        Debug.WriteLine("Get");
                         return (BitmapImage)_image.Target;
                     }
                     else
                     {
                         GetImageBitmapImage(ImagePage);
-                        Debug.WriteLine("Reload");
                         return null;
                     }
                 }
             }
         }
+
 
         WeakReference _image;
         private string _imageuri;

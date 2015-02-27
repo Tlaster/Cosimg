@@ -12,7 +12,7 @@
     <Page.Resources>
         <DataTemplate x:Key="ListTemple">
             <Grid Width="110" Height="146" Margin="4">
-                <Image x:Name="image" Source="{Binding ImageView}" Stretch="Uniform"/>
+                <Image x:Name="image" Source="{Binding Result}" DataContext="{Binding ImageView,Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" Stretch="Uniform"/>
                 <Border VerticalAlignment="Bottom" Background="#7F000000">
                     <TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding Title}" FontSize="15" MaxLines="2" TextTrimming="CharacterEllipsis" />
                 </Border>

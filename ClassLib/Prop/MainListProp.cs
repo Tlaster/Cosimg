@@ -9,11 +9,8 @@ namespace ExHentaiLib.Prop
     public class MainListProp
     {
         public string Title { get; set; }
-
         public string ImageView { get; set; }
-
         public string Link { get; set; }
-
         public string FliesCount { get; set; }
 
     }

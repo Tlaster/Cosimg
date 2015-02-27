@@ -7,6 +7,7 @@
         Background="{DynamicResource BackgroundColor}" WindowStartupLocation="CenterScreen" 
         BorderBrush="#7F000000" BorderThickness="2"
         AllowsTransparency="True" WindowStyle="None" Foreground="#FF333334"
+             xmlns:common="clr-namespace:ExHentaiViewer.WPF.Common"
         MouseDown="Window_MouseDown"
         ResizeMode="NoResize"
     >
@@ -21,7 +22,7 @@
         				<RowDefinition Height="Auto"/>
         			</Grid.RowDefinitions>
         			<TextBlock TextWrapping="NoWrap" Text="{Binding Title}" Foreground="White" FontSize="15" TextTrimming="CharacterEllipsis" />
-        			<Image MaxHeight="200" Source="{Binding ImageView}" Grid.Row="1" Stretch="Uniform"/>
+                    <Image MaxHeight="200" DataContext="{Binding Path=ImageView,Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" Source="{Binding Path=Result}" Grid.Row="1" Stretch="Uniform"/>
         			<TextBlock Text="{Binding FliesCount}" Grid.Row="2" Foreground="White" FontSize="10"/>
         		</Grid>
         	</Border>

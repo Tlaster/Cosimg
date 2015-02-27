@@ -22,8 +22,11 @@ namespace ExHentaiLib.Common
             {
                 stream.Write(data, 0, data.Length);
             }
-            HttpWebResponse logResponse = (HttpWebResponse)(await loginRequest.GetResponseAsync());
-            var logCookie = logResponse.Headers["Set-Cookie"];
+            string logCookie = "";
+            using (HttpWebResponse logResponse = (HttpWebResponse)(await loginRequest.GetResponseAsync()))
+            {
+                logCookie = logResponse.Headers["Set-Cookie"];
+            }
             string memberidRegex = @"ipb_member_id=([^;]*)";
             string passhashRegex = @"ipb_pass_hash=([^;]*)";
             var memberidStr = Regex.Match(logCookie, memberidRegex);
@@ -34,14 +37,18 @@ namespace ExHentaiLib.Common
             }
             HttpWebRequest webRequest = HttpWebRequest.CreateHttp("http://exhentai.org/");
             webRequest.Headers["Cookie"] = memberidStr.Value + ";" + passhashStr.Value;
+            string imgCookie = "";
             using (HttpWebResponse webResponse = await webRequest.GetResponseAsync() as HttpWebResponse)
             {
                 if (webResponse.ContentType=="image/gif")
                 {
                     throw new LogAccessException("No Access");
                 }
+                imgCookie = webResponse.Headers["Set-Cookie"];
             }
-            return memberidStr.Value + ";" + passhashStr.Value;
+            string igneousRegex = @"igneous=([^;]*)";
+            var igneousStr = Regex.Match(imgCookie, igneousRegex);
+            return memberidStr.Value + ";" + passhashStr.Value + ";" + igneousStr.Value;
         }
     }
 }

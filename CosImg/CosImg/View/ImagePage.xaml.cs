@@ -54,7 +54,7 @@ namespace CosImg.CosImg.View
         {
             proRing.IsActive = true;
             Item = e.Parameter as ListModel;
-            var htmlStr = await HttpHelper.HttpReadString("http://worldcosplay.net" + Item.url);
+            var htmlStr = await HttpHelper.GetReadString("http://worldcosplay.net" + Item.url);
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
             doc.LoadHtml(htmlStr);
             HtmlNode node;
@@ -68,7 +68,7 @@ namespace CosImg.CosImg.View
             }
             this.link = node.Attributes["src"].Value;
             BitmapImage img = new BitmapImage(new Uri(link));
-            ImageByte = await ImageHelper.GetImageByteArrayFromUriAsync(node.Attributes["src"].Value);
+            ImageByte = await HttpHelper.GetByteArray(node.Attributes["src"].Value);
             this.BigImage.Source = await ImageHelper.ByteArrayToBitmapImage(ImageByte);
             proRing.IsActive = false;
         }

@@ -58,7 +58,7 @@ namespace ExHentaiLib.Common
         /// <returns></returns>
         public async static Task<string> GetImageAync(string uri, string cookie)
         {
-            string htmlstring = await HttpHelper.HttpReadStringWithCookie(uri, cookie);
+            string htmlstring = await HttpHelper.GetStringWithCookie(uri, cookie);
             return ImagePageString2ImageString(htmlstring);
         }
 
@@ -72,7 +72,7 @@ namespace ExHentaiLib.Common
 
         public async static Task<DetailProp> GetDetailAsync(string uri, string cookie)
         {
-            string htmlstring = await HttpHelper.HttpReadStringWithCookie(uri, cookie + unconfig);
+            string htmlstring = await HttpHelper.GetStringWithCookie(uri, cookie + unconfig);
             return String2Detail(htmlstring);
         }
 
@@ -115,7 +115,7 @@ namespace ExHentaiLib.Common
         }
         public async static Task<ObservableCollection<MainListProp>> GetMainListAsync(string uri, string cookie)
         {
-            string htmlstring = await HttpHelper.HttpReadStringWithCookie(uri, cookie + unconfig);
+            string htmlstring = await HttpHelper.GetStringWithCookie(uri, cookie + unconfig);
             return MainString2List(htmlstring);
         }
         private static ObservableCollection<MainListProp> MainString2List(string htmlstring)
@@ -137,6 +137,7 @@ namespace ExHentaiLib.Common
                              Link = (a.GetNodebyClassName("id2").Element("a").Attributes["href"].Value),
                              FliesCount = (a.GetNodebyClassName("id42").InnerText),
                          };
+            var dsa = new ObservableCollection<MainListProp>(result);
             return new ObservableCollection<MainListProp>(result);
         }
 

@@ -54,7 +54,6 @@ namespace CosImg.Common
         {
             var folder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists);
             await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
-            Debug.WriteLine("cache deleted");
         }
 
         public static async Task<bool> CheckCacheImage(string folderName, string fileName)
@@ -63,12 +62,10 @@ namespace CosImg.Common
             {
                 var folder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
                 var file = await folder.GetFileAsync(fileName);
-                Debug.WriteLine("have cache");
                 return true;
             }
             catch (Exception)
             {
-                Debug.WriteLine("no cache");
                 return false;
             }
         }
@@ -84,7 +81,6 @@ namespace CosImg.Common
             {
                 imagebyte = await StreamToBytes(stream);
             }
-            Debug.WriteLine("get cache");
             return imagebyte;
         }
 
@@ -95,7 +91,6 @@ namespace CosImg.Common
             var folder = await cachefolder.CreateFolderAsync(folderName, CreationCollisionOption.OpenIfExists);
             var file = await folder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
             await Windows.Storage.FileIO.WriteBytesAsync(file, imagebyte);
-            Debug.WriteLine("cached");
         }
 
 
@@ -135,29 +130,6 @@ namespace CosImg.Common
                 await input.CopyToAsync(ms);
                 return ms.ToArray();
             }
-        }
-        public static async Task<byte[]> GetImageByteArrayFromUriAsync(string imgUri)
-        {
-            byte[] bit = default(byte[]);
-            using (HttpClient client = new HttpClient())
-            {
-                bit = await client.GetByteArrayAsync(imgUri);
-            }
-            return bit;
-        }
-        public static async Task<byte[]> GetImageByteArrayFromUriAsync(string imgUri,string cookie)
-        {
-            byte[] bit = default(byte[]);
-            using (HttpClient client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Add("Cookie", cookie);
-                client.DefaultRequestHeaders.Accept.TryParseAdd("text/html, application/xhtml+xml, */*");
-                client.DefaultRequestHeaders.AcceptEncoding.TryParseAdd("gzip, deflate");
-                client.DefaultRequestHeaders.AcceptLanguage.TryParseAdd("en-US,en;q=0.8,zh-Hans-CN;q=0.6,zh-Hans;q=0.4,ja;q=0.2");
-                client.DefaultRequestHeaders.UserAgent.TryParseAdd("Mozilla/5.0 (MSIE 9.0; Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
-                bit = await client.GetByteArrayAsync(imgUri);
-            }
-            return bit;
         }
 
 

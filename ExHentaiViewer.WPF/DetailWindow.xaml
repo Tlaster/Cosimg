@@ -39,7 +39,7 @@
         				<RowDefinition Height="*"/>
         				<RowDefinition Height="Auto"/>
         			</Grid.RowDefinitions>
-                    <Image MaxHeight="170" Source="{Binding ImgeSrc}" Grid.Row="0" Stretch="Uniform"/>
+                    <Image MaxHeight="170"  DataContext="{Binding ImgeSrc,Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" Source="{Binding Path=Result}" Grid.Row="0" Stretch="Uniform"/>
         			<TextBlock Text="{Binding ImageName}" Grid.Row="1" Foreground="White" FontSize="10" HorizontalAlignment="Center"/>
         		</Grid>
         	</Border>
@@ -83,7 +83,7 @@
 						<ColumnDefinition Width="auto"/>
 						<ColumnDefinition Width="auto"/>
 					</Grid.ColumnDefinitions>
-					<Image Source="{Binding Detail.HeaderInfo.HeaderImage,Mode=OneWay}" Stretch="Uniform" MaxHeight="300" MaxWidth="200"/>
+					<Image Source="{Binding Path=Result}" DataContext="{Binding Detail.HeaderInfo.HeaderImage,Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" Stretch="Uniform" MaxHeight="300" MaxWidth="200"/>
 					<Grid Grid.Column="1" Grid.Row="1">
 						<Grid.RowDefinitions>
 							<RowDefinition Height="auto"/>
@@ -130,6 +130,7 @@
 								<VirtualizingStackPanel Orientation="Horizontal"/>
 							</ItemsPanelTemplate>
 						</ListView.ItemsPanel>
+                        
 						<i:Interaction.Triggers>
 							<i:EventTrigger EventName="MouseDoubleClick">
 								<i:InvokeCommandAction Command="{Binding ClickToRead}" CommandParameter="{Binding ElementName=ImageListView,Path=SelectedItem}"/>
