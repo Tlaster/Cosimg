@@ -83,9 +83,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\CookieHelper.cs" />
-    <Compile Include="Common\DownLoadHelper.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Common\LinkToBitmapImageWitchCookieConverter.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\DetailViewModel.cs" />

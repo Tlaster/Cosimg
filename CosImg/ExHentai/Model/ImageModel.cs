@@ -9,6 +9,7 @@ using TBase.RT;
 using System.Windows.Input;
 using TBase;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace CosImg.ExHentai.Model
 {
@@ -74,18 +75,20 @@ namespace CosImg.ExHentai.Model
         {
             get
             {
-                return new DelegateCommand(() =>
+                return new DelegateCommand(async () =>
                 {
-                    Refresh();
+                    await Refresh();
                 });
             }
         }
-        public void Refresh()
+        public async Task Refresh()
         {
             isLoadFail = false;
             _image = null;
+            await ImageHelper.DeleCacheImage(SaveFolder, ImageIndex.ToString());
             OnPropertyChanged("Image");
         }
+
         public async void Save()
         {
             if (!await ImageHelper.CheckCacheImage(SaveFolder, ImageIndex.ToString()))

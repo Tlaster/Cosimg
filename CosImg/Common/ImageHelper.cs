@@ -13,6 +13,7 @@ using Windows.Storage;
 using TBase.RT;
 using UmengSocialSDK;
 using System.Diagnostics;
+using TBase;
 
 namespace CosImg.Common
 {
@@ -71,6 +72,16 @@ namespace CosImg.Common
         }
 
 
+        public static async Task DeleCacheImage(string folderName, string fileName)
+        {
+            if (await CheckCacheImage(folderName,fileName))
+            {
+                var folder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+                var file = await folder.GetFileAsync(fileName);
+                await file.DeleteAsync(StorageDeleteOption.PermanentDelete);
+            }
+        }
+
 
         public static async Task<byte[]> GetCacheImage(string folderName, string fileName)
         {
@@ -79,7 +90,7 @@ namespace CosImg.Common
             var imagebyte = default(byte[]);
             using (var stream = await file.OpenStreamForReadAsync())
             {
-                imagebyte = await StreamToBytes(stream);
+                imagebyte = await Converter.StreamToBytes(stream);
             }
             return imagebyte;
         }
@@ -123,14 +134,7 @@ namespace CosImg.Common
         }
 
 
-        public static async Task<byte[]> StreamToBytes(Stream input)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                await input.CopyToAsync(ms);
-                return ms.ToArray();
-            }
-        }
+
 
 
     }

@@ -34,11 +34,18 @@
 							<Grid Grid.Row="1">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="auto"/>
-									<ColumnDefinition Width="*"/>
-								</Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 								<TextBlock Foreground="White" FontSize="12" Text="{Binding CurrentState, Mode=OneWay}"/>
-								<ProgressBar Grid.Column="1" Value="{Binding CurrentDownLoadImage, Mode=OneWay}" Foreground="{DynamicResource AppTheme}" Maximum="{Binding MaxImageCount, Mode=OneWay}"/>
-							</Grid>
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <ProgressBar Grid.Row="0" Margin="2" Value="{Binding DownLoadProgress, Mode=OneWay}" Foreground="{DynamicResource AppTheme}" Maximum="100"/>
+                                    <ProgressBar Grid.Row="1" Margin="2" Value="{Binding CurrentDownLoadImage, Mode=OneWay}" Foreground="{DynamicResource AppTheme}" Maximum="{Binding MaxImageCount, Mode=OneWay}"/>
+                                </Grid>
+                            </Grid>
 							<TextBlock Grid.Row="2" Text="{Binding CurrentDownLoadImage, Mode=OneWay, StringFormat=Download Completed:\{0\}}" Foreground="Gray" FontSize="12" HorizontalAlignment="Left"/>
 							<TextBlock Grid.Row="2" Text="{Binding MaxImageCount, Mode=OneWay, StringFormat=Image Count:\{0\}}" Foreground="Gray" FontSize="12" HorizontalAlignment="Right"/>
 						</Grid>

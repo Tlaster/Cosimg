@@ -17,16 +17,101 @@ namespace ExHentaiViewer.WPF.Prop
 {
     public class DownLoadListProp : NotifyPropertyChanged
     {
-        public string ItemName { get; set; }
         public DownLoadListProp(string uri,string savePath,string itemName)
         {
             ItemName = itemName;
-            this.SavePath = savePath;
-            System.IO.Directory.CreateDirectory(SavePath);
-            PageUri = uri;
-            ImagePageUri = new List<ImageListInfo>();
+            this._savePath = savePath;
+            System.IO.Directory.CreateDirectory(_savePath);
+            _pageUri = uri;
+            _imagePageUri = new List<ImageListInfo>();
+            webClient = new WebClient();
+            webClient.DownloadProgressChanged += webClient_DownloadProgressChanged;
+            webClient.Headers["Cookie"] = CookieHelper.GetCookie();
+            webClient.DownloadDataCompleted += webClient_DownloadDataCompleted;
             StartDownLoading();
         }
+
+
+        private async Task GetImagePageListAsync()
+        {
+            CurrentState = "Getting Image Count";
+            ItemInfo = await ParseHelper.GetDetailAsync(_pageUri, CookieHelper.GetCookie());
+            _imagePageUri = await ParseHelper.GetImagePageListAsync(_pageUri, CookieHelper.GetCookie());
+            MaxImageCount = ItemInfo.MaxImageCount;
+        }
+        private async void StartDownLoading()
+        {
+            try
+            {
+                await GetImagePageListAsync();
+                await DownloadFromUriList();
+            }
+            catch (Exception)
+            {
+                OnParse = true;
+                CurrentState = "Error";
+            }
+        }
+        private async Task DownloadFromUriList()
+        {
+            CurrentState = "Downloading...";
+            try
+            {
+                _sourceUri = await ParseHelper.GetImageAync(_imagePageUri[CurrentDownLoadImage].ImagePage, CookieHelper.GetCookie());
+                webClient.DownloadDataAsync(new Uri(_sourceUri));
+            }
+            catch (Exception)
+            {
+                OnParse = true;
+                CurrentState = "Error";
+            }
+        }
+
+        async void webClient_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e)
+        {
+            if (!e.Cancelled)
+            {
+                if (webClient.ResponseHeaders["Content-Disposition"] != null)
+                {
+                    await DownloadFromUriList();
+                }
+                else
+                {
+                    File.WriteAllBytes(_savePath + "\\" + _imagePageUri[CurrentDownLoadImage].ImageName + System.IO.Path.GetExtension(_sourceUri), e.Result);
+                    webClient.Dispose();
+                    CurrentDownLoadImage += 1;
+                    DownLoadProgress = 0;
+                    if (CurrentDownLoadImage < MaxImageCount)
+                    {
+                        await DownloadFromUriList();
+                    }
+                    else
+                    {
+                        CurrentState = "Completed";
+                        DownLoadProgress = 100;
+                        webClient.Dispose();
+                    }
+                }
+            }
+        }
+
+
+        private void webClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            DownLoadProgress = e.ProgressPercentage;
+        }
+
+
+
+
+
+
+
+        private string _pageUri;
+        private string _savePath;
+        private List<ImageListInfo> _imagePageUri;
+        public WebClient webClient;
+
         private bool _onParse = false;
 
         public bool OnParse
@@ -37,95 +122,23 @@ namespace ExHentaiViewer.WPF.Prop
                 _onParse = value;
                 if (!value)
                 {
-                    DownloadFromUriList(ImagePageUri);
+                    DownloadFromUriList();
+                }
+                else
+                {
+                    this.webClient.CancelAsync();
+                    CurrentState = "Parse";
+                    DownLoadProgress = 0;
                 }
             }
         }
 
-        private List<ImageListInfo> ImagePageUri;
-        private async Task GetImagePageListAsync(string uri,string cookie)
-        {
-            CurrentState = "Getting Image Count";
-            ItemInfo = await ParseHelper.GetDetailAsync(uri, cookie);
-            ImagePageUri = await ParseHelper.GetImagePageListAsync(uri, cookie);
-            MaxImageCount = ItemInfo.MaxImageCount;
-        }
-        private async void StartDownLoading()
-        {
-            try
-            {
-                await GetImagePageListAsync(PageUri, CookieHelper.GetCookie());
-                DownloadFromUriList(ImagePageUri);
-            }
-            catch (Exception)
-            {
-                OnParse = true;
-            }
-        }
-        public string SavePath { get; set; }
-        private void DownloadFromUriList(List<ImageListInfo> uriList)
-        {
-            CurrentState = "Downloading...";
-            DownLoadFromUri(uriList[CurrentDownLoadImage].ImagePage, uriList[CurrentDownLoadImage].ImageName);
-        }
-        private string _currentState;
+        private int _downLoadProgress;
 
-        public string CurrentState
+        public int DownLoadProgress
         {
-            get { return _currentState; }
-            set { _currentState = value; OnPropertyChanged("CurrentState"); }
-        }
-        private void DownLoadFromUri(string uri,string fileName)
-        {
-            try
-            {
-                DownLoadHelper DH = new DownLoadHelper(uri, SavePath + "\\" + fileName, CookieHelper.GetCookie());
-                DH.DownLoadCompleted += DH_DownLoadCompleted;
-                DH.DownLoadFailed += DH_DownLoadFailed;
-            }
-            catch (Exception)
-            {
-                OnParse = true;
-            }
-        }
-
-        void DH_DownLoadFailed(object sender, EventArgs e)
-        {
-            OnParse = true;
-            CurrentState = "Parse";
-        }
-
-        void DH_DownLoadCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
-        {
-
-            CurrentDownLoadImage += 1;
-            if (OnParse)
-            {
-                CurrentState = "Parse";
-                return;
-            }
-            if (CurrentDownLoadImage < MaxImageCount)
-            {
-                DownLoadFromUri(ImagePageUri[CurrentDownLoadImage].ImagePage, ImagePageUri[CurrentDownLoadImage].ImageName);
-            }
-            else
-            {
-                CurrentState = "Completed";
-            }
-        }
-
-
-        private string PageUri { get; set; }
-        private int _maxImageCount;
-
-        public int MaxImageCount
-        {
-            get { return _maxImageCount; }
-            set 
-            {
-                _maxImageCount = value;
-                OnPropertyChanged("MaxImageCount");
-            }
+            get { return _downLoadProgress; }
+            set { _downLoadProgress = value; OnPropertyChanged("DownLoadProgress"); }
         }
 
 
@@ -140,6 +153,25 @@ namespace ExHentaiViewer.WPF.Prop
             }
         }
 
+        private int _maxImageCount;
+        public int MaxImageCount
+        {
+            get { return _maxImageCount; }
+            set
+            {
+                _maxImageCount = value;
+                OnPropertyChanged("MaxImageCount");
+            }
+        }
+        private string _currentState;
+        private string _sourceUri;
+
+        public string CurrentState
+        {
+            get { return _currentState; }
+            set { _currentState = value; OnPropertyChanged("CurrentState"); }
+        }
         public DetailProp ItemInfo { get; set; }
+        public string ItemName { get; set; }
     }
 }
