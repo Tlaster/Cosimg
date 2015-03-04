@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.Security.Cryptography;
+using Windows.Security.Cryptography.Core;
 using TBase;
 using TBase.RT;
 
@@ -34,13 +36,21 @@ namespace CosImg.ExHentai.ViewModel
                 { 
                     ImageIndex = i,
                     ImagePage = PageList[i].ImagePage,
-                    SaveFolder = HeaderEn.Replace("\\","").Replace("/","").Replace(":","").Replace("*","").Replace("?","").Replace("\"","").Replace("<","").Replace(">","").Replace("|",""),
-                    //Image = await ParseHelper.GetImageAync(PageList[i].ImagePage, TBase.RT.SettingHelpers.GetSetting<string>("cookie")) 
+                    SaveFolder = HashedStringOf(HeaderEn) 
                 });
             }
             ImageList = temp;
             OnPropertyChanged("ImageList");
         }
+
+        private string HashedStringOf(string name)
+        {
+            Windows.Storage.Streams.IBuffer buff_utf8 = CryptographicBuffer.ConvertStringToBinary(name, Windows.Security.Cryptography.BinaryStringEncoding.Utf8);
+            HashAlgorithmProvider algprov = HashAlgorithmProvider.OpenAlgorithm(HashAlgorithmNames.Sha1);
+            Windows.Storage.Streams.IBuffer buff_hash = algprov.HashData(buff_utf8);
+            return CryptographicBuffer.EncodeToHexString(buff_hash);
+        }
+
         public int SelectIndex { get; set; }
         public ICommand RefreshCommand
         {
