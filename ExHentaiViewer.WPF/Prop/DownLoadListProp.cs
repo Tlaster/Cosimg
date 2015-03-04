@@ -35,9 +35,9 @@ namespace ExHentaiViewer.WPF.Prop
         private async Task GetImagePageListAsync()
         {
             CurrentState = "Getting Image Count";
-            ItemInfo = await ParseHelper.GetDetailAsync(_pageUri, CookieHelper.GetCookie());
+            _itemInfo = await ParseHelper.GetDetailAsync(_pageUri, CookieHelper.GetCookie());
             _imagePageUri = await ParseHelper.GetImagePageListAsync(_pageUri, CookieHelper.GetCookie());
-            MaxImageCount = ItemInfo.MaxImageCount;
+            MaxImageCount = _itemInfo.MaxImageCount;
         }
         private async void StartDownLoading()
         {
@@ -71,7 +71,7 @@ namespace ExHentaiViewer.WPF.Prop
         {
             if (!e.Cancelled)
             {
-                if (webClient.ResponseHeaders["Content-Disposition"] != null)
+                if (e.Error != null || webClient.ResponseHeaders["Content-Disposition"] != null)
                 {
                     await DownloadFromUriList();
                 }
@@ -111,8 +111,15 @@ namespace ExHentaiViewer.WPF.Prop
         private string _savePath;
         private List<ImageListInfo> _imagePageUri;
         public WebClient webClient;
-
+        private string _currentState;
+        private string _sourceUri;
+        private DetailProp _itemInfo;
+        private int _downLoadProgress;
+        private int _courrentDownLoadImage = 0;
         private bool _onParse = false;
+        private int _maxImageCount;
+
+
 
         public bool OnParse
         {
@@ -133,16 +140,19 @@ namespace ExHentaiViewer.WPF.Prop
             }
         }
 
-        private int _downLoadProgress;
+        public string ItemName { get; set; }
 
         public int DownLoadProgress
         {
             get { return _downLoadProgress; }
-            set { _downLoadProgress = value; OnPropertyChanged("DownLoadProgress"); }
+            set
+            { 
+                _downLoadProgress = value; 
+                OnPropertyChanged("DownLoadProgress");
+            }
         }
 
 
-        private int _courrentDownLoadImage = 0;
         public int CurrentDownLoadImage
         {
             get { return _courrentDownLoadImage; }
@@ -153,7 +163,6 @@ namespace ExHentaiViewer.WPF.Prop
             }
         }
 
-        private int _maxImageCount;
         public int MaxImageCount
         {
             get { return _maxImageCount; }
@@ -163,15 +172,16 @@ namespace ExHentaiViewer.WPF.Prop
                 OnPropertyChanged("MaxImageCount");
             }
         }
-        private string _currentState;
-        private string _sourceUri;
 
         public string CurrentState
         {
             get { return _currentState; }
-            set { _currentState = value; OnPropertyChanged("CurrentState"); }
+            set 
+            {
+                _currentState = value;
+                OnPropertyChanged("CurrentState"); 
+            }
         }
-        public DetailProp ItemInfo { get; set; }
-        public string ItemName { get; set; }
+
     }
 }
