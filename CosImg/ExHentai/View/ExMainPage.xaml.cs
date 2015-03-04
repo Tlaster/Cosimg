@@ -59,5 +59,10 @@ namespace CosImg.ExHentai.View
         {
             this.pivot.SelectedIndex = 1;
         }
+
+        private void AppBarButton_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

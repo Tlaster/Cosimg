@@ -9,6 +9,8 @@
     >
 
     <Application.Resources>
+
+        <SolidColorBrush x:Key="LineColor" Color="#FF007ACC"/>
         <SolidColorBrush x:Key="AppTheme" Color="#FFEE3E75"/>
         <common:SelectedIndexToVisibilityConverter x:Key="SelectedIndexToVisilibityConverter"/>
         <common:SelectedIndexToCollapsedConverter x:Key="SelectedIndexToCollapsedConverter"/>

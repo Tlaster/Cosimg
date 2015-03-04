@@ -35,41 +35,53 @@
     </Page.Resources>
 
     <Grid>
-        <Pivot Visibility="{Binding LoadMoreVis}" Margin="0,-25,0,0" >
-            <Pivot.TitleTemplate>
-                <DataTemplate>
-                    <Grid Margin="-8,-8,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="{Binding Detail.HeaderInfo.TitleEn}" FontSize="25"/>
-                            <TextBlock Text="{Binding Detail.HeaderInfo.TitleJp}" FontSize="25"/>
-                        </StackPanel>
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Image MaxHeight="250" MaxWidth="200" MinHeight="200" MinWidth="150" Source="{Binding Path=Result}" DataContext="{Binding Detail.HeaderInfo.HeaderImage,Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" Margin="0,0,0,8"/>
-                            <StackPanel Orientation="Vertical" Grid.Column="1" Margin="8,0,0,0">
-                                <Button Content="Read" Command="{Binding ReadCommand}"/>
-                                <Button Grid.Column="1" Content="Download" Command="{Binding DownLoadCommand}"/>
-                            </StackPanel>
-                        </Grid>
-                    </Grid>
-                </DataTemplate>
-            </Pivot.TitleTemplate>
-            <PivotItem Margin="0,4">
+        <Pivot Visibility="{Binding LoadMoreVis}" Margin="0,-25,0,0">
+            <PivotItem Margin="0">
                 <PivotItem.Header>
-                    <TextBlock FontSize="20">Tag</TextBlock>
+                    <TextBlock Text="Detail" FontSize="25"/>
+                </PivotItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <AppBarButton IsCompact="True" VerticalAlignment="Bottom" HorizontalAlignment="Right" Icon="UnFavorite"/>
+                    <ScrollViewer>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock TextWrapping="Wrap" Text="{Binding Detail.HeaderInfo.TitleEn}" FontSize="25"/>
+                                <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding Detail.HeaderInfo.TitleJp}" FontSize="25"/>
+                            </Grid>
+                            <Image Grid.Row="1" MaxHeight="250" MinHeight="200" Source="{Binding Path=Result}" DataContext="{Binding Detail.HeaderInfo.HeaderImage,Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" />
+                        </Grid>
+                    </ScrollViewer>
+                    <Grid Background="#FF1F1F1F" Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Margin="8,0" Content="Read" Command="{Binding ReadCommand}" HorizontalAlignment="Stretch"/>
+                        <Button Margin="8,0" Grid.Column="1" Content="Download" Command="{Binding DownLoadCommand}" HorizontalAlignment="Stretch"/>
+                    </Grid>
+                </Grid>
+            </PivotItem>
+            <PivotItem Margin="0">
+                <PivotItem.Header>
+                    <TextBlock Text="Tags" FontSize="25"/>
                 </PivotItem.Header>
                 <ListView ItemsSource="{Binding Detail.HeaderInfo.TagInfo}" ItemTemplate="{StaticResource TagListTemple}"/>
             </PivotItem>
-            <PivotItem Margin="8,0">
+            <PivotItem Margin="0">
                 <PivotItem.Header>
-                    <TextBlock FontSize="20" Text="Images"/>
+                    <TextBlock Text="Images" FontSize="25"/>
                 </PivotItem.Header>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -96,9 +108,9 @@
                         </GridView.ItemTemplate>
                     </GridView>
                 </Grid>
+
             </PivotItem>
         </Pivot>
-
         <ProgressRing IsActive="{Binding isOnLoading}" Visibility="{Binding ProVis}"/>
         <StackPanel Visibility="{Binding FailVis}" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock FontSize="25" HorizontalAlignment="Center">
