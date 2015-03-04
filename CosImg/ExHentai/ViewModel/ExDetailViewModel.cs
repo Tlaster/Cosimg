@@ -11,6 +11,8 @@ using System.Windows.Input;
 using TBase;
 using TBase.RT;
 using Windows.UI.Popups;
+using CosImg.Common;
+using Windows.Storage;
 
 namespace CosImg.ExHentai.ViewModel
 {
@@ -85,10 +87,17 @@ namespace CosImg.ExHentai.ViewModel
         {
             get
             {
-                return new DelegateCommand(() =>
-                {
-                    MessageDialog dialog = new MessageDialog("Now Buliding", "Sorry");
-                    dialog.ShowAsync();
+                return new DelegateCommand( async() =>
+                {           
+                    var cachefolder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("download",CreationCollisionOption.OpenIfExists);
+                    var folder = await cachefolder.CreateFolderAsync(this.Detail.HeaderInfo.TitleEn.GetHashedString(), CreationCollisionOption.OpenIfExists);
+                    if (App.DownLoadList==null)
+                    {
+                        App.DownLoadList = new List<DownLoadModel>();
+                    }
+                    App.DownLoadList.Add(new DownLoadModel(this.Link, folder, this.Detail.HeaderInfo.TitleEn));
+                    //MessageDialog dialog = new MessageDialog("Now Buliding", "Sorry");
+                    //dialog.ShowAsync();
                 });
             }
         }

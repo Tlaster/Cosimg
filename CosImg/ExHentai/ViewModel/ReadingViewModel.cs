@@ -9,6 +9,7 @@ using System.Windows.Input;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using TBase;
+using CosImg.Common;
 using TBase.RT;
 
 namespace CosImg.ExHentai.ViewModel
@@ -25,7 +26,6 @@ namespace CosImg.ExHentai.ViewModel
             ImageList = new List<ImageModel>();
             OnLoaded();
         }
-
         private async void OnLoaded()
         {
             this.PageList = await ParseHelper.GetImagePageListAsync(Link, SettingHelpers.GetSetting<string>("cookie"));
@@ -33,32 +33,25 @@ namespace CosImg.ExHentai.ViewModel
             for (int i = 0; i < PageList.Count; i++)
             {
                 temp.Add(new ImageModel() 
-                { 
+                {
                     ImageIndex = i,
                     ImagePage = PageList[i].ImagePage,
-                    SaveFolder = HashedStringOf(HeaderEn) 
+                    SaveFolder = HeaderEn.GetHashedString()
                 });
             }
             ImageList = temp;
             OnPropertyChanged("ImageList");
         }
 
-        private string HashedStringOf(string name)
-        {
-            Windows.Storage.Streams.IBuffer buff_utf8 = CryptographicBuffer.ConvertStringToBinary(name, Windows.Security.Cryptography.BinaryStringEncoding.Utf8);
-            HashAlgorithmProvider algprov = HashAlgorithmProvider.OpenAlgorithm(HashAlgorithmNames.Sha1);
-            Windows.Storage.Streams.IBuffer buff_hash = algprov.HashData(buff_utf8);
-            return CryptographicBuffer.EncodeToHexString(buff_hash);
-        }
 
         public int SelectIndex { get; set; }
         public ICommand RefreshCommand
         {
             get
             {
-                return new DelegateCommand(() =>
+                return new DelegateCommand(async () =>
                 {
-                    ImageList[SelectIndex].Refresh();
+                    await ImageList[SelectIndex].Refresh();
                 });
             }
         }

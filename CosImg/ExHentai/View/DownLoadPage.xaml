@@ -1,0 +1,40 @@
+﻿<Page
+    x:Class="CosImg.ExHentai.View.DownLoadPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CosImg.ExHentai.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Now Downloading" FontSize="25" Margin="8,0,0,0"/>
+        <Grid Grid.Row="1">
+            <ListView>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{Binding ItemImage}" Width="110" Height="146"/>
+                            <Grid Grid.Column="1">
+                                <StackPanel Orientation="Vertical" >
+                                    <TextBlock Text="{Binding Name}"/>
+                                    <ProgressBar Margin="2" Maximum="100" Value="{Binding CurrentPageProgress}"/>
+                                    <ProgressBar Margin="2" Maximum="{Binding MaxImageCount}" Value="{Binding CurrentPage}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </Grid>
+</Page>

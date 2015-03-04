@@ -1,4 +1,5 @@
 ﻿using CosImg.Common;
+using CosImg.ExHentai.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,6 +30,9 @@ namespace CosImg
     {
 
         public static Frame rootFrame { get; private set; }
+        public static List<DownLoadModel> DownLoadList;
+
+
         /// <summary>
         /// 初始化单一实例应用程序对象。    这是执行的创作代码的第一行，
         /// 逻辑上等同于 main() 或 WinMain()。
@@ -43,7 +47,7 @@ namespace CosImg
 #endif
         }
         bool isExit = false;
-        async void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
         {
             if (!rootFrame.CanGoBack)
             {
