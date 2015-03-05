@@ -29,11 +29,20 @@ namespace CosImg.Common
         }
         private async Task<BitmapImage> GetImage(string link)
         {
-            using (HttpClient client = new HttpClient())
+            try
             {
-                client.DefaultRequestHeaders.Add("Cookie", SettingHelpers.GetSetting<string>("cookie") + ParseHelper.unconfig);
-                byte[] bit = await client.GetByteArrayAsync(link);
+                var bit = await HttpHelper.GetByteArray(link, SettingHelpers.GetSetting<string>("cookie") + ParseHelper.unconfig);
                 return await ImageHelper.ByteArrayToBitmapImage(bit);
+                //using (HttpClient client = new HttpClient())
+                //{
+                //    client.DefaultRequestHeaders.Add("Cookie", SettingHelpers.GetSetting<string>("cookie") + ParseHelper.unconfig);
+                //    byte[] bit = await client.GetByteArrayAsync(link);
+                //    return await ImageHelper.ByteArrayToBitmapImage(bit);
+                //}
+            }
+            catch (Exception e)
+            {
+                return new BitmapImage();
             }
 
         }

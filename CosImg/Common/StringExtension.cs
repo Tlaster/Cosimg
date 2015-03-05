@@ -17,5 +17,6 @@ namespace CosImg.Common
             Windows.Storage.Streams.IBuffer buff_hash = algprov.HashData(buff_utf8);
             return CryptographicBuffer.EncodeToHexString(buff_hash);
         }
+
     }
 }

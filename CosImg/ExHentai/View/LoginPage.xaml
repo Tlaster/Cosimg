@@ -17,8 +17,6 @@
             <TextBlock Style="{StaticResource MessageDialogTitleStyle}">OK Welcome,Hentai</TextBlock>
             <TextBox Name="userName" Header="User Name"/>
             <PasswordBox  Name="password" Header="Password"/>
-
-            <!-- 内容主体 -->
             <TextBlock Name="body" Style="{StaticResource MessageDialogContentStyle}" TextWrapping="Wrap">
                 But you MUST login before you use ExHentaiViewer
                 <LineBreak/>

@@ -199,7 +199,7 @@
     <PackageInfo>
       <OsMinVersion>6.3.0.0</OsMinVersion>
       <PackageArchitecture>neutral</PackageArchitecture>
-      <PackageMaxArchitectureVersion>0.0.0.12</PackageMaxArchitectureVersion>
+      <PackageMaxArchitectureVersion>0.0.0.13</PackageMaxArchitectureVersion>
     </PackageInfo>
   </PackageInfoList>
 </StoreAssociation>

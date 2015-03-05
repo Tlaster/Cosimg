@@ -67,5 +67,6 @@ namespace CosImg.ExHentai.View
         {
             App.rootFrame.GoBack();
         }
+
     }
 }

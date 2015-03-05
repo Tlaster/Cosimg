@@ -98,8 +98,14 @@ namespace ExHentaiLib.Common
                                                              Name = (a.FirstChild.InnerText),
                                                              Value = (from b in a.LastChild.ChildNodes
                                                                       select new StringBuilder((b.InnerText)).ToString()).ToArray<string>(),
-                                                         }).ToList<TagInfo>(),
+                                                         }).ToList(),
                                           },
+                             RateValue = "Rating "+htmldoc.GetElementbyId("rating_label").InnerText,
+                             UpLoadInfo = (from a in htmldoc.GetElementbyId("gdd").FirstChild.ChildNodes
+                                           select new UpLoadInfo
+                                           {
+                                               Value = a.InnerText,
+                                           }).ToList(),
                              //ImageCountString = htmldoc.DocumentNode.GetNodebyClassName("ip").InnerText,
                              MaxImageCount = GetMaxImageCount(htmldoc.DocumentNode.GetNodebyClassName("ip").InnerText),
                              DetailPageCount = htmldoc.DocumentNode.GetNodebyClassName("ptt").FirstChild.ChildNodes.Count - 2,
@@ -110,7 +116,7 @@ namespace ExHentaiLib.Common
                                               ImageName = (a.InnerText),
                                               ImgeSrc = a.FirstChild.FirstChild.Attributes["src"].Value,
                                               ImagePage = (a.FirstChild.Attributes["href"].Value),
-                                          }).ToList<ImageListInfo>(),
+                                          }).ToList(),
                          };
         }
         public async static Task<ObservableCollection<MainListProp>> GetMainListAsync(string uri, string cookie)

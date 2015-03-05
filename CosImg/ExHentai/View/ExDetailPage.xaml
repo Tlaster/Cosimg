@@ -33,6 +33,20 @@
             </Grid>
         </DataTemplate>
     </Page.Resources>
+    
+    <Page.BottomAppBar>
+        <CommandBar Visibility="{Binding LoadMoreVis}">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Icon="TwoPage" Label="Read" Command="{Binding ReadCommand}"/>
+                <AppBarButton Icon="Download" Label="DownLoad" Command="{Binding DownLoadCommand}"/>
+                <AppBarButton Icon="{Binding FavorIcon}" Label="{Binding FavorButtonText}" Command="{Binding FavorCommand}"/>
+                <AppBarButton Icon="Shuffle" Label="Share" Command="{Binding ShareCommand}"/>
+            </CommandBar.PrimaryCommands>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="View In IE" Command="{Binding ViewInIECommand}" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
 
     <Grid>
         <Pivot Visibility="{Binding LoadMoreVis}" Margin="0,-25,0,0">
@@ -45,12 +59,13 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <AppBarButton IsCompact="True" VerticalAlignment="Bottom" HorizontalAlignment="Right" Icon="UnFavorite"/>
-                    <ScrollViewer>
+                    <ScrollViewer Margin="10,0">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -58,19 +73,27 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock TextWrapping="Wrap" Text="{Binding Detail.HeaderInfo.TitleEn}" FontSize="25"/>
-                                <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding Detail.HeaderInfo.TitleJp}" FontSize="25"/>
+                                <TextBlock Foreground="Gray" Grid.Row="1" TextWrapping="Wrap" Text="{Binding Detail.HeaderInfo.TitleJp}" FontSize="25"/>
                             </Grid>
-                            <Image Grid.Row="1" MaxHeight="250" MinHeight="200" Source="{Binding Path=Result}" DataContext="{Binding Detail.HeaderInfo.HeaderImage,Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" />
+                            <Image Margin="8,16" Grid.Row="1" MaxHeight="350" MinHeight="200" Source="{Binding Path=Result}" DataContext="{Binding Detail.HeaderInfo.HeaderImage,Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" />
+                            <TextBlock Grid.Row="2" Text="{Binding Detail.RateValue}" FontSize="15"/>
+                            <ListView Grid.Row="3" ItemsSource="{Binding Detail.UpLoadInfo}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Value}" FontSize="15"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </Grid>
                     </ScrollViewer>
-                    <Grid Background="#FF1F1F1F" Grid.Row="1">
+                    <!--<Grid Background="#FF1F1F1F" Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Button Margin="8,0" Content="Read" Command="{Binding ReadCommand}" HorizontalAlignment="Stretch"/>
                         <Button Margin="8,0" Grid.Column="1" Content="Download" Command="{Binding DownLoadCommand}" HorizontalAlignment="Stretch"/>
-                    </Grid>
+                    </Grid>-->
                 </Grid>
             </PivotItem>
             <PivotItem Margin="0">

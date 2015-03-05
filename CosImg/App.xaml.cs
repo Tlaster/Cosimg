@@ -1,5 +1,7 @@
 ﻿using CosImg.Common;
 using CosImg.ExHentai.Model;
+using CosImg.ExHentai.View;
+using ExHentaiLib.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +12,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -18,6 +21,11 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Windows.Storage;
+using System.Threading.Tasks;
+using Windows.Data.Json;
+using SQLite;
+using System.Collections.ObjectModel;
 
 // “空白应用程序”模板在 http://go.microsoft.com/fwlink/?LinkId=391641 上有介绍
 
@@ -31,6 +39,7 @@ namespace CosImg
 
         public static Frame rootFrame { get; private set; }
         public static List<DownLoadModel> DownLoadList;
+        public static string ExitToastContent { get;set; }
 
 
         /// <summary>
@@ -39,6 +48,7 @@ namespace CosImg
         /// </summary>
         public App()
         {
+            ExitToastContent = "再按一次返回键退出程序";
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
@@ -47,21 +57,35 @@ namespace CosImg
 #endif
         }
         bool isExit = false;
-        void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        async void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
         {
             if (!rootFrame.CanGoBack)
             {
-                if (!isExit)
+                if (DownLoadList != null && DownLoadList.Count != 0)
                 {
-                    isExit = true;
-                    ToastPrompt toast = new ToastPrompt("再按一次返回键退出程序");
-                    toast.Completed += (s1, e1) => { isExit = false; };
-                    toast.Show();
-                    e.Handled = true;
+                    MessageDialog dialog = new MessageDialog("Something is downlaoding,exit the application?", "Sure?");
+                    dialog.Commands.Add(new UICommand("Exit", (a) =>
+                    {
+                        //TODO:Save the download state
+                        App.Current.Exit();
+                    }));
+                    dialog.Commands.Add(new UICommand("Cancel"));
+                    await dialog.ShowAsync();
                 }
                 else
                 {
-                    App.Current.Exit();
+                    if (!isExit)
+                    {
+                        isExit = true;
+                        ToastPrompt toast = new ToastPrompt(ExitToastContent);
+                        toast.Completed += (s1, e1) => { isExit = false; };
+                        toast.Show();
+                        e.Handled = true;
+                    }
+                    else
+                    {
+                        App.Current.Exit();
+                    }
                 }
             }
             else
@@ -70,6 +94,9 @@ namespace CosImg
                 e.Handled = true;
             }
         }
+
+
+
 
 
         /// <summary>
@@ -109,15 +136,46 @@ namespace CosImg
                 Window.Current.Content = rootFrame;
             }
 
-            if (rootFrame.Content == null)
-            {
-
-                rootFrame.ContentTransitions = null;
-                if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))
+#if DEBUG
+            
+                try
                 {
-                    throw new Exception("Failed to create initial page");
+                    LogInHelper.LogCookieCheck(SettingHelpers.GetSetting<string>("cookie", true));
+                    App.rootFrame.Navigate(typeof(ExHentai.View.ExMainPage));
+                }
+                catch (Exception)
+                {
+                    App.rootFrame.Navigate(typeof(ExHentai.View.LoginPage));
+                }
+#else
+            if (SettingHelpers.GetSetting<bool>("ExDefault"))
+            {
+                try
+                {
+                    LogInHelper.LogCookieCheck(SettingHelpers.GetSetting<string>("cookie", true));
+                    App.rootFrame.Navigate(typeof(ExHentai.View.ExMainPage));
+                }
+                catch (Exception)
+                {
+                    App.rootFrame.Navigate(typeof(ExHentai.View.LoginPage));
                 }
             }
+            else
+            {
+                App.rootFrame.Navigate(typeof(MainPage));
+            }
+#endif
+
+
+
+            //if (rootFrame.Content == null)
+            //{
+            //    rootFrame.ContentTransitions = null;
+            //    if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))
+            //    {
+            //        throw new Exception("Failed to create initial page");
+            //    }
+            //}
 
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
@@ -130,9 +188,8 @@ namespace CosImg
                 await ImageHelper.ClearCache();
             }
             SettingHelpers.SetSetting<string>("LastLaunch", DateTime.Today.ToString());
+
         }
-
-
 
         protected async override void OnActivated(IActivatedEventArgs args)
         {

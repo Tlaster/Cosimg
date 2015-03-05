@@ -41,5 +41,9 @@ namespace ExHentaiLib.Prop
         public string ImageCountString { get; set; }
 
         public int MaxImageCount { get; set; }
+
+        public List<UpLoadInfo> UpLoadInfo { get; set; }
+
+        public string RateValue { get; set; }
     }
 }

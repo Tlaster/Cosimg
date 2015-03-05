@@ -19,9 +19,9 @@ namespace CosImg.Common
 {
     public static class ImageHelper
     {
-        public static async Task ShareImage(byte[] imagebyte)
+        public static async Task ShareImage(byte[] imagebyte, string content = "分享图片")
         {
-            UmengPicture picture = new UmengPicture(imagebyte, "分享图片");
+            UmengPicture picture = new UmengPicture(imagebyte, content);
             List<UmengClient> clients = new List<UmengClient>() 
                     { 
                         new SinaWeiboClient("549eb88bfd98c51269000c35"), 
@@ -53,7 +53,7 @@ namespace CosImg.Common
 
         public static async Task ClearCache()
         {
-            var folder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists);
+            var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists);
             await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
         }
 
@@ -61,7 +61,7 @@ namespace CosImg.Common
         {
             try
             {
-                var folder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+                var folder = await (await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
                 var file = await folder.GetFileAsync(fileName);
                 return true;
             }
@@ -76,7 +76,7 @@ namespace CosImg.Common
         {
             if (await CheckCacheImage(folderName,fileName))
             {
-                var folder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+                var folder = await (await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
                 var file = await folder.GetFileAsync(fileName);
                 await file.DeleteAsync(StorageDeleteOption.PermanentDelete);
             }
@@ -85,7 +85,7 @@ namespace CosImg.Common
 
         public static async Task<byte[]> GetCacheImage(string folderName, string fileName)
         {
-            var folder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+            var folder = await (await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
             var file = await folder.GetFileAsync(fileName);
             var imagebyte = default(byte[]);
             using (var stream = await file.OpenStreamForReadAsync())
@@ -98,7 +98,7 @@ namespace CosImg.Common
 
         public static async Task SaveCacheImage(string folderName, string fileName, byte[] imagebyte)
         {
-            var cachefolder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("cache",CreationCollisionOption.OpenIfExists);
+            var cachefolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists);
             var folder = await cachefolder.CreateFolderAsync(folderName, CreationCollisionOption.OpenIfExists);
             var file = await folder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
             await Windows.Storage.FileIO.WriteBytesAsync(file, imagebyte);

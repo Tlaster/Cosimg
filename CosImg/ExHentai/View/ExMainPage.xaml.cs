@@ -1,4 +1,6 @@
-﻿using CosImg.ExHentai.ViewModel;
+﻿using CosImg.ExHentai.Common;
+using CosImg.ExHentai.Model;
+using CosImg.ExHentai.ViewModel;
 using ExHentaiLib.Common;
 using System;
 using System.Collections.Generic;
@@ -8,6 +10,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using TBase.RT;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -37,16 +41,23 @@ namespace CosImg.ExHentai.View
         /// </summary>
         /// <param name="e">描述如何访问此页的事件数据。
         /// 此参数通常用于配置页。</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.NavigationMode == NavigationMode.New)
             {
-                App.rootFrame.BackStack.RemoveAt(0);
+                if (App.rootFrame.BackStack.Count!=0)
+                {
+                    App.rootFrame.BackStack.RemoveAt(0);
+                }
+                await StatusBar.GetForCurrentView().HideAsync();
                 this.RequestedTheme = ElementTheme.Dark;
+                App.ExitToastContent = "Press once more to exit";
+                UmengSDK.UmengAnalytics.TrackEvent("HentaiModeExChanged");
             }
-            UmengSDK.UmengAnalytics.TrackEvent("HentaiModeExChanged");
             UmengSDK.UmengAnalytics.TrackPageStart("ExHnetaiMainPage");
-
+            var list = await FavorDBHelpers.Query();
+            list.Reverse();
+            favorGridView.ItemsSource = list;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -62,7 +73,12 @@ namespace CosImg.ExHentai.View
 
         private void AppBarButton_Click_1(object sender, RoutedEventArgs e)
         {
+            App.rootFrame.Navigate(typeof(ExSettingPage));
+        }
 
+        private void favorGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            App.rootFrame.Navigate(typeof(ExDetailPage), new ExDetailViewModel((e.ClickedItem as FavorModel).ItemPageLink));
         }
     }
 }

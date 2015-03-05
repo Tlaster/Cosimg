@@ -51,6 +51,7 @@
     <Compile Include="Prop\ImageListInfo.cs" />
     <Compile Include="Prop\MainListProp.cs" />
     <Compile Include="Prop\TagInfo.cs" />
+    <Compile Include="Prop\UpLoadInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack">
