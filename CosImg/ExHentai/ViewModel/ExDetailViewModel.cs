@@ -127,7 +127,7 @@ namespace CosImg.ExHentai.ViewModel
                 return new DelegateCommand(async () =>
                 {
                     var imgbyte = await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie") + ParseHelper.unconfig);
-                    await ImageHelper.ShareImage(imgbyte, (Detail.HeaderInfo.TitleJp ?? Detail.HeaderInfo.TitleEn) + "------" + _link);
+                    await ImageHelper.ShareImage(imgbyte, (Detail.HeaderInfo.TitleJp == "" ? Detail.HeaderInfo.TitleEn : Detail.HeaderInfo.TitleJp) + "------" + _link);
                 });
             }
         }

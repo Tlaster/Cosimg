@@ -1,0 +1,18 @@
+﻿<Application
+    x:Class="CosImg.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CosImg"
+    RequestedTheme="Light"
+    xmlns:common="using:CosImg.Common"
+    >
+    
+    <Application.Resources>
+
+        <SolidColorBrush x:Key="LineColor" Color="#FF007ACC"/>
+        <SolidColorBrush x:Key="AppTheme" Color="#FFEE3E75"/>
+        <common:SelectedIndexToVisibilityConverter x:Key="SelectedIndexToVisilibityConverter"/>
+        <common:SelectedIndexToCollapsedConverter x:Key="SelectedIndexToCollapsedConverter"/>
+    </Application.Resources>
+
+</Application>

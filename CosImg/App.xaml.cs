@@ -1,31 +1,14 @@
 ﻿using CosImg.Common;
 using CosImg.ExHentai.Model;
-using CosImg.ExHentai.View;
 using ExHentaiLib.Common;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using TBase.RT;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
-using Windows.Storage;
-using System.Threading.Tasks;
-using Windows.Data.Json;
-using SQLite;
-using System.Collections.ObjectModel;
 
 // “空白应用程序”模板在 http://go.microsoft.com/fwlink/?LinkId=391641 上有介绍
 
@@ -112,6 +95,7 @@ namespace CosImg
             {
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
+            UmengSDK.UmengAnalytics.IsDebug = true;
 #endif
 
             //UmengSDK.UmengAnalytics.IsDebug = true;

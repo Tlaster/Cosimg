@@ -50,6 +50,9 @@
 
     <Page.BottomAppBar>
         <CommandBar ClosedDisplayMode="Minimal">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Command="{Binding RefreshCommand}" Label="Refresh" Icon="Refresh" Visibility="{Binding ElementName=pivot,Path=SelectedIndex,Converter={StaticResource SelectedIndexToVisilibityConverter},ConverterParameter=0}"/>
+            </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="Setting" Click="AppBarButton_Click_1"/>
             </CommandBar.SecondaryCommands>

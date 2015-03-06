@@ -88,7 +88,6 @@
     </Compile>
     <Compile Include="Common\ImageHelper.cs" />
     <Compile Include="Common\LinkToBitmapImageWitchCookieConverter.cs" />
-    <Compile Include="Common\SelectedIndexToVisibilityConverter.cs" />
     <Compile Include="Common\StringExtension.cs" />
     <Compile Include="CosImg\Common\BaseViewModel.cs" />
     <Compile Include="CosImg\Common\GeneratorIncrementalLoadingClass.cs" />
@@ -253,6 +252,7 @@
       <Name>TBase</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\CosImg.Shared\CosImg.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

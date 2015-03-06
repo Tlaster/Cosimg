@@ -26,6 +26,17 @@ namespace CosImg.ExHentai.ViewModel
             set { _pivotSelectedIndex = value; OnPropertyChanged("PivotSelectedIndex"); }
         }
 
+        public ICommand RefreshCommand
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    MainItemModel.OnLoaded("http://exhentai.org/?");
+                });
+            }
+        }
+
 
         public PivotItemModel MainItemModel { get; set; }
         public SearchModel SearchItemModel { get; set; }

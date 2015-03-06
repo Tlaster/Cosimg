@@ -40,7 +40,7 @@ namespace CosImg.Common
                 //    return await ImageHelper.ByteArrayToBitmapImage(bit);
                 //}
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return new BitmapImage();
             }
