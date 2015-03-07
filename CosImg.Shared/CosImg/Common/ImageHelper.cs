@@ -11,14 +11,17 @@ using System.Net.Http;
 using System.Net;
 using Windows.Storage;
 using TBase.RT;
-using UmengSocialSDK;
 using System.Diagnostics;
 using TBase;
+#if WINDOWS_PHONE_APP
+using UmengSocialSDK;
+#endif
 
 namespace CosImg.Common
 {
     public static class ImageHelper
     {
+#if WINDOWS_PHONE_APP
         public static async Task ShareImage(byte[] imagebyte, string content = "分享图片")
         {
             UmengPicture picture = new UmengPicture(imagebyte, content);
@@ -49,7 +52,7 @@ namespace CosImg.Common
                     break;
             }
         }
-
+#endif
 
         public static async Task ClearCache()
         {

@@ -1,4 +1,5 @@
-﻿using CosImg.CosImg.Common;
+﻿using CosImg.Common;
+using CosImg.CosImg.Common;
 using CosImg.ExHentai.View;
 using CosImg.ExHentai.ViewModel;
 using ExHentaiLib.Common;
@@ -19,7 +20,7 @@ namespace CosImg.ExHentai.Model
     public class PivotItemModel : LoadProps
     {
         private ObservableCollection<MainListProp> _list;
-        private string _link;
+        public string Link;
 
         public ObservableCollection<MainListProp> List
         {
@@ -33,8 +34,8 @@ namespace CosImg.ExHentai.Model
 
         public PivotItemModel(string link)
         {
-            _link = link;
-            OnLoaded(_link);
+            Link = link;
+            OnLoaded(Link);
         }
 
         public async void OnLoaded(string uri)
@@ -85,7 +86,7 @@ namespace CosImg.ExHentai.Model
                     else
                     {
                         var a = List.Count / 25;
-                        LoadMore(_link + "&page=" + (a).ToString());
+                        LoadMore(Link + "&page=" + (a).ToString());
                     }
                 });
             }
@@ -103,7 +104,7 @@ namespace CosImg.ExHentai.Model
                 return new DelegateCommand(() =>
                 {
                     isLoadFail = false;
-                    OnLoaded(_link);
+                    OnLoaded(Link);
                 });
             }
         }
@@ -115,7 +116,7 @@ namespace CosImg.ExHentai.Model
                 return new DelegateCommand(() =>
                 {
                     List = new System.Collections.ObjectModel.ObservableCollection<MainListProp>();
-                    OnLoaded(_link);
+                    OnLoaded(Link);
                 });
             }
         }

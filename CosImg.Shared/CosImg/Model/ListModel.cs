@@ -17,20 +17,12 @@ namespace CosImg.CosImg.Model
         {
             get
             {
+#if WINDOWS_PHONE_APP
                 var a = SettingHelpers.GetSetting<int?>("ColumnCount") == default(int?) ? 3 : SettingHelpers.GetSetting<int>("ColumnCount");
                 return ((Window.Current.Content as Frame).ActualWidth) / a - 10d;
-                
-                //var bounds = Window.Current.Bounds;
-                //var dpiRatio = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
-                //var resolutionH = Math.Round(bounds.Height * dpiRatio);
-                //var resolutionW = Math.Round(bounds.Width * dpiRatio);
-                //if (resolutionH == 1920d && resolutionW == 1080d)
-                //{
-                //    return ((Window.Current.Content as Frame).ActualWidth) / 4 - 10d;
-                //}
-                //else
-                //{
-                //}
+#else
+                return ((Window.Current.Content as Frame).ActualWidth) / 10;
+#endif
             }
         }
         public string image { get; set; }

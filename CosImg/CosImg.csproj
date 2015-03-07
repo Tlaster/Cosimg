@@ -20,7 +20,7 @@
     <AppxBundle>Auto</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>ARM</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -86,17 +86,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Common\ImageHelper.cs" />
-    <Compile Include="Common\LinkToBitmapImageWitchCookieConverter.cs" />
-    <Compile Include="Common\StringExtension.cs" />
-    <Compile Include="CosImg\Common\BaseViewModel.cs" />
-    <Compile Include="CosImg\Common\GeneratorIncrementalLoadingClass.cs" />
-    <Compile Include="CosImg\Common\LoadProps.cs" />
-    <Compile Include="CosImg\Common\SelectionViewModel.cs" />
-    <Compile Include="CosImg\Model\ListModel.cs" />
     <Compile Include="CosImg\Model\SearchModel.cs" />
-    <Compile Include="CosImg\Model\SelectionModel.cs" />
-    <Compile Include="CosImg\ViewModel\MainViewModel.cs" />
     <Compile Include="CosImg\View\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
@@ -139,8 +129,6 @@
       <DependentUpon>ReadingPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Common\SQLite.cs" />
-    <Compile Include="Common\SQLiteAsync.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -237,7 +225,9 @@
       <Name>SQLite for Windows Phone 8.1</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="CosImg\ViewModel\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClassLib\ExHentaiLib.csproj">
       <Project>{661d6320-3c74-42c9-b60f-7c34ba5dd934}</Project>

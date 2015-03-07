@@ -19,7 +19,6 @@ namespace CosImg.CosImg.Model
 
         public SearchModel(Func<IJsonValue, T> generator)
         {
-            //Link = link;
             _generator = generator;
         }
 
@@ -53,7 +52,7 @@ namespace CosImg.CosImg.Model
                     }
                     else
                     {
-                        Link = "http://worldcosplay.net/api/photo/search?q=" + str;
+                        _link = "http://worldcosplay.net/api/photo/search?q=" + str;
                         OnLoaded();
                     }
                 });
@@ -62,7 +61,7 @@ namespace CosImg.CosImg.Model
 
         public void OnLoaded()
         {
-            List = new GeneratorIncrementalLoadingClass<T>(Link, _generator);
+            List = new GeneratorIncrementalLoadingClass<T>(_link, _generator);
             List.LoadFailed += (s, e) => { isLoadFail = true; isOnLoading = false; };
             List.OnLoading += (s, e) => { isOnLoading = true; };
             List.LoadSucceed += (s, e) => { isOnLoading = false; };

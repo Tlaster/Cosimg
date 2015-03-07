@@ -5,6 +5,7 @@
     xmlns:local="using:CosImg"
     RequestedTheme="Light"
     xmlns:common="using:CosImg.Common"
+    xmlns:TBaseRT="using:TBase.RT"
     >
     
     <Application.Resources>
@@ -13,6 +14,8 @@
         <SolidColorBrush x:Key="AppTheme" Color="#FFEE3E75"/>
         <common:SelectedIndexToVisibilityConverter x:Key="SelectedIndexToVisilibityConverter"/>
         <common:SelectedIndexToCollapsedConverter x:Key="SelectedIndexToCollapsedConverter"/>
+        <common:LinkToBitmapImageWitchCookieConverter x:Key="LinkToBitmapImageWitchCookieConverter"/>
+        <TBaseRT:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Application.Resources>
 
 </Application>

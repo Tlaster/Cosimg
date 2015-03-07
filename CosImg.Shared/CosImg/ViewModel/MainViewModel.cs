@@ -35,27 +35,12 @@ namespace CosImg.CosImg.ViewModel
             };
         };
 
-        private List<SelectionModel> _newList= new List<SelectionModel>()
+        private List<SelectionModel> _newList = new List<SelectionModel>()
         { 
             new SelectionModel() { Name = "最新照片", Link = "http://worldcosplay.net/api/photo/list?",Generator = generator }, 
             new SelectionModel() { Name = "最新随拍", Link = "http://worldcosplay.net/api/instants/list?",Generator = generator2 }
         };
-        public List<SelectionModel> NewList
-        {
-            get { return _newList; }
-            set { _newList = value; }
-        }
 
-        public ICommand NewListPicked
-        {
-            get
-            {
-                return new DelegateCommand<SelectionModel>((item) =>
-                {
-                    NewViewModel = new SelectionViewModel<ListModel>(item.Link, item.Generator);
-                });
-            }
-        }
 
         private List<SelectionModel> _popList = new List<SelectionModel>()
         {
@@ -65,33 +50,22 @@ namespace CosImg.CosImg.ViewModel
             new SelectionModel(){ Name="累计",Link="http://worldcosplay.net/api/ranking/good?sort=good_cnt",Generator=generator},
         };
 
-        public List<SelectionModel> PopList
-        {
-            get { return _popList; }
-            set { _popList = value; }
-        }
-        public ICommand PopListPicked
-        {
-            get
-            {
-                return new DelegateCommand<SelectionModel>((item) =>
-                {
-                    PopViewModel = new SelectionViewModel<ListModel>(item.Link, item.Generator);
-                });
-            }
-        }
 
 
 
         public MainViewModel()
         {
-            FoundViewModel = new SelectionViewModel<ListModel>("http://worldcosplay.net/api/photo/popular?", generator);
-            NewViewModel = new SelectionViewModel<ListModel>("http://worldcosplay.net/api/photo/list?", generator);
-            PopViewModel = new SelectionViewModel<ListModel>("http://worldcosplay.net/api/ranking/good?sort=daily_good_cnt", generator);
+            FoundViewModel = new SelectionViewModel("http://worldcosplay.net/api/photo/popular?", generator);
+            NewViewModel = new SelectionViewModel("http://worldcosplay.net/api/photo/list?", generator, _newList);
+            PopViewModel = new SelectionViewModel("http://worldcosplay.net/api/ranking/good?sort=daily_good_cnt", generator, _popList);
+#if WINDOWS_PHONE_APP
             SearchViewModel = new SearchModel<ListModel>(generator);
+#endif
         }
 
+#if WINDOWS_PHONE_APP
         public SearchModel<ListModel> SearchViewModel { get; set; }
+#endif
 
 
         public ICommand RefreshCommand
@@ -118,17 +92,17 @@ namespace CosImg.CosImg.ViewModel
             }
         }
 
-        private SelectionViewModel<ListModel> _popViewModel;
+        private SelectionViewModel _popViewModel;
 
-        public SelectionViewModel<ListModel> PopViewModel
+        public SelectionViewModel PopViewModel
         {
             get { return _popViewModel; }
             private set { _popViewModel = value; OnPropertyChanged("PopViewModel"); }
         }
 
-        private SelectionViewModel<ListModel> _foundViewModel;
+        private SelectionViewModel _foundViewModel;
 
-        public SelectionViewModel<ListModel> FoundViewModel
+        public SelectionViewModel FoundViewModel
         {
             get { return _foundViewModel; }
             private set { _foundViewModel = value; OnPropertyChanged("PopViewModel"); }
@@ -136,9 +110,9 @@ namespace CosImg.CosImg.ViewModel
 
 
 
-        private SelectionViewModel<ListModel> _newViewModel;
+        private SelectionViewModel _newViewModel;
 
-        public SelectionViewModel<ListModel> NewViewModel
+        public SelectionViewModel NewViewModel
         {
             get { return _newViewModel; }
             private set { _newViewModel = value; OnPropertyChanged("NewViewModel"); }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CosImg.CosImg.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,27 +13,42 @@ using Windows.UI.Xaml.Controls;
 
 namespace CosImg.CosImg.Common
 {
-    public class SelectionViewModel<T> :BaseViewModel<T>
+    public class SelectionViewModel : BaseViewModel<ListModel>
     {
-        private Func<IJsonValue, T> _generator;
+        private Func<IJsonValue, ListModel> _generator;
+        public List<SelectionModel> ModelList { get; set; }
 
 
-        public SelectionViewModel(string link,Func<IJsonValue, T> generator)
+        public SelectionViewModel(string link, Func<IJsonValue, ListModel> generator, List<SelectionModel> list = null)
         {
-            Link = link;
+            _link = link;
             _generator = generator;
+            ModelList = list;
             OnLoaded();
         }
 
 
         public void OnLoaded()
         {
-            List = new GeneratorIncrementalLoadingClass<T>(Link, _generator);
+            List = new GeneratorIncrementalLoadingClass<ListModel>(_link, _generator);
             List.OnLoading += (s, e) => { isOnLoading = true; };
             List.LoadFailed += (s, e) => { isLoadFail = true; isOnLoading = false; };
             List.LoadSucceed += (s, e) => { isOnLoading = false; };
         }
 
+        public ICommand ModelPicked
+        {
+            get
+            {
+                return new DelegateCommand<SelectionModel>((item) =>
+
+                {
+                    this._link = item.Link;
+                    this._generator = item.Generator;
+                    OnLoaded();
+                });
+            }
+        }
 
         public override System.Windows.Input.ICommand ReTryCommand
         {
@@ -52,7 +68,11 @@ namespace CosImg.CosImg.Common
             {
                 return new DelegateCommand<ItemClickEventArgs>((item) =>
                 {
-                    App.rootFrame.Navigate(typeof(CosImg.View.ImagePage), (T)item.ClickedItem);
+#if WINDOWS_PHONE_APP
+                    App.rootFrame.Navigate(typeof(CosImg.View.ImagePage), item.ClickedItem as ListModel);
+#else
+
+#endif
                 });
             }
         }

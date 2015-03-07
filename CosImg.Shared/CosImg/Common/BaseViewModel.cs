@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CosImg.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,9 @@ namespace CosImg.CosImg.Common
             set { _list = value; OnPropertyChanged("List"); }
         }
 
-        public string Link { get; set; }
+        protected string _link;
+
+
         public abstract ICommand ReTryCommand { get; }
         public abstract ICommand ItemTapped { get; }
 

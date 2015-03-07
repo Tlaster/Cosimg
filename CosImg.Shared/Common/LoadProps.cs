@@ -5,7 +5,7 @@ using System.Text;
 using TBase;
 using Windows.UI.Xaml;
 
-namespace CosImg.CosImg.Common
+namespace CosImg.Common
 {
     public abstract class LoadProps : NotifyPropertyChanged
     {

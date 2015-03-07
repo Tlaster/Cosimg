@@ -50,6 +50,7 @@
                 </GridView>
         	</Grid>
         </DataTemplate>
+
     </Page.Resources>
 
     <Page.BottomAppBar>
@@ -58,7 +59,7 @@
                 <AppBarButton Command="{Binding RefreshCommand}" Label="刷新" Visibility="{Binding SelectedIndex, ConverterParameter=3, Converter={StaticResource SelectedIndexToCollapsedConverter}}" Icon="Refresh"/>
                 <AppBarButton Label="选择源" Visibility="{Binding SelectedIndex, ConverterParameter=1, Converter={StaticResource SelectedIndexToVisilibityConverter}}" Icon="List">
                     <AppBarButton.Flyout>
-                        <ListPickerFlyout x:Name="NewListFlyout" ItemsSource="{Binding NewList}" >
+                        <ListPickerFlyout x:Name="ListFlyout" ItemsSource="{Binding NewViewModel.ModelList}" >
                             <ListPickerFlyout.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock FontFamily="30" Text="{Binding Name}"/>
@@ -66,7 +67,7 @@
                             </ListPickerFlyout.ItemTemplate>
                             <Interactivity:Interaction.Behaviors>
                                 <Core:EventTriggerBehavior EventName="ItemsPicked">
-                                    <Core:InvokeCommandAction Command="{Binding NewListPicked}" CommandParameter="{Binding ElementName=NewListFlyout,Path=SelectedItem}"/>
+                                    <Core:InvokeCommandAction Command="{Binding NewViewModel.ModelPicked}" CommandParameter="{Binding ElementName=ListFlyout,Path=SelectedItem}"/>
                                 </Core:EventTriggerBehavior>
                             </Interactivity:Interaction.Behaviors>
                         </ListPickerFlyout>
@@ -74,7 +75,7 @@
                 </AppBarButton>
                 <AppBarButton Label="选择源" Visibility="{Binding SelectedIndex, ConverterParameter=2, Converter={StaticResource SelectedIndexToVisilibityConverter}}" Icon="List">
                     <AppBarButton.Flyout>
-                        <ListPickerFlyout x:Name="PopListFlyout" ItemsSource="{Binding PopList}" >
+                        <ListPickerFlyout x:Name="popListFlyout" ItemsSource="{Binding PopViewModel.ModelList}" >
                             <ListPickerFlyout.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock FontFamily="30" Text="{Binding Name}"/>
@@ -82,11 +83,10 @@
                             </ListPickerFlyout.ItemTemplate>
                             <Interactivity:Interaction.Behaviors>
                                 <Core:EventTriggerBehavior EventName="ItemsPicked">
-                                    <Core:InvokeCommandAction Command="{Binding PopListPicked}" CommandParameter="{Binding ElementName=PopListFlyout,Path=SelectedItem}"/>
+                                    <Core:InvokeCommandAction Command="{Binding PopViewModel.ModelPicked}" CommandParameter="{Binding ElementName=popListFlyout,Path=SelectedItem}"/>
                                 </Core:EventTriggerBehavior>
                             </Interactivity:Interaction.Behaviors>
-                        </ListPickerFlyout>
-                    </AppBarButton.Flyout>
+                        </ListPickerFlyout>                    </AppBarButton.Flyout>
                 </AppBarButton>
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
@@ -97,7 +97,7 @@
     </Page.BottomAppBar>
 
 	<Grid>
-		<Pivot Margin="0,15,0,0" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}">
+		<Pivot x:Name="pivot" Margin="0,15,0,0" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}">
 			<PivotItem Margin="0,0" DataContext="{Binding FoundViewModel}" ContentTemplate="{StaticResource HubContentTemple}" />
 
 			<PivotItem Margin="0,0" DataContext="{Binding NewViewModel}" ContentTemplate="{StaticResource HubContentTemple}"/>

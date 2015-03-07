@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CosImg.CosImg.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace CosImg
         public MainPage()
         {
             this.InitializeComponent();
+            this.DataContext = new MainViewModel();
         }
     }
 }
