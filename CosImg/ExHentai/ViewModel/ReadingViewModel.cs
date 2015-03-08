@@ -19,6 +19,7 @@ namespace CosImg.ExHentai.ViewModel
         private string Link;
         private List<ExHentaiLib.Prop.ImageListInfo> PageList;
         private string HeaderEn;
+        private string _imagePage;
         public ReadingViewModel(string link,string headerEn)
         {
             this.HeaderEn = headerEn;
@@ -26,6 +27,13 @@ namespace CosImg.ExHentai.ViewModel
             ImageList = new List<ImageModel>();
             OnLoaded();
         }
+
+        public ReadingViewModel(string link, string headerEn, string imagePage):this(link,headerEn)
+        {
+            this._imagePage = imagePage;
+        }
+
+
         private async void OnLoaded()
         {
             this.PageList = await ParseHelper.GetImagePageListAsync(Link, SettingHelpers.GetSetting<string>("cookie"));
@@ -41,6 +49,11 @@ namespace CosImg.ExHentai.ViewModel
             }
             ImageList = temp;
             OnPropertyChanged("ImageList");
+            if (_imagePage != null)
+            {
+                SelectIndex = PageList.FindIndex((a) => { return a.ImagePage == _imagePage; });
+                OnPropertyChanged("SelectIndex");
+            }
         }
 
 

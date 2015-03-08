@@ -99,7 +99,9 @@
     <Compile Include="CosImg\View\SettingPage.xaml.cs">
       <DependentUpon>SettingPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ExHentai\Common\DownLoadDBHelpers.cs" />
     <Compile Include="ExHentai\Common\FavorDBHelpers.cs" />
+    <Compile Include="ExHentai\Model\DownLoadInfo.cs" />
     <Compile Include="ExHentai\Model\DownLoadModel.cs" />
     <Compile Include="ExHentai\Model\FavorModel.cs" />
     <Compile Include="ExHentai\Model\ImageModel.cs" />

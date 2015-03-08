@@ -1,4 +1,5 @@
 ﻿using CosImg.Common;
+using CosImg.ExHentai.Common;
 using CosImg.ExHentai.Model;
 using ExHentaiLib.Common;
 using System;
@@ -131,6 +132,7 @@ namespace CosImg
                 {
                     App.rootFrame.Navigate(typeof(ExHentai.View.LoginPage));
                 }
+                var list = await DownLoadDBHelpers.Query();
             }
             else
             {

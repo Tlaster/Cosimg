@@ -15,6 +15,7 @@ using CosImg.Common;
 using Windows.Storage;
 using CosImg.ExHentai.Common;
 using Windows.UI.Xaml.Controls;
+using ExHentaiLib.Prop;
 
 namespace CosImg.ExHentai.ViewModel
 {
@@ -39,6 +40,10 @@ namespace CosImg.ExHentai.ViewModel
                 {
                     var item = await FavorDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
                     _favorState = item == null ? false : true;
+                    if (_favorState)
+                    {
+                        isDownLoaded = item.isDownLoaded;
+                    }
                 }
                 PageList = new List<PageListModel>();
                 for (int i = 0; i < Detail.DetailPageCount; i++)
@@ -53,6 +58,8 @@ namespace CosImg.ExHentai.ViewModel
                 isOnLoading = false;
             }
         }
+
+
 
         private async void LoadMoreImage(string uri)
         {
@@ -141,24 +148,55 @@ namespace CosImg.ExHentai.ViewModel
                 });
             }
         }
+
+        public ICommand ImageItemClick
+        {
+            get
+            {
+                return new DelegateCommand<ItemClickEventArgs>((e) =>
+                {
+                    var item = e.ClickedItem as ImageListInfo;
+                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn, item.ImagePage));
+                });
+            }
+        }
+
         public ICommand DownLoadCommand
         {
             get
             {
                 return new DelegateCommand(async () =>
                 {
-                    //var cachefolder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("download",CreationCollisionOption.OpenIfExists);
-                    //var folder = await cachefolder.CreateFolderAsync(this.Detail.HeaderInfo.TitleEn.GetHashedString(), CreationCollisionOption.OpenIfExists);
-                    //if (App.DownLoadList==null)
-                    //{
-                    //    App.DownLoadList = new List<DownLoadModel>();
-                    //}
-                    //App.DownLoadList.Add(new DownLoadModel(this.Link, folder, this.Detail.HeaderInfo.TitleEn));
-                    MessageDialog dialog = new MessageDialog("Now Buliding", "Sorry");
-                    await dialog.ShowAsync();
+                    var cachefolder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists);
+                    var folder = await cachefolder.CreateFolderAsync(this.Detail.HeaderInfo.TitleEn.GetHashedString(), CreationCollisionOption.OpenIfExists);
+                    if (App.DownLoadList == null)
+                    {
+                        App.DownLoadList = new List<DownLoadModel>();
+                    }
+                    App.DownLoadList.Add(new DownLoadModel(this._link, folder, this.Detail.HeaderInfo.TitleEn));
+                    new ToastPrompt("Downloading").Show();
+                    var item = await FavorDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
+                    item.isDownLoaded = true;
+                    FavorDBHelpers.Modify(item);
+                    isDownLoaded = true;
+                    _favorState = true;
+                    OnPropertyChanged("FavorIcon");
+                    OnPropertyChanged("FavorButtonText");
+                    //MessageDialog dialog = new MessageDialog("Now Buliding", "Sorry");
+                    //await dialog.ShowAsync();
                 });
             }
         }
+
+
+        private bool _isDownLoaded;
+
+        public bool isDownLoaded
+        {
+            get { return _isDownLoaded; }
+            set { _isDownLoaded = value; OnPropertyChanged("isDownLoaded"); }
+        }
+
 
         private PageListModel _selectedPage;
 

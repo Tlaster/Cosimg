@@ -45,6 +45,13 @@ namespace CosImg.ExHentai.View
         {
             this.RequestedTheme = ElementTheme.Dark;
             this.DataContext = e.Parameter as ReadingViewModel;
+            UmengSDK.UmengAnalytics.TrackPageStart("ReadingPage");
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            UmengSDK.UmengAnalytics.TrackPageEnd("ReadingPage");
         }
 
         private void Grid_Tapped(object sender, TappedRoutedEventArgs e)

@@ -9,6 +9,7 @@
     <Import_RootNamespace>CosImg</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Common\ImageHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\LinkToBitmapImageWitchCookieConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\LoadProps.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\SelectedIndexToVisibilityConverter.cs" />
@@ -17,7 +18,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Common\StringExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CosImg\Common\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CosImg\Common\GeneratorIncrementalLoadingClass.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CosImg\Common\ImageHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CosImg\Common\SelectionViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CosImg\Model\ListModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CosImg\Model\SelectionModel.cs" />
