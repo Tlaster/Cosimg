@@ -47,11 +47,6 @@ namespace CosImg.ExHentai.Common
             await conn.DeleteAsync(await query.FirstOrDefaultAsync());
         }
 
-        public static async void Modify(string hashStr)
-        {
-            SQLiteAsyncConnection conn = await GetFavorDBConnection();
-            await conn.UpdateAsync(Query(hashStr));
-        }
 
         public static async void Modify(DownLoadInfo item)
         {

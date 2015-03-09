@@ -144,7 +144,7 @@ namespace CosImg.ExHentai.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link,this.Detail.HeaderInfo.TitleEn));
+                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn, isDownLoaded));
                 });
             }
         }
@@ -167,25 +167,44 @@ namespace CosImg.ExHentai.ViewModel
             {
                 return new DelegateCommand(async () =>
                 {
-                    var cachefolder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists);
-                    var folder = await cachefolder.CreateFolderAsync(this.Detail.HeaderInfo.TitleEn.GetHashedString(), CreationCollisionOption.OpenIfExists);
-                    if (App.DownLoadList == null)
-                    {
-                        App.DownLoadList = new List<DownLoadModel>();
-                    }
-                    App.DownLoadList.Add(new DownLoadModel(this._link, folder, this.Detail.HeaderInfo.TitleEn, await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"))));
-                    new ToastPrompt("Downloading").Show();
-                    var item = await FavorDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
-                    item.isDownLoaded = true;
-                    FavorDBHelpers.Modify(item);
-                    isDownLoaded = true;
-                    _favorState = true;
-                    OnPropertyChanged("FavorIcon");
-                    OnPropertyChanged("FavorButtonText");
-                    //MessageDialog dialog = new MessageDialog("Now Buliding", "Sorry");
-                    //await dialog.ShowAsync();
+                    await StartDownLoad();
                 });
             }
+        }
+
+        private async Task StartDownLoad()
+        {
+            if (App.DownLoadList == null)
+            {
+                App.DownLoadList = new List<DownLoadModel>();
+            }
+            App.DownLoadList.Add(new DownLoadModel(this._link, this.Detail.HeaderInfo.TitleEn, await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"))));
+            new ToastPrompt("Downloading").Show();
+            var imgbyte = await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"));
+            var item = await FavorDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
+            if (item == null)
+            {
+                FavorDBHelpers.Add(new FavorModel()
+                {
+                    isDownLoaded = true,
+                    HashString = Detail.HeaderInfo.TitleEn.GetHashedString(),
+                    Name = Detail.HeaderInfo.TitleEn,
+                    ItemPageLink = this._link,
+                    //ImageUri = Detail.HeaderInfo.HeaderImage,
+                    ImageByte = imgbyte
+                });
+            }
+            DownLoadDBHelpers.Add(new DownLoadInfo()
+            {
+                PageUri = this._link,
+                Name = Detail.HeaderInfo.TitleEn,
+                HashString = Detail.HeaderInfo.TitleEn.GetHashedString(),
+                Imagebyte = imgbyte
+            });
+            isDownLoaded = true;
+            _favorState = true;
+            OnPropertyChanged("FavorIcon");
+            OnPropertyChanged("FavorButtonText");
         }
 
 

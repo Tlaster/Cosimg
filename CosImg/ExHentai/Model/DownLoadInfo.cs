@@ -16,15 +16,21 @@ namespace CosImg.ExHentai.Model
     {
         [AutoIncrement, PrimaryKey]
         public int PK { get; set; }
-        public string HashString { get; protected set; }
-        public StorageFolder _saveFolder { get; protected set; }
+        public string HashString { get; set; }
+        //public string HashString 
+        //{
+        //    get
+        //    {
+        //        return Name.GetHashedString();
+        //    }
+        //}
         public int MaxImageCount { get; protected set; }
-        public int CurrentPage { get; protected set; }
-        public string Name { get; protected set; }
-        public List<ImageListInfo> _imagePageUri { get; protected set; }
+        public int CurrentPage { get; set; }
+        public string Name { get; set; }
+        public string PageUri { get; set; }
 
 
-        protected byte[] _imagebyte;
+        public byte[] Imagebyte { get; set; }
 
         private BitmapImage _image;
         public BitmapImage ItemImage
@@ -45,13 +51,13 @@ namespace CosImg.ExHentai.Model
 
         private async void LoadImage()
         {
-            if (_imagebyte==null)
+            if (Imagebyte==null)
             {
                 _image = new BitmapImage();
             }
             else
             {
-                _image = await ImageHelper.ByteArrayToBitmapImage(_imagebyte);
+                _image = await ImageHelper.ByteArrayToBitmapImage(Imagebyte);
             }
         }
 

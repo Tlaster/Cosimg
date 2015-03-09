@@ -55,6 +55,7 @@
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="Setting" Click="AppBarButton_Click_1"/>
+                <AppBarButton Label="Download" Click="AppBarButton_Click_2"/>
             </CommandBar.SecondaryCommands>
             <!--<AppBarButton Icon="Find" Label="Search" Click="AppBarButton_Click"/>-->
         </CommandBar>

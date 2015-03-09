@@ -21,46 +21,44 @@ namespace CosImg.ExHentai.Model
     public class DownLoadModel : DownLoadInfo
     {
         private HttpClient _client;
-        private string _pageUri;
+        public StorageFolder _saveFolder { get; private set; }
+        public List<ImageListInfo> _imagePageUri { get; private set; }
 
 
-        public DownLoadModel(string pageUri, StorageFolder saveFolder, string name,byte[] imgbyte)
+        public DownLoadModel(string pageUri, string name,byte[] imgbyte)
         {
-            _imagebyte = imgbyte;
+            Imagebyte = imgbyte;
             _imagePageUri = new List<ImageListInfo>();
-            _pageUri = pageUri;
-            _saveFolder = saveFolder;
+            PageUri = pageUri;
             Name = name;
+            HashString = name.GetHashedString();
             _client = new HttpClient();
             _client.DefaultRequestHeaders.Add("Cookie", SettingHelpers.GetSetting<string>("cookie"));
             CurrentPage = 0;
-            HashString = name.GetHashedString();
             StartDownLoad();
         }
 
         public DownLoadModel(DownLoadInfo item)
         {
             base.CurrentPage = item.CurrentPage;
-            base._saveFolder = item._saveFolder;
-            base.HashString = item.HashString;
             base.Name = item.Name;
             base.MaxImageCount = item.MaxImageCount;
-            base._imagePageUri = item._imagePageUri;
+            base.HashString = item.Name.GetHashedString();
+            base.PageUri = item.PageUri;
+            _imagePageUri = new List<ImageListInfo>();
+            _client = new HttpClient();
+            _client.DefaultRequestHeaders.Add("Cookie", SettingHelpers.GetSetting<string>("cookie"));
+            StartDownLoad();
         }
 
 
-        public void Parse()
-        {
-
-        }
 
 
         private async void StartDownLoad()
         {
-            if (MaxImageCount == null || _imagePageUri == null)
-            {
-                await GetImagePageListAsync();
-            }
+            var cachefolder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists);
+            _saveFolder = await cachefolder.CreateFolderAsync(HashString, CreationCollisionOption.OpenIfExists);
+            await GetImagePageListAsync();
             await DownloadFromUriList();
         }
 
@@ -69,10 +67,12 @@ namespace CosImg.ExHentai.Model
             var sourceUri = await ParseHelper.GetImageAync(_imagePageUri[CurrentPage].ImagePage, SettingHelpers.GetSetting<string>("cookie"));
             var file = await _saveFolder.CreateFileAsync(this.CurrentPage.ToString(), CreationCollisionOption.ReplaceExisting);
 
+            Debug.WriteLine("start page "+CurrentPage);
             var res = await _client.GetAsync(new Uri(sourceUri));
             if (!res.IsSuccessStatusCode)
             {
                 await DownloadFromUriList();
+                Debug.WriteLine("Fail,retry");
             }
             else
             {
@@ -86,7 +86,10 @@ namespace CosImg.ExHentai.Model
 
             CurrentPage++;
             OnPropertyChanged("CurrentPage");
-            DownLoadDBHelpers.Modify(HashString);
+            var a = await DownLoadDBHelpers.Query();
+            var item = await DownLoadDBHelpers.Query(HashString);
+            item.CurrentPage = CurrentPage;
+            DownLoadDBHelpers.Modify(item);
             if (CurrentPage < MaxImageCount)
             {
                 await DownloadFromUriList();
@@ -101,9 +104,9 @@ namespace CosImg.ExHentai.Model
 
         private async Task GetImagePageListAsync()
         {
-            MaxImageCount = (await ParseHelper.GetDetailAsync(_pageUri, SettingHelpers.GetSetting<string>("cookie"))).MaxImageCount;
+            MaxImageCount = (await ParseHelper.GetDetailAsync(PageUri, SettingHelpers.GetSetting<string>("cookie"))).MaxImageCount;
             OnPropertyChanged("MaxImageCount");
-            _imagePageUri = await ParseHelper.GetImagePageListAsync(_pageUri, SettingHelpers.GetSetting<string>("cookie"));
+            _imagePageUri = await ParseHelper.GetImagePageListAsync(PageUri, SettingHelpers.GetSetting<string>("cookie"));
         }
 
 

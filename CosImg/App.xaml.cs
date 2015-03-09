@@ -132,14 +132,6 @@ namespace CosImg
                 {
                     App.rootFrame.Navigate(typeof(ExHentai.View.LoginPage));
                 }
-                var list = await DownLoadDBHelpers.Query();
-                if (list!=null)
-                {
-                    for (int i = 0; i < list.Count; i++)
-                    {
-                        DownLoadList.Add(new DownLoadModel(list[i]));
-                    }
-                }
             }
             else
             {

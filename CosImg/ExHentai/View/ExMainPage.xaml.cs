@@ -49,6 +49,18 @@ namespace CosImg.ExHentai.View
                 {
                     App.rootFrame.BackStack.RemoveAt(0);
                 }
+                var downloadlist = await DownLoadDBHelpers.Query();
+                if (downloadlist!=null&&downloadlist.Count!=0)
+                {
+                    for (int i = 0; i < downloadlist.Count; i++)
+                    {
+                        if (App.DownLoadList==null)
+                        {
+                            App.DownLoadList = new List<DownLoadModel>();
+                        }
+                        App.DownLoadList.Add(new DownLoadModel(downloadlist[i]));
+                    }
+                }
                 await StatusBar.GetForCurrentView().HideAsync();
                 this.RequestedTheme = ElementTheme.Dark;
                 App.ExitToastContent = "Press once more to exit";
@@ -79,6 +91,11 @@ namespace CosImg.ExHentai.View
         private void favorGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             App.rootFrame.Navigate(typeof(ExDetailPage), new ExDetailViewModel((e.ClickedItem as FavorModel).ItemPageLink));
+        }
+
+        private void AppBarButton_Click_2(object sender, RoutedEventArgs e)
+        {
+            App.rootFrame.Navigate(typeof(DownLoadPage));
         }
     }
 }
