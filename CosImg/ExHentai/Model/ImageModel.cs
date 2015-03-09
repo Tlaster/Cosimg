@@ -41,6 +41,21 @@ namespace CosImg.ExHentai.Model
         }
 #endregion
 
+
+
+        private async void GetImageBitmapImage(int ImageIndex)
+        {
+            try
+            {
+                byte[] _imagebyte = await ImageHelper.GetDownLoadedImage(SaveFolder, ImageIndex.ToString());
+                _image = new WeakReference(await ImageHelper.ByteArrayToBitmapImage(_imagebyte));
+                OnPropertyChanged("Image");
+            }
+            catch (Exception)
+            {
+                GetImageBitmapImage(ImagePage);
+            }
+        }
         async void GetImageBitmapImage(string uri)
         {
 #if RELEASE
@@ -114,7 +129,14 @@ namespace CosImg.ExHentai.Model
             {
                 if (_image == null)
                 {
-                    GetImageBitmapImage(ImagePage);
+                    if (isDownLoaded)
+                    {
+                        GetImageBitmapImage(ImageIndex);
+                    }
+                    else
+                    {
+                        GetImageBitmapImage(ImagePage);
+                    }
                     return null;
                 }
                 else
@@ -125,7 +147,14 @@ namespace CosImg.ExHentai.Model
                     }
                     else
                     {
-                        GetImageBitmapImage(ImagePage);
+                        if (isDownLoaded)
+                        {
+                            GetImageBitmapImage(ImageIndex);
+                        }
+                        else
+                        {
+                            GetImageBitmapImage(ImagePage);
+                        }
                         return null;
                     }
                 }
@@ -133,10 +162,12 @@ namespace CosImg.ExHentai.Model
         }
 
 
+
         WeakReference _image;
         private string _imageuri;
         public string ImagePage;
         public string SaveFolder;
         public int ImageIndex;
+        public bool isDownLoaded;
     }
 }

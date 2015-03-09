@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CosImg.ExHentai.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,6 +36,7 @@ namespace CosImg.ExHentai.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.RequestedTheme = ElementTheme.Dark;
+            this.DataContext = new DownLoadViewModel();
         }
     }
 }

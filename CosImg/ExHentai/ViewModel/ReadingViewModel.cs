@@ -20,10 +20,12 @@ namespace CosImg.ExHentai.ViewModel
         private List<ExHentaiLib.Prop.ImageListInfo> PageList;
         private string HeaderEn;
         private string _imagePage;
-        public ReadingViewModel(string link,string headerEn)
+        private bool _isDownLoaded;
+        public ReadingViewModel(string link,string headerEn,bool isDownLoaded = false)
         {
             this.HeaderEn = headerEn;
             this.Link = link;
+            this._isDownLoaded = isDownLoaded;
             ImageList = new List<ImageModel>();
             OnLoaded();
         }
@@ -44,7 +46,8 @@ namespace CosImg.ExHentai.ViewModel
                 {
                     ImageIndex = i,
                     ImagePage = PageList[i].ImagePage,
-                    SaveFolder = HeaderEn.GetHashedString()
+                    SaveFolder = HeaderEn.GetHashedString(),
+                    isDownLoaded = this._isDownLoaded,
                 });
             }
             ImageList = temp;

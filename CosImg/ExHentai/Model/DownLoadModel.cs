@@ -22,12 +22,11 @@ namespace CosImg.ExHentai.Model
     {
         private HttpClient _client;
         private string _pageUri;
-        private List<ImageListInfo> _imagePageUri;
 
-        public BitmapImage ItemImage { get; private set; }
 
-        public DownLoadModel(string pageUri, StorageFolder saveFolder, string name)
+        public DownLoadModel(string pageUri, StorageFolder saveFolder, string name,byte[] imgbyte)
         {
+            _imagebyte = imgbyte;
             _imagePageUri = new List<ImageListInfo>();
             _pageUri = pageUri;
             _saveFolder = saveFolder;
@@ -46,22 +45,29 @@ namespace CosImg.ExHentai.Model
             base.HashString = item.HashString;
             base.Name = item.Name;
             base.MaxImageCount = item.MaxImageCount;
+            base._imagePageUri = item._imagePageUri;
         }
+
+
+        public void Parse()
+        {
+
+        }
+
 
         private async void StartDownLoad()
         {
-            await GetImagePageListAsync();
+            if (MaxImageCount == null || _imagePageUri == null)
+            {
+                await GetImagePageListAsync();
+            }
             await DownloadFromUriList();
         }
 
         private async Task DownloadFromUriList()
         {
             var sourceUri = await ParseHelper.GetImageAync(_imagePageUri[CurrentPage].ImagePage, SettingHelpers.GetSetting<string>("cookie"));
-            var file = await _saveFolder.CreateFileAsync(this.CurrentPage.ToString() + Path.GetExtension(sourceUri), CreationCollisionOption.ReplaceExisting);
-
-            BackgroundDownloader bgDownloader = new BackgroundDownloader();
-            bgDownloader.SetRequestHeader("Cookie", SettingHelpers.GetSetting<string>("cookie"));
-            bgDownloader.CreateDownload(new Uri(sourceUri), file);
+            var file = await _saveFolder.CreateFileAsync(this.CurrentPage.ToString(), CreationCollisionOption.ReplaceExisting);
 
             var res = await _client.GetAsync(new Uri(sourceUri));
             if (!res.IsSuccessStatusCode)
@@ -91,7 +97,6 @@ namespace CosImg.ExHentai.Model
                 App.DownLoadList.Remove(this);
                 DownLoadDBHelpers.Delete(HashString);
             }
-
         }
 
         private async Task GetImagePageListAsync()

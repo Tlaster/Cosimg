@@ -54,6 +54,8 @@ namespace CosImg.Common
         }
 #endif
 
+
+
         public static async Task ClearCache()
         {
             var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists);
@@ -83,6 +85,19 @@ namespace CosImg.Common
                 var file = await folder.GetFileAsync(fileName);
                 await file.DeleteAsync(StorageDeleteOption.PermanentDelete);
             }
+        }
+
+
+        public static async Task<byte[]> GetDownLoadedImage(string folderName, string fileName)
+        {
+            var folder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+            var file = await folder.GetFileAsync(fileName);
+            var imagebyte = default(byte[]);
+            using (var stream = await file.OpenStreamForReadAsync())
+            {
+                imagebyte = await Converter.StreamToBytes(stream);
+            }
+            return imagebyte;
         }
 
 

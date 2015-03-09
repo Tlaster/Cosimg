@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
         <TextBlock Text="Now Downloading" FontSize="25" Margin="8,0,0,0"/>
         <Grid Grid.Row="1">
-            <ListView>
+            <ListView ItemsSource="{Binding DownLoadList}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -27,7 +27,6 @@
                             <Grid Grid.Column="1">
                                 <StackPanel Orientation="Vertical" >
                                     <TextBlock Text="{Binding Name}"/>
-                                    <ProgressBar Margin="2" Maximum="100" Value="{Binding CurrentPageProgress}"/>
                                     <ProgressBar Margin="2" Maximum="{Binding MaxImageCount}" Value="{Binding CurrentPage}"/>
                                 </StackPanel>
                             </Grid>

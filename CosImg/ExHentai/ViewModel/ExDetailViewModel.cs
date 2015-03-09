@@ -173,7 +173,7 @@ namespace CosImg.ExHentai.ViewModel
                     {
                         App.DownLoadList = new List<DownLoadModel>();
                     }
-                    App.DownLoadList.Add(new DownLoadModel(this._link, folder, this.Detail.HeaderInfo.TitleEn));
+                    App.DownLoadList.Add(new DownLoadModel(this._link, folder, this.Detail.HeaderInfo.TitleEn, await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"))));
                     new ToastPrompt("Downloading").Show();
                     var item = await FavorDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
                     item.isDownLoaded = true;
@@ -243,6 +243,7 @@ namespace CosImg.ExHentai.ViewModel
             get { return _detail; }
             set { _detail = value; OnPropertyChanged("Detail"); }
         }
-
     }
+
+
 }
