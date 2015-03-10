@@ -1,0 +1,63 @@
+﻿<Page
+    x:Name="searchPage"
+    x:Class="CosImg.CosImg.View.SearchPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CosImg.CosImg.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <DataTemplate x:Key="GridViewItemTemple">
+            <Grid Margin="4"  Height="{Binding HeightWidth}" Width="{Binding HeightWidth}">
+                <Image Source="{Binding image}"/>
+                <Border>
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#7F000000" Offset="1"/>
+                            <GradientStop Color="Transparent" Offset="0.538"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <TextBlock Foreground="White" Margin="4" FontSize="15" Text="{Binding name}" FontWeight="Bold" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Bottom"/>
+                </Border>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="LoadStateTemple">
+            <Grid>
+                <StackPanel Visibility="{Binding isLoadFail, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock FontSize="25" Text="载入失败" HorizontalAlignment="Center"/>
+                    <Button Content="重新载入" BorderThickness="0" Command="{Binding ReTryCommand}" Background="{StaticResource AppTheme}" Foreground="White"/>
+                </StackPanel>
+                <ProgressRing Height="50" Width="50" IsActive="{Binding isOnLoading, Mode=OneWay}" Visibility="{Binding isOnLoading, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
+            </Grid>
+        </DataTemplate>
+
+    </Page.Resources>
+    
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Background="{StaticResource AppTheme}"/>
+        <Grid RequestedTheme="Dark">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <AppBarButton Click="AppBarButton_Click" Icon="Back" Label="返回" />
+            <TextBlock Grid.Column="1" Text="{Binding ElementName=searchPage,Path=Title}" FontSize="{ThemeResource HubHeaderThemeFontSize}" />
+        </Grid>
+        <Grid Grid.Row="1">
+            <ListView  ItemsSource="{Binding ElementName=searchPage,Path=List}" SelectionMode="None" ScrollViewer.VerticalScrollBarVisibility="Hidden" FooterTemplate="{StaticResource LoadStateTemple}" IsItemClickEnabled="True" x:Name="listBox" ItemTemplate="{StaticResource GridViewItemTemple}" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+        </Grid>
+
+    </Grid>
+</Page>

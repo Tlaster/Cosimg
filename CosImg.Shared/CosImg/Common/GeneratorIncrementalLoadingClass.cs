@@ -11,8 +11,12 @@ namespace CosImg.CosImg.Common
 {
     public class GeneratorIncrementalLoadingClass<T> : IncrementalLoadingBase<T>
     {
-
+        
+#if WINDOWS_PHONE_APP
         public GeneratorIncrementalLoadingClass(string uri, Func<IJsonValue, T> generator, int loadCount = 20)
+#else
+        public GeneratorIncrementalLoadingClass(string uri, Func<IJsonValue, T> generator, int loadCount = 40)
+#endif
         {
             _uri = uri;
             _loadCount = loadCount;

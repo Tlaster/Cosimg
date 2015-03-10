@@ -62,12 +62,35 @@ namespace CosImg.Common
             await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
         }
 
+
+        public static async Task<bool> CheckDownLoadFolder(string folderName)
+        {
+            try
+            {
+#if WINDOWS_PHONE_APP
+                                await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+
+#else
+                await (await ApplicationData.Current.LocalFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+#endif
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public static async Task<bool> CheckCacheImage(string folderName, string fileName)
         {
             try
             {
-                var folder = await (await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
-                var file = await folder.GetFileAsync(fileName);
+
+#if WINDOWS_PHONE_APP
+                await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+#else
+                await (await ApplicationData.Current.LocalFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+#endif
                 return true;
             }
             catch (Exception)
@@ -87,6 +110,18 @@ namespace CosImg.Common
             }
         }
 
+        public static async Task DeleDownloadFile(string folderName)
+        {
+            if (await CheckDownLoadFolder(folderName))
+            {
+#if WINDOWS_PHONE_APP
+                var folder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+#else       
+            var folder = await (await ApplicationData.Current.LocalFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+#endif
+                await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
+            }
+        }
 
         public static async Task<byte[]> GetDownLoadedImage(string folderName, string fileName)
         {

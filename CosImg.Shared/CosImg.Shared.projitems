@@ -16,11 +16,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Common\SQLite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\SQLiteAsync.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\StringExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CosImg\Common\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CosImg\Common\GeneratorIncrementalLoadingClass.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CosImg\Common\SelectionViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CosImg\Model\ListModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CosImg\Model\SelectionModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CosImg\ViewModel\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CosImg\ViewModel\MainViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CosImg\ViewModel\SelectionViewModel.cs" />
   </ItemGroup>
 </Project>

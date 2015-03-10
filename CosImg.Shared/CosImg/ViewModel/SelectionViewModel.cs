@@ -1,4 +1,5 @@
 ﻿using CosImg.CosImg.Model;
+using CosImg.CosImg.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,12 +67,13 @@ namespace CosImg.CosImg.Common
         {
             get
             {
-                return new DelegateCommand<ItemClickEventArgs>((item) =>
+                return new DelegateCommand<ItemClickEventArgs>((e) =>
                 {
 #if WINDOWS_PHONE_APP
-                    App.rootFrame.Navigate(typeof(CosImg.View.ImagePage), item.ClickedItem as ListModel);
+                    App.rootFrame.Navigate(typeof(CosImg.View.ImagePage), e.ClickedItem as ListModel);
 #else
-
+                    var item = e.ClickedItem as ListModel;
+                    new ImagePopUp(item).Show();
 #endif
                 });
             }

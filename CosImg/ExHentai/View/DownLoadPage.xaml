@@ -10,6 +10,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <Rectangle VerticalAlignment="Top" Fill="{StaticResource LineColor}" Height="3" Margin="0,33,0,0"/>
         <Pivot Margin="0,-30,0,0">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
@@ -61,7 +62,8 @@
                     </GridView.ItemTemplate>
                     <Interactivity:Interaction.Behaviors>
                         <Core:EventTriggerBehavior EventName="ItemClick">
-                            <Core:InvokeCommandAction Command="{Binding ItemClick}" CommandParameter="{Binding ElementName=gridView,Path=SelectedItem}"/>                        </Core:EventTriggerBehavior>
+                            <Core:InvokeCommandAction Command="{Binding ItemClick}" CommandParameter="{Binding ElementName=gridView,Path=SelectedItem}"/>                       
+                        </Core:EventTriggerBehavior>
                     </Interactivity:Interaction.Behaviors>
                 </GridView>
             </PivotItem>

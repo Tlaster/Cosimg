@@ -46,7 +46,7 @@
         <Popup.Projection>
             <PlaneProjection/>
         </Popup.Projection>
-        <Border x:Name="border" Background="{ThemeResource PhoneAccentBrush}" >
+        <Border x:Name="border" Background="{StaticResource LineColor}" >
             <StackPanel>
                 <ProgressBar x:Name="probar" Visibility="Collapsed" IsIndeterminate="False"></ProgressBar>
                 <TextBlock x:Name="innerText" FontSize="20" Foreground="White"></TextBlock>

@@ -1,4 +1,6 @@
-﻿using CosImg.CosImg.ViewModel;
+﻿using CosImg.CosImg.Model;
+using CosImg.CosImg.View;
+using CosImg.CosImg.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,5 +30,24 @@ namespace CosImg
             this.InitializeComponent();
             this.DataContext = new MainViewModel();
         }
+
+        private void listBox_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var item = e.ClickedItem as ListModel;
+            new ImagePopUp(item).Show();
+        }
+
+        private void SearchBox_QuerySubmitted(SearchBox sender, SearchBoxQuerySubmittedEventArgs args)
+        {
+            if (args.QueryText == "I AM HENYAI")
+            {
+
+            }
+            else
+            {
+                App.rootFrame.Navigate(typeof(SearchPage), args.QueryText);
+            }
+        }
+
     }
 }

@@ -38,10 +38,10 @@ namespace CosImg.ExHentai.ViewModel
                 Detail = await ParseHelper.GetDetailAsync(link, SettingHelpers.GetSetting<string>("cookie"));
                 if (await FavorDBHelpers.CheckDBFile())
                 {
-                    var item = await FavorDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
-                    _favorState = item == null ? false : true;
-                    var downlaoditem = await DownLoadDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
-                    if (downlaoditem!=null&&downlaoditem.DownLoadComplete)
+                    _favoritem = await FavorDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
+                    _favorState = _favoritem == null ? false : true;
+                    _downlaoditem = await DownLoadDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
+                    if (_downlaoditem!=null&&_downlaoditem.DownLoadComplete)
                     {
                         isDownLoaded = true;
                     }
@@ -166,9 +166,19 @@ namespace CosImg.ExHentai.ViewModel
         {
             get
             {
-                return new DelegateCommand(() =>
+                return new DelegateCommand(async () =>
                 {
-
+                    MessageDialog dialog = new MessageDialog("Delete the Download File?", "Sure?");
+                    dialog.Commands.Add(new UICommand("Yes", async (e1) =>
+                    {
+                        DownLoadDBHelpers.Delete(Detail.HeaderInfo.TitleEn.GetHashedString());
+                        await ImageHelper.DeleDownloadFile(Detail.HeaderInfo.TitleEn.GetHashedString());
+                        isDownLoaded = false;
+                        OnPropertyChanged("isDownLoaded"); 
+                        new ToastPrompt("Delete Complete").Show();
+                    }));
+                    dialog.Commands.Add(new UICommand("No"));
+                    await dialog.ShowAsync();
                 });
             }
         }
@@ -275,6 +285,8 @@ namespace CosImg.ExHentai.ViewModel
         public List<PageListModel> PageList { get; set; }
 
         private ExHentaiLib.Prop.DetailProp _detail;
+        private FavorModel _favoritem;
+        private DownLoadInfo _downlaoditem;
         public ExHentaiLib.Prop.DetailProp Detail
         {
             get { return _detail; }

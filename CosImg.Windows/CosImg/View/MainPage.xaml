@@ -10,17 +10,6 @@
 
     <Page.Resources>
 
-        <DataTemplate x:Key="HubContentTemple">
-        	<Grid>
-        		<ListView SelectionMode="None" ScrollViewer.VerticalScrollBarVisibility="Hidden" FooterTemplate="{StaticResource LoadStateTemple}" IsItemClickEnabled="True" x:Name="listBox" ItemTemplate="{StaticResource GridViewItemTemple}" ItemsSource="{Binding List, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" >
-        			<ListView.ItemsPanel>
-        				<ItemsPanelTemplate>
-        					<ItemsWrapGrid Orientation="Horizontal"/>
-        				</ItemsPanelTemplate>
-        			</ListView.ItemsPanel>
-        		</ListView>
-        	</Grid>
-        </DataTemplate>
         <DataTemplate x:Key="GridViewItemTemple">
         	<Grid Margin="4"  Height="{Binding HeightWidth}" Width="{Binding HeightWidth}">
         		<Image Source="{Binding image}"/>
@@ -41,7 +30,7 @@
         			<TextBlock FontSize="25" Text="载入失败" HorizontalAlignment="Center"/>
         			<Button Content="重新载入" BorderThickness="0" Command="{Binding ReTryCommand}" Background="{StaticResource AppTheme}" Foreground="White"/>
         		</StackPanel>
-        		<ProgressRing IsActive="{Binding isOnLoading, Mode=OneWay}" Visibility="{Binding isOnLoading, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
+        		<ProgressRing Height="50" Width="50" IsActive="{Binding isOnLoading, Mode=OneWay}" Visibility="{Binding isOnLoading, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
         	</Grid>
         </DataTemplate>
         <DataTemplate x:Key="FlipViewContent">
@@ -62,7 +51,29 @@
                         </Core:EventTriggerBehavior>
                     </Interactivity:Interaction.Behaviors>
                 </ComboBox>
-                <ListView Grid.Row="1" SelectionMode="None" ScrollViewer.VerticalScrollBarVisibility="Hidden"  FooterTemplate="{StaticResource LoadStateTemple}" IsItemClickEnabled="True" x:Name="listBox" ItemTemplate="{StaticResource GridViewItemTemple}" ItemsSource="{Binding List, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <ListView Grid.Row="1" SelectionMode="None" ScrollViewer.VerticalScrollBarVisibility="Hidden" FooterTemplate="{StaticResource LoadStateTemple}" IsItemClickEnabled="True" x:Name="listBox" ItemTemplate="{StaticResource GridViewItemTemple}" ItemsSource="{Binding List, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <Interactivity:Interaction.Behaviors>
+                        <Core:EventTriggerBehavior EventName="ItemClick">
+                            <Core:InvokeCommandAction Command="{Binding ItemTapped}"/>
+                        </Core:EventTriggerBehavior>
+                    </Interactivity:Interaction.Behaviors>
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="HubContentTemple">
+            <Grid>
+                <ListView SelectionMode="None" ScrollViewer.VerticalScrollBarVisibility="Hidden" FooterTemplate="{StaticResource LoadStateTemple}" IsItemClickEnabled="True" x:Name="listBox" ItemTemplate="{StaticResource GridViewItemTemple}" ItemsSource="{Binding List, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                	<Interactivity:Interaction.Behaviors>
+                		<Core:EventTriggerBehavior EventName="ItemClick">
+                            <Core:InvokeCommandAction Command="{Binding ItemTapped}"/>
+                		</Core:EventTriggerBehavior>
+                	</Interactivity:Interaction.Behaviors>
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <ItemsWrapGrid Orientation="Horizontal"/>
@@ -95,7 +106,7 @@
 			<TextBlock Visibility="{Binding SelectedIndex, ConverterParameter=0, Converter={StaticResource SelectedIndexToVisilibityConverter}, ElementName=flipView}" Margin="10" Grid.Column="1" Foreground="White" Text="发现" FontSize="{ThemeResource HubSectionHeaderThemeFontSize}"/>
 			<TextBlock Visibility="{Binding SelectedIndex, ConverterParameter=1, Converter={StaticResource SelectedIndexToVisilibityConverter}, ElementName=flipView}" Margin="10" Grid.Column="2" Foreground="White" Text="最新" FontSize="{ThemeResource HubSectionHeaderThemeFontSize}"/>
 			<TextBlock Visibility="{Binding SelectedIndex, ConverterParameter=2, Converter={StaticResource SelectedIndexToVisilibityConverter}, ElementName=flipView}" Margin="10" Grid.Column="3" Foreground="White" Text="热门" FontSize="{ThemeResource HubSectionHeaderThemeFontSize}"/>
-			<SearchBox BorderBrush="#7F000000" BorderThickness="2" MinWidth="200" Background="White" Margin="10" Grid.Column="5"/>
+			<SearchBox  BorderBrush="#7F000000" BorderThickness="2" MinWidth="200" Background="White" Margin="10" Grid.Column="5" QuerySubmitted="SearchBox_QuerySubmitted" />
 		</Grid>
 		<Rectangle Grid.Row="1" Fill="#7F000000" Height="2" />
 		<FlipView x:Name="flipView" Grid.Row="2">
