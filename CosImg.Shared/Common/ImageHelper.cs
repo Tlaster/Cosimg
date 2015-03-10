@@ -90,7 +90,11 @@ namespace CosImg.Common
 
         public static async Task<byte[]> GetDownLoadedImage(string folderName, string fileName)
         {
+#if WINDOWS_PHONE_APP
             var folder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+#else       
+            var folder = await (await ApplicationData.Current.LocalFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+#endif
             var file = await folder.GetFileAsync(fileName);
             var imagebyte = default(byte[]);
             using (var stream = await file.OpenStreamForReadAsync())

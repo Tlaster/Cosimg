@@ -36,13 +36,14 @@ namespace CosImg.ExHentai.ViewModel
             {
                 isOnLoading = true;
                 Detail = await ParseHelper.GetDetailAsync(link, SettingHelpers.GetSetting<string>("cookie"));
-                if (await FavorDBHelpers.CheckFavorDBFile())
+                if (await FavorDBHelpers.CheckDBFile())
                 {
                     var item = await FavorDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
                     _favorState = item == null ? false : true;
-                    if (_favorState)
+                    var downlaoditem = await DownLoadDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
+                    if (downlaoditem!=null&&downlaoditem.DownLoadComplete)
                     {
-                        isDownLoaded = item.isDownLoaded;
+                        isDownLoaded = true;
                     }
                 }
                 PageList = new List<PageListModel>();
@@ -161,13 +162,32 @@ namespace CosImg.ExHentai.ViewModel
             }
         }
 
+        public ICommand DeleFileCommand
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+
+                });
+            }
+        }
+
         public ICommand DownLoadCommand
         {
             get
             {
                 return new DelegateCommand(async () =>
                 {
-                    await StartDownLoad();
+                    if (App.DownLoadList!=null&&App.DownLoadList.Find((a) => { return a.HashString == Detail.HeaderInfo.TitleEn.GetHashedString(); }) != null)
+                    {
+                        MessageDialog dialog = new MessageDialog("Is Downloading");
+                        await dialog.ShowAsync();
+                    }
+                    else
+                    {
+                        await StartDownLoad();
+                    }
                 });
             }
         }
@@ -186,7 +206,6 @@ namespace CosImg.ExHentai.ViewModel
             {
                 FavorDBHelpers.Add(new FavorModel()
                 {
-                    isDownLoaded = true,
                     HashString = Detail.HeaderInfo.TitleEn.GetHashedString(),
                     Name = Detail.HeaderInfo.TitleEn,
                     ItemPageLink = this._link,
@@ -201,7 +220,6 @@ namespace CosImg.ExHentai.ViewModel
                 HashString = Detail.HeaderInfo.TitleEn.GetHashedString(),
                 Imagebyte = imgbyte
             });
-            isDownLoaded = true;
             _favorState = true;
             OnPropertyChanged("FavorIcon");
             OnPropertyChanged("FavorButtonText");

@@ -41,8 +41,9 @@
                 <AppBarButton Label="View In IE" Command="{Binding ViewInIECommand}" />
             </CommandBar.SecondaryCommands>
         	<AppBarButton Icon="TwoPage" Label="Read" Command="{Binding ReadCommand}"/>
-        	<AppBarButton Icon="Download" Label="DownLoad" Command="{Binding DownLoadCommand}"/>
-        	<AppBarButton Icon="{Binding FavorIcon}" Label="{Binding FavorButtonText}" Command="{Binding FavorCommand}"/>
+            <AppBarButton Visibility="{Binding isDownLoaded,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" Icon="Download" Label="DownLoad" Command="{Binding DownLoadCommand}"/>
+            <AppBarButton Visibility="{Binding isDownLoaded,Converter={StaticResource BoolToVisibilityConverter}}" Icon="UnSyncFolder" Label="DeleFile" Command="{Binding DeleFileCommand}"/>
+            <AppBarButton Icon="{Binding FavorIcon}" Label="{Binding FavorButtonText}" Command="{Binding FavorCommand}"/>
         	<AppBarButton Icon="Shuffle" Label="Share" Command="{Binding ShareCommand}"/>
         </CommandBar>
     </Page.BottomAppBar>

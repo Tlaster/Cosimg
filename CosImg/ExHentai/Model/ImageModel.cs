@@ -58,10 +58,8 @@ namespace CosImg.ExHentai.Model
         }
         async void GetImageBitmapImage(string uri)
         {
-#if RELEASE
             try
             {
-#endif
                 isOnLoading = true;
                 byte[] _imagebyte;
                 if (await ImageHelper.CheckCacheImage(SaveFolder, ImageIndex.ToString()))
@@ -77,14 +75,12 @@ namespace CosImg.ExHentai.Model
                 _image = new WeakReference(await ImageHelper.ByteArrayToBitmapImage(_imagebyte));
                 isOnLoading = false;
                 OnPropertyChanged("Image");
-#if RELEASE
             }
             catch (Exception)
             {
                 isOnLoading = false;
                 isLoadFail = true;
             }
-#endif
         }
         public ICommand ReTryCommand
         {
@@ -101,6 +97,7 @@ namespace CosImg.ExHentai.Model
             isLoadFail = false;
             _image = null;
             await ImageHelper.DeleCacheImage(SaveFolder, ImageIndex.ToString());
+            isDownLoaded = false;
             OnPropertyChanged("Image");
         }
 

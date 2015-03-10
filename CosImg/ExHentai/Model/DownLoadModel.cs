@@ -21,6 +21,7 @@ namespace CosImg.ExHentai.Model
     public class DownLoadModel : DownLoadInfo
     {
         private HttpClient _client;
+        Random random;
         public StorageFolder _saveFolder { get; private set; }
         public List<ImageListInfo> _imagePageUri { get; private set; }
 
@@ -56,37 +57,66 @@ namespace CosImg.ExHentai.Model
 
         private async void StartDownLoad()
         {
+            random = new Random();
             var cachefolder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists);
             _saveFolder = await cachefolder.CreateFolderAsync(HashString, CreationCollisionOption.OpenIfExists);
             await GetImagePageListAsync();
             await DownloadFromUriList();
         }
 
+
+        int retryCount = 0;
         private async Task DownloadFromUriList()
         {
-            var sourceUri = await ParseHelper.GetImageAync(_imagePageUri[CurrentPage].ImagePage, SettingHelpers.GetSetting<string>("cookie"));
-            var file = await _saveFolder.CreateFileAsync(this.CurrentPage.ToString(), CreationCollisionOption.ReplaceExisting);
-
-            Debug.WriteLine("start page "+CurrentPage);
-            var res = await _client.GetAsync(new Uri(sourceUri));
-            if (!res.IsSuccessStatusCode)
+            try
             {
-                await DownloadFromUriList();
-                Debug.WriteLine("Fail,retry");
+                var sourceUri = await ParseHelper.GetImageAync(_imagePageUri[CurrentPage].ImagePage, SettingHelpers.GetSetting<string>("cookie"));
+                var file = await _saveFolder.CreateFileAsync(this.CurrentPage.ToString(), CreationCollisionOption.ReplaceExisting);
+
+                Debug.WriteLine("start page " + CurrentPage);
+                var res = await _client.GetAsync(new Uri(sourceUri));
+                if (!res.IsSuccessStatusCode)
+                {
+                    await Retry();
+                }
+                else
+                {
+                    using (var resStream = await res.Content.ReadAsStreamAsync())
+                    {
+                        var resbyte = await Converter.StreamToBytes(resStream);
+                        await FileIO.WriteBytesAsync(file, resbyte);
+                        Debug.WriteLine("page " + CurrentPage + " completed");
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                Retry();
+            }
+
+            await ToNext();
+        }
+
+        private async Task Retry()
+        {
+            retryCount++;
+            if (retryCount == 5)
+            {
+                retryCount = 0;
+                await ToNext();
             }
             else
             {
-                using (var resStream = await res.Content.ReadAsStreamAsync())
-                {
-                    var resbyte = await Converter.StreamToBytes(resStream);
-                    await FileIO.WriteBytesAsync(file, resbyte);
-                    Debug.WriteLine("page" + CurrentPage + "completed");
-                }
+                _imagePageUri[CurrentPage].ImagePage += "&nl=" + random.Next(61, 63);
+                Debug.WriteLine("Fail,retry");
+                await DownloadFromUriList();
             }
+        }
 
+        private async Task ToNext()
+        {
             CurrentPage++;
             OnPropertyChanged("CurrentPage");
-            var a = await DownLoadDBHelpers.Query();
             var item = await DownLoadDBHelpers.Query(HashString);
             item.CurrentPage = CurrentPage;
             DownLoadDBHelpers.Modify(item);
@@ -98,7 +128,8 @@ namespace CosImg.ExHentai.Model
             {
                 _client.Dispose();
                 App.DownLoadList.Remove(this);
-                DownLoadDBHelpers.Delete(HashString);
+                item.DownLoadComplete = true;
+                DownLoadDBHelpers.Modify(item);
             }
         }
 

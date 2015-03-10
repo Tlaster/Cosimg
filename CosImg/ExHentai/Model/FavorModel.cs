@@ -40,7 +40,6 @@ namespace CosImg.ExHentai.Model
             _itemImage = await ImageHelper.ByteArrayToBitmapImage(ImageByte);
             OnPropertyChanged("ItemImage");
         }
-        public bool isDownLoaded { get; set; }
         private BitmapImage _itemImage;
         public byte[] ImageByte { get; set; }
     }

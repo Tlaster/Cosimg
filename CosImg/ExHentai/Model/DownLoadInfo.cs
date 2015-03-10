@@ -28,7 +28,7 @@ namespace CosImg.ExHentai.Model
         public int CurrentPage { get; set; }
         public string Name { get; set; }
         public string PageUri { get; set; }
-
+        public bool DownLoadComplete { get; set; }
 
         public byte[] Imagebyte { get; set; }
 
@@ -59,6 +59,7 @@ namespace CosImg.ExHentai.Model
             {
                 _image = await ImageHelper.ByteArrayToBitmapImage(Imagebyte);
             }
+            OnPropertyChanged("ItemImage");
         }
 
     }

@@ -115,7 +115,7 @@ namespace ExHentaiLib.Common
                                           {
                                               ImageName = (a.InnerText),
                                               ImgeSrc = a.FirstChild.FirstChild.Attributes["src"].Value,
-                                              ImagePage = (a.FirstChild.Attributes["href"].Value),
+                                              ImagePage = (a.FirstChild.Attributes["href"].Value)+"?",
                                           }).ToList(),
                          };
         }

@@ -32,14 +32,15 @@ namespace CosImg
         /// </summary>
         public App()
         {
-            ExitToastContent = "再按一次返回键退出程序";
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+            ExitToastContent = "再按一次返回键退出程序";
 #if DEBUG
             UmengSDK.UmengAnalytics.IsDebug = true;
 #endif
         }
+
         bool isExit = false;
         async void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
         {
@@ -47,13 +48,13 @@ namespace CosImg
             {
                 if (DownLoadList != null && DownLoadList.Count != 0)
                 {
-                    MessageDialog dialog = new MessageDialog("Something is downlaoding,exit the application?", "Sure?");
+                    MessageDialog dialog = new MessageDialog("Something is downloading,exit the application?", "Sure?");
                     dialog.Commands.Add(new UICommand("Exit", (a) =>
                     {
-                        //TODO:Save the download state
                         App.Current.Exit();
                     }));
                     dialog.Commands.Add(new UICommand("Cancel"));
+                    e.Handled = true;
                     await dialog.ShowAsync();
                 }
                 else
@@ -141,14 +142,6 @@ namespace CosImg
 
 
 
-            //if (rootFrame.Content == null)
-            //{
-            //    rootFrame.ContentTransitions = null;
-            //    if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))
-            //    {
-            //        throw new Exception("Failed to create initial page");
-            //    }
-            //}
 
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
@@ -163,6 +156,7 @@ namespace CosImg
             SettingHelpers.SetSetting<string>("LastLaunch", DateTime.Today.ToString());
 
         }
+
 
         protected async override void OnActivated(IActivatedEventArgs args)
         {

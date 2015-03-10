@@ -11,7 +11,7 @@ namespace CosImg.ExHentai.Common
 {
     public static class DownLoadDBHelpers
     {
-        public static async Task<bool> CheckFavorDBFile()
+        public static async Task<bool> CheckDBFile()
         {
             try
             {
@@ -23,10 +23,10 @@ namespace CosImg.ExHentai.Common
                 return false;
             }
         }
-        public static async Task<SQLiteAsyncConnection> GetFavorDBConnection()
+        public static async Task<SQLiteAsyncConnection> GetDBConnection()
         {
             var conn = new SQLiteAsyncConnection(ApplicationData.Current.LocalFolder.Path + "\\Download.db");
-            if (!await CheckFavorDBFile())
+            if (!await CheckDBFile())
             {
                 await conn.CreateTableAsync<DownLoadInfo>();
             }
@@ -34,13 +34,13 @@ namespace CosImg.ExHentai.Common
         }
         public static async void Add(DownLoadInfo item)
         {
-            SQLiteAsyncConnection conn = await GetFavorDBConnection();
+            SQLiteAsyncConnection conn = await GetDBConnection();
             await conn.InsertAsync(item);
         }
 
         public static async void Delete(string hashStr)
         {
-            SQLiteAsyncConnection conn = await GetFavorDBConnection();
+            SQLiteAsyncConnection conn = await GetDBConnection();
             var query = from item in conn.Table<DownLoadInfo>()
                         where item.HashString == hashStr
                         select item;
@@ -50,13 +50,13 @@ namespace CosImg.ExHentai.Common
 
         public static async void Modify(DownLoadInfo item)
         {
-            SQLiteAsyncConnection conn = await GetFavorDBConnection();
+            SQLiteAsyncConnection conn = await GetDBConnection();
             await conn.UpdateAsync(item);
         }
 
         public static async Task<DownLoadInfo> Query(string hashStr)
         {
-            SQLiteAsyncConnection conn = await GetFavorDBConnection();
+            SQLiteAsyncConnection conn = await GetDBConnection();
             var query = from item in conn.Table<DownLoadInfo>()
                         where item.HashString == hashStr
                         select item;
@@ -65,11 +65,19 @@ namespace CosImg.ExHentai.Common
 
         public static async Task<List<DownLoadInfo>> Query()
         {
-            SQLiteAsyncConnection conn = await GetFavorDBConnection();
+            SQLiteAsyncConnection conn = await GetDBConnection();
             var query = conn.Table<DownLoadInfo>();
             List<DownLoadInfo> result = await query.ToListAsync();
             return result;
-
         }
+        public static async Task<List<DownLoadInfo>> GetList(bool isComplete = false)
+        {
+            SQLiteAsyncConnection conn = await GetDBConnection();
+            var query = from a in conn.Table<DownLoadInfo>()
+                        where a.DownLoadComplete == isComplete
+                        select a;
+            return await query.ToListAsync();
+        }
+
     }
 }

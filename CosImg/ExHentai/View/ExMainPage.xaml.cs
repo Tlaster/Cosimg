@@ -45,11 +45,12 @@ namespace CosImg.ExHentai.View
         {
             if (e.NavigationMode == NavigationMode.New)
             {
+                this.RequestedTheme = ElementTheme.Dark;
                 if (App.rootFrame.BackStack.Count!=0)
                 {
                     App.rootFrame.BackStack.RemoveAt(0);
                 }
-                var downloadlist = await DownLoadDBHelpers.Query();
+                var downloadlist = await DownLoadDBHelpers.GetList();
                 if (downloadlist!=null&&downloadlist.Count!=0)
                 {
                     for (int i = 0; i < downloadlist.Count; i++)
@@ -62,7 +63,6 @@ namespace CosImg.ExHentai.View
                     }
                 }
                 await StatusBar.GetForCurrentView().HideAsync();
-                this.RequestedTheme = ElementTheme.Dark;
                 App.ExitToastContent = "Press once more to exit";
                 UmengSDK.UmengAnalytics.TrackEvent("HentaiModeExChanged");
             }

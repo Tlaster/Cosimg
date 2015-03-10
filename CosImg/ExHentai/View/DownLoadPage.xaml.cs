@@ -36,7 +36,12 @@ namespace CosImg.ExHentai.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.RequestedTheme = ElementTheme.Dark;
+            UmengSDK.UmengAnalytics.TrackPageStart("DownLoadPage");
             this.DataContext = new DownLoadViewModel();
+        }
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            UmengSDK.UmengAnalytics.TrackPageEnd("DownLoadPage");
         }
     }
 }

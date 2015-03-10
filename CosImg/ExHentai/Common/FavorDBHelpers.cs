@@ -11,7 +11,7 @@ namespace CosImg.ExHentai.Common
 {
     public static class FavorDBHelpers
     {
-        public static async Task<bool> CheckFavorDBFile()
+        public static async Task<bool> CheckDBFile()
         {
             try
             {
@@ -23,10 +23,10 @@ namespace CosImg.ExHentai.Common
                 return false;
             }
         }
-        public static async Task<SQLiteAsyncConnection> GetFavorDBConnection()
+        public static async Task<SQLiteAsyncConnection> GetDBConnection()
         {
             var conn = new SQLiteAsyncConnection(ApplicationData.Current.LocalFolder.Path + "\\Favor.db");
-            if (!await CheckFavorDBFile())
+            if (!await CheckDBFile())
             {
                 await conn.CreateTableAsync<FavorModel>();
             }
@@ -34,13 +34,13 @@ namespace CosImg.ExHentai.Common
         }
         public static async void Add(FavorModel item)
         {
-            SQLiteAsyncConnection conn = await GetFavorDBConnection();
+            SQLiteAsyncConnection conn = await GetDBConnection();
             await conn.InsertAsync(item);
         }
 
         public static async void Delete(string hashStr)
         {
-            SQLiteAsyncConnection conn = await GetFavorDBConnection();
+            SQLiteAsyncConnection conn = await GetDBConnection();
             var query = from item in conn.Table<FavorModel>()
                         where item.HashString == hashStr
                         select item;
@@ -48,13 +48,13 @@ namespace CosImg.ExHentai.Common
         }
         public static async void Modify(FavorModel item)
         {
-            SQLiteAsyncConnection conn = await GetFavorDBConnection();
+            SQLiteAsyncConnection conn = await GetDBConnection();
             await conn.UpdateAsync(item);
         }
 
         public static async Task<FavorModel> Query(string hashStr)
         {
-            SQLiteAsyncConnection conn = await GetFavorDBConnection();
+            SQLiteAsyncConnection conn = await GetDBConnection();
             var query = from item in conn.Table<FavorModel>()
                         where item.HashString == hashStr
                         select item;
@@ -63,7 +63,7 @@ namespace CosImg.ExHentai.Common
 
         public static async Task<List<FavorModel>> Query()
         {
-            SQLiteAsyncConnection conn = await GetFavorDBConnection();
+            SQLiteAsyncConnection conn = await GetDBConnection();
             var query = conn.Table<FavorModel>();
             List<FavorModel> result = await query.ToListAsync();
             return result;
