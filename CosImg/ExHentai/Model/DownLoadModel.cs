@@ -41,6 +41,7 @@ namespace CosImg.ExHentai.Model
 
         public DownLoadModel(DownLoadInfo item)
         {
+            base.Imagebyte = item.Imagebyte;
             base.CurrentPage = item.CurrentPage;
             base.Name = item.Name;
             base.MaxImageCount = item.MaxImageCount;
@@ -73,7 +74,7 @@ namespace CosImg.ExHentai.Model
                 var sourceUri = await ParseHelper.GetImageAync(_imagePageUri[CurrentPage].ImagePage, SettingHelpers.GetSetting<string>("cookie"));
                 var file = await _saveFolder.CreateFileAsync(this.CurrentPage.ToString(), CreationCollisionOption.ReplaceExisting);
 
-                Debug.WriteLine("start page " + CurrentPage);
+                //Debug.WriteLine("start page " + CurrentPage);
                 var res = await _client.GetAsync(new Uri(sourceUri));
                 if (!res.IsSuccessStatusCode)
                 {
@@ -85,7 +86,7 @@ namespace CosImg.ExHentai.Model
                     {
                         var resbyte = await Converter.StreamToBytes(resStream);
                         await FileIO.WriteBytesAsync(file, resbyte);
-                        Debug.WriteLine("page " + CurrentPage + " completed");
+                        //Debug.WriteLine("page " + CurrentPage + " completed");
                     }
                 }
             }
@@ -108,28 +109,39 @@ namespace CosImg.ExHentai.Model
             else
             {
                 _imagePageUri[CurrentPage].ImagePage += "&nl=" + random.Next(61, 63);
-                Debug.WriteLine("Fail,retry");
+                //Debug.WriteLine("Fail,retry");
                 await DownloadFromUriList();
             }
         }
 
         private async Task ToNext()
         {
-            CurrentPage++;
-            OnPropertyChanged("CurrentPage");
-            var item = await DownLoadDBHelpers.Query(HashString);
-            item.CurrentPage = CurrentPage;
-            DownLoadDBHelpers.Modify(item);
-            if (CurrentPage < MaxImageCount)
+            if (App.DownLoadList.Find((a) => { return a.HashString == base.HashString; }) == null)
             {
-                await DownloadFromUriList();
+                //Debug.WriteLine("Cancel download");
+                DownLoadDBHelpers.Delete(HashString);
+                await ImageHelper.DeleDownloadFile(HashString);
             }
             else
             {
-                _client.Dispose();
-                App.DownLoadList.Remove(this);
-                item.DownLoadComplete = true;
+                CurrentPage++;
+                OnPropertyChanged("CurrentPage");
+                var item = await DownLoadDBHelpers.Query(HashString);
+                item.CurrentPage = CurrentPage;
                 DownLoadDBHelpers.Modify(item);
+                if (CurrentPage < MaxImageCount)
+                {
+                    await DownloadFromUriList();
+                }
+                else
+                {
+                    //Debug.WriteLine("download complete");
+                    _client.Dispose();
+                    App.DownLoadList.Remove(this);
+                    item.DownLoadComplete = true;
+                    DownLoadDBHelpers.Modify(item);
+                }
+
             }
         }
 

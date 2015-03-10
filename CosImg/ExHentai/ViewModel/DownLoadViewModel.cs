@@ -21,6 +21,21 @@ namespace CosImg.ExHentai.ViewModel
             OnLoaded();
         }
 
+        public ICommand DeleteCommand
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    for (int i = 0; i < RemoveList.Count; i++)
+                    {
+                        App.DownLoadList.Remove(RemoveList[i] as DownLoadModel);
+                        OnPropertyChanged("DownLoadList");
+                    }
+                });
+            }
+        }
+
         public ICommand ItemClick
         {
             get
@@ -57,5 +72,7 @@ namespace CosImg.ExHentai.ViewModel
                 return App.DownLoadList;
             }
         }
+
+        public List<object> RemoveList { get; set; }
     }
 }

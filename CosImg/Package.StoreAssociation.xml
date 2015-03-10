@@ -198,8 +198,8 @@
   <PackageInfoList LandingUrl="https://dev.windowsphone.com/AppSubmission/AssociationLanding?windowsProductId=9e0c1ab5-ad3d-4d67-9ae7-a04393b29726">
     <PackageInfo>
       <OsMinVersion>6.3.0.0</OsMinVersion>
-      <PackageArchitecture>neutral</PackageArchitecture>
-      <PackageMaxArchitectureVersion>0.0.0.13</PackageMaxArchitectureVersion>
+      <PackageArchitecture>arm</PackageArchitecture>
+      <PackageMaxArchitectureVersion>0.0.0.15</PackageMaxArchitectureVersion>
     </PackageInfo>
   </PackageInfoList>
 </StoreAssociation>

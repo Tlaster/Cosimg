@@ -1,4 +1,5 @@
-﻿using CosImg.ExHentai.ViewModel;
+﻿using CosImg.ExHentai.Model;
+using CosImg.ExHentai.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,9 +24,11 @@ namespace CosImg.ExHentai.View
     /// </summary>
     public sealed partial class DownLoadPage : Page
     {
+        DownLoadViewModel VM;
         public DownLoadPage()
         {
             this.InitializeComponent();
+            VM = new DownLoadViewModel();
         }
 
         /// <summary>
@@ -37,12 +40,41 @@ namespace CosImg.ExHentai.View
         {
             this.RequestedTheme = ElementTheme.Dark;
             UmengSDK.UmengAnalytics.TrackPageStart("DownLoadPage");
-            this.DataContext = new DownLoadViewModel();
+            this.DataContext = VM;
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             UmengSDK.UmengAnalytics.TrackPageEnd("DownLoadPage");
         }
+
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            downloadGridView.SelectionMode = ListViewSelectionMode.Multiple;
+            DeleteButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            SelectButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
+
+        private void AppBarButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            VM.RemoveList = downloadGridView.SelectedItems.ToList();
+            downloadGridView.SelectionMode = ListViewSelectionMode.None;
+            DeleteButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            SelectButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+        }
+
+        private void pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (pivot.SelectedIndex)
+            {
+                case 0:
+                    this.BottomAppBar.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    break;
+                default:
+                    this.BottomAppBar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                    break;
+            }
+        }
+
 
     }
 }

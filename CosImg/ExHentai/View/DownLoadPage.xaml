@@ -9,16 +9,25 @@
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.BottomAppBar>
+        <CommandBar>
+            <CommandBar.PrimaryCommands>
+                <AppBarButton x:Name="SelectButton" Label="Select..." Icon="SelectAll" Click="AppBarButton_Click"/>
+                <AppBarButton Command="{Binding DeleteCommand}" CommandParameter="{Binding}" x:Name="DeleteButton" Visibility="Collapsed" Label="Delete" Icon="Remove" Click="AppBarButton_Click_1" />
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
+    
     <Grid>
         <Rectangle VerticalAlignment="Top" Fill="{StaticResource LineColor}" Height="3" Margin="0,33,0,0"/>
-        <Pivot Margin="0,-30,0,0">
+        <Pivot SelectionChanged="pivot_SelectionChanged" x:Name="pivot" Margin="0,-30,0,0">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" FontSize="20"/>
                 </DataTemplate>
             </Pivot.HeaderTemplate>
             <PivotItem Header="Downloading" Margin="0">
-                <GridView ItemsSource="{Binding DownLoadList}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" >
+                <GridView x:Name="downloadGridView" SelectionMode="None" ItemsSource="{Binding DownLoadList}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" >
                     <GridView.ItemTemplate>
                         <DataTemplate>
                             <Grid Width="110" Height="146" Margin="4">
