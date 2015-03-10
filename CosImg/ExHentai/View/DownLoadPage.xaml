@@ -17,25 +17,35 @@
                 </DataTemplate>
             </Pivot.HeaderTemplate>
             <PivotItem Header="Downloading" Margin="0">
-                <ListView ItemsSource="{Binding DownLoadList}">
-                    <ListView.ItemTemplate>
+                <GridView ItemsSource="{Binding DownLoadList}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" >
+                    <GridView.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Image Source="{Binding ItemImage}" Width="110" Height="146"/>
-                                <Grid Grid.Column="1">
-                                    <StackPanel Orientation="Vertical" >
-                                        <TextBlock Text="{Binding Name}"/>
-                                        <ProgressBar Margin="2" Maximum="{Binding MaxImageCount}" Value="{Binding CurrentPage}"/>
-                                    </StackPanel>
+                            <Grid Width="110" Height="146" Margin="4">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Image Source="{Binding ItemImage}" Stretch="Uniform"/>
+                                <Border VerticalAlignment="Bottom" Background="#BF000000">
+                                    <TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding Name}" FontSize="15" MaxLines="2" TextTrimming="CharacterEllipsis" />
+                                </Border>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ProgressBar Margin="2" Maximum="{Binding MaxImageCount}" Value="{Binding CurrentPage}"/>
+                                    <TextBlock Grid.Column="1">
+                                        <Run Text="{Binding CurrentPage}"/>
+                                        <Run Text="/"/>
+                                        <Run Text="{Binding MaxImageCount}"/>
+                                    </TextBlock>
                                 </Grid>
                             </Grid>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    </GridView.ItemTemplate>
+                </GridView>
             </PivotItem>
             <PivotItem Header="Completed" Margin="0">
                 <GridView x:Name="gridView" IsItemClickEnabled="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" ItemsSource="{Binding CompletedList}">
