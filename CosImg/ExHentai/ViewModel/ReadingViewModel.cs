@@ -30,7 +30,8 @@ namespace CosImg.ExHentai.ViewModel
             OnLoaded();
         }
 
-        public ReadingViewModel(string link, string headerEn, string imagePage):this(link,headerEn)
+        public ReadingViewModel(string link, string headerEn, string imagePage, bool isDownLoaded = false)
+            : this(link, headerEn, isDownLoaded)
         {
             this._imagePage = imagePage;
         }

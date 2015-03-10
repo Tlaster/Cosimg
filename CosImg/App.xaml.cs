@@ -36,9 +36,22 @@ namespace CosImg
             this.Suspending += this.OnSuspending;
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
             ExitToastContent = "再按一次返回键退出程序";
+            UnhandledException += App_UnhandledException;
 #if DEBUG
             UmengSDK.UmengAnalytics.IsDebug = true;
 #endif
+        }
+
+        async void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            e.Handled = true;
+            MessageDialog dialog = new MessageDialog("the app is crashed,send crash reports?","Oops");
+            dialog.Commands.Add(new UICommand("Yes", async (a1) =>
+            {
+                await Windows.System.Launcher.LaunchUriAsync(new Uri(@"mailto:CosImg@outlook.com?subject=CosImg Crash Report&body=" + e.Message + "%0d%0a" + e.Exception.StackTrace + "%0d%0a" + e.Exception.InnerException + "%0d%0a" + e.Exception.HResult + "%0d%0a" + e.Exception.Source));
+            }));
+            dialog.Commands.Add(new UICommand("No"));
+            await dialog.ShowAsync();
         }
 
         bool isExit = false;

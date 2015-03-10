@@ -157,7 +157,7 @@ namespace CosImg.ExHentai.ViewModel
                 return new DelegateCommand<ItemClickEventArgs>((e) =>
                 {
                     var item = e.ClickedItem as ImageListInfo;
-                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn, item.ImagePage));
+                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn,item.ImagePage,isDownLoaded));
                 });
             }
         }
