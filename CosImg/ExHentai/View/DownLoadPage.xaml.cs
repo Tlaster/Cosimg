@@ -29,6 +29,7 @@ namespace CosImg.ExHentai.View
         {
             this.InitializeComponent();
             VM = new DownLoadViewModel();
+            this.DataContext = VM;
         }
 
         /// <summary>
@@ -40,7 +41,6 @@ namespace CosImg.ExHentai.View
         {
             this.RequestedTheme = ElementTheme.Dark;
             UmengSDK.UmengAnalytics.TrackPageStart("DownLoadPage");
-            this.DataContext = VM;
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {

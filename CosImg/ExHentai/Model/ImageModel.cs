@@ -62,12 +62,11 @@ namespace CosImg.ExHentai.Model
         }
         async void GetBitmapImage(string uri)
         {
-            if (_isbusy)
+            if (isOnLoading || isLoadFail)
             {
                 return;
             }
             isOnLoading = true;
-            _isbusy = true;
             try
             {
                 if (_client == null)
@@ -80,6 +79,7 @@ namespace CosImg.ExHentai.Model
                 if (await ImageHelper.CheckCacheImage(SaveFolder, ImageIndex.ToString()))
                 {
                     _imagebyte = await ImageHelper.GetCacheImage(SaveFolder, ImageIndex.ToString());
+                    
                 }
                 else
                 {
@@ -97,7 +97,6 @@ namespace CosImg.ExHentai.Model
             {
                 isLoadFail = true;
             }
-            _isbusy = false;
             isOnLoading = false;
         }
         public ICommand ReTryCommand
@@ -161,7 +160,6 @@ namespace CosImg.ExHentai.Model
                 }
             }
         }
-        bool _isbusy;
         HttpClient _client;
         //WeakReference _client;
         WeakReference _image;

@@ -50,10 +50,12 @@
 
 	<Grid>
 		<Pivot Visibility="{Binding LoadMoreVis}" Margin="0,-25,0,0">
-			<PivotItem Margin="0">
-				<PivotItem.Header>
-					<TextBlock Text="Detail" FontSize="25"/>
-				</PivotItem.Header>
+            <Pivot.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" FontSize="25"/>
+                </DataTemplate>
+            </Pivot.HeaderTemplate>
+            <PivotItem Margin="0" Header="Detail">
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="*"/>
@@ -88,16 +90,10 @@
 					</ScrollViewer>
 				</Grid>
 			</PivotItem>
-			<PivotItem Margin="0">
-				<PivotItem.Header>
-					<TextBlock Text="Tags" FontSize="25"/>
-				</PivotItem.Header>
+            <PivotItem Margin="0" Header="Tags">
 				<ListView ItemsSource="{Binding Detail.HeaderInfo.TagInfo}" ItemTemplate="{StaticResource TagListTemple}"/>
 			</PivotItem>
-			<PivotItem Margin="0">
-				<PivotItem.Header>
-					<TextBlock Text="Images" FontSize="25"/>
-				</PivotItem.Header>
+            <PivotItem Margin="0" Header="Images">
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="auto"/>
@@ -130,6 +126,25 @@
 				</Grid>
 
 			</PivotItem>
+            <PivotItem Margin="0" Header="Comment">
+                <ListView ItemsSource="{Binding Detail.CommentList}" HorizontalContentAlignment="Stretch">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,8">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Border Background="#7F6A6A6A" Width="1000"/>
+                                <TextBlock Text="{Binding Poster}" FontSize="15"/>
+                                <TextBlock Margin="8,0" TextWrapping="Wrap" Grid.Row="1" Text="{Binding Content}" FontSize="15"/>
+                                <TextBlock Foreground="Gray" Grid.Row="2" Text="{Binding Base}" FontSize="15"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </PivotItem>
 		</Pivot>
 		<ProgressRing IsActive="{Binding isOnLoading}" Visibility="{Binding ProVis}"/>
 		<StackPanel Visibility="{Binding FailVis}" HorizontalAlignment="Center" VerticalAlignment="Center">

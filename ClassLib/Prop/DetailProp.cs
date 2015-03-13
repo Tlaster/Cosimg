@@ -45,5 +45,9 @@ namespace ExHentaiLib.Prop
         public List<UpLoadInfo> UpLoadInfo { get; set; }
 
         public string RateValue { get; set; }
+
+        public List<CommentInfo> CommentList { get; set; }
+
+        public string Torrent { get; set; }
     }
 }

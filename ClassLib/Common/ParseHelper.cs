@@ -85,6 +85,9 @@ namespace ExHentaiLib.Common
 
         private static DetailProp HtmlNode2Detail(HtmlDocument htmldoc)
         {
+            //var Torrent = (from a in htmldoc.GetElementbyId("gd5").ChildNodes
+            //               where a.Name == "p" && a.Attributes["class"].Value == "g2"
+            //               select a.ChildNodes).ToList()[1].FindFirst("a");
             return new DetailProp
                          {
                              HeaderInfo = new HeaderInfo
@@ -100,13 +103,12 @@ namespace ExHentaiLib.Common
                                                                       select new StringBuilder((b.InnerText)).ToString()).ToArray<string>(),
                                                          }).ToList(),
                                           },
-                             RateValue = "Rating "+htmldoc.GetElementbyId("rating_label").InnerText,
+                             RateValue = "Rating " + htmldoc.GetElementbyId("rating_label").InnerText,
                              UpLoadInfo = (from a in htmldoc.GetElementbyId("gdd").FirstChild.ChildNodes
                                            select new UpLoadInfo
                                            {
                                                Value = a.InnerText,
                                            }).ToList(),
-                             //ImageCountString = htmldoc.DocumentNode.GetNodebyClassName("ip").InnerText,
                              MaxImageCount = GetMaxImageCount(htmldoc.DocumentNode.GetNodebyClassName("ip").InnerText),
                              DetailPageCount = htmldoc.DocumentNode.GetNodebyClassName("ptt").FirstChild.ChildNodes.Count - 2,
                              ImageList = (from a in htmldoc.GetElementbyId("gdt").ChildNodes
@@ -115,10 +117,21 @@ namespace ExHentaiLib.Common
                                           {
                                               ImageName = (a.InnerText),
                                               ImgeSrc = a.FirstChild.FirstChild.Attributes["src"].Value,
-                                              ImagePage = (a.FirstChild.Attributes["href"].Value)+"?",
+                                              ImagePage = (a.FirstChild.Attributes["href"].Value) + "?",
                                           }).ToList(),
+                             CommentList = (from a in htmldoc.GetElementbyId("cdiv").ChildNodes
+                                            where a.HasChildNodes && a.FirstChild.Name == "div"
+                                            select new CommentInfo
+                                            {
+                                                Poster = a.GetNodebyClassName("c3").InnerText,
+                                                Content = HtmlEntity.DeEntitize(a.GetNodebyClassName("c6").InnerText),
+                                                Score = a.GetNodebyClassName("c5") == null ? a.GetNodebyClassName("c4").InnerText : a.GetNodebyClassName("c5").InnerText,
+                                                Base = a.GetNodebyClassName("c7") == null ? "" : a.GetNodebyClassName("c7").InnerText,
+                                            }).ToList(),
                          };
         }
+
+
         public async static Task<ObservableCollection<MainListProp>> GetMainListAsync(string uri, string cookie)
         {
             string htmlstring = await HttpHelper.GetStringWithCookie(uri, cookie + unconfig);

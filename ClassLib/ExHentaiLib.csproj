@@ -46,6 +46,7 @@
     <Compile Include="Common\LogInHelper.cs" />
     <Compile Include="Common\ParseHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Prop\CommentInfo.cs" />
     <Compile Include="Prop\DetailProp.cs" />
     <Compile Include="Prop\HeaderInfo.cs" />
     <Compile Include="Prop\ImageListInfo.cs" />
