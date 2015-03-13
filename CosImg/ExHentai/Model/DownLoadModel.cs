@@ -69,33 +69,81 @@ namespace CosImg.ExHentai.Model
         int retryCount = 0;
         private async Task DownloadFromUriList()
         {
-            try
-            {
-                var sourceUri = await ParseHelper.GetImageAync(_imagePageUri[CurrentPage].ImagePage, SettingHelpers.GetSetting<string>("cookie"));
-                var file = await _saveFolder.CreateFileAsync(this.CurrentPage.ToString(), CreationCollisionOption.ReplaceExisting);
 
-                //Debug.WriteLine("start page " + CurrentPage);
+            var item = await DownLoadDBHelpers.Query(HashString);
+            for (; CurrentPage < MaxImageCount; CurrentPage++, OnPropertyChanged("CurrentPage"), item.CurrentPage = CurrentPage, DownLoadDBHelpers.Modify(item))
+            {
+                Debug.WriteLine("page " + CurrentPage + " start");
+                var file = await _saveFolder.CreateFileAsync(this.CurrentPage.ToString(), CreationCollisionOption.ReplaceExisting);
+                var sourceUri = await ParseHelper.GetImageAync(_imagePageUri[CurrentPage].ImagePage, SettingHelpers.GetSetting<string>("cookie"));
                 var res = await _client.GetAsync(new Uri(sourceUri));
                 if (!res.IsSuccessStatusCode)
                 {
-                    await Retry();
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Debug.WriteLine("Fail,retry");
+                        Debug.WriteLine("page " + CurrentPage + " restart " + i);
+                        _imagePageUri[CurrentPage].ImagePage += "&nl=" + random.Next(61, 63);
+                        sourceUri = await ParseHelper.GetImageAync(_imagePageUri[CurrentPage].ImagePage, SettingHelpers.GetSetting<string>("cookie"));
+                        res = await _client.GetAsync(new Uri(sourceUri));
+                        if (res.IsSuccessStatusCode)
+                        {
+                            break;
+                        }
+                    }
                 }
-                else
+                if (res.IsSuccessStatusCode)
                 {
                     using (var resStream = await res.Content.ReadAsStreamAsync())
                     {
                         var resbyte = await Converter.StreamToBytes(resStream);
                         await FileIO.WriteBytesAsync(file, resbyte);
-                        //Debug.WriteLine("page " + CurrentPage + " completed");
+                        Debug.WriteLine("page " + CurrentPage + " completed");
                     }
                 }
+                if (App.DownLoadList.Find((a) => { return a.HashString == base.HashString; }) == null)
+                {
+                    Debug.WriteLine("DownLoad Cancel");
+                    DownLoadDBHelpers.Delete(HashString);
+                    await ImageHelper.DeleDownloadFile(HashString);
+                    break;
+                }
             }
-            catch (Exception)
+            if (App.DownLoadList.Find((a) => { return a.HashString == base.HashString; }) != null)
             {
-                Retry();
+                _client.Dispose();
+                App.DownLoadList.Remove(this);
+                item.DownLoadComplete = true;
+                DownLoadDBHelpers.Modify(item);
             }
 
-            await ToNext();
+            //try
+            //{
+            //    var sourceUri = await ParseHelper.GetImageAync(_imagePageUri[CurrentPage].ImagePage, SettingHelpers.GetSetting<string>("cookie"));
+            //    var file = await _saveFolder.CreateFileAsync(this.CurrentPage.ToString(), CreationCollisionOption.ReplaceExisting);
+
+            //    //Debug.WriteLine("start page " + CurrentPage);
+            //    var res = await _client.GetAsync(new Uri(sourceUri));
+            //    if (!res.IsSuccessStatusCode)
+            //    {
+            //        await Retry();
+            //    }
+            //    else
+            //    {
+            //        using (var resStream = await res.Content.ReadAsStreamAsync())
+            //        {
+            //            var resbyte = await Converter.StreamToBytes(resStream);
+            //            await FileIO.WriteBytesAsync(file, resbyte);
+            //            //Debug.WriteLine("page " + CurrentPage + " completed");
+            //        }
+            //    }
+            //}
+            //catch (Exception)
+            //{
+            //    Retry();
+            //}
+
+            //await ToNext();
         }
 
         private async Task Retry()
@@ -147,9 +195,10 @@ namespace CosImg.ExHentai.Model
 
         private async Task GetImagePageListAsync()
         {
-            MaxImageCount = (await ParseHelper.GetDetailAsync(PageUri, SettingHelpers.GetSetting<string>("cookie"))).MaxImageCount;
-            OnPropertyChanged("MaxImageCount");
+            //MaxImageCount = (await ParseHelper.GetDetailAsync(PageUri, SettingHelpers.GetSetting<string>("cookie"))).MaxImageCount;
             _imagePageUri = await ParseHelper.GetImagePageListAsync(PageUri, SettingHelpers.GetSetting<string>("cookie"));
+            MaxImageCount = _imagePageUri.Count; 
+            OnPropertyChanged("MaxImageCount");
         }
 
 

@@ -135,6 +135,17 @@ namespace CosImg
                 Window.Current.Content = rootFrame;
             }
 
+#if DEBUG
+            try
+            {
+                LogInHelper.LogCookieCheck(SettingHelpers.GetSetting<string>("cookie", true));
+                App.rootFrame.Navigate(typeof(ExHentai.View.ExMainPage));
+            }
+            catch (Exception)
+            {
+                App.rootFrame.Navigate(typeof(ExHentai.View.LoginPage));
+            }
+#else
             if (SettingHelpers.GetSetting<bool>("ExDefault"))
             {
                 try
@@ -151,6 +162,8 @@ namespace CosImg
             {
                 App.rootFrame.Navigate(typeof(MainPage));
             }
+#endif
+
 
 
 

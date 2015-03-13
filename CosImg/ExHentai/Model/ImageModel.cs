@@ -10,6 +10,7 @@ using System.Windows.Input;
 using TBase;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace CosImg.ExHentai.Model
 {
@@ -45,6 +46,7 @@ namespace CosImg.ExHentai.Model
 
         private async void GetImageBitmapImage(int ImageIndex)
         {
+            isOnLoading = true;
             try
             {
                 byte[] _imagebyte = await ImageHelper.GetDownLoadedImage(SaveFolder, ImageIndex.ToString());
@@ -53,14 +55,27 @@ namespace CosImg.ExHentai.Model
             }
             catch (Exception)
             {
-                GetImageBitmapImage(ImagePage);
+                GetBitmapImage(ImagePage);
             }
+
+            isOnLoading = false;
         }
-        async void GetImageBitmapImage(string uri)
+        async void GetBitmapImage(string uri)
         {
+            if (_isbusy)
+            {
+                return;
+            }
+            isOnLoading = true;
+            _isbusy = true;
             try
             {
-                isOnLoading = true;
+                if (_client == null)
+                {
+                    _client = new HttpClient();
+                    _client.DefaultRequestHeaders.Add("Cookie", SettingHelpers.GetSetting<string>("cookie"));
+                }
+
                 byte[] _imagebyte;
                 if (await ImageHelper.CheckCacheImage(SaveFolder, ImageIndex.ToString()))
                 {
@@ -68,19 +83,22 @@ namespace CosImg.ExHentai.Model
                 }
                 else
                 {
-                    _imageuri = await ParseHelper.GetImageAync(uri, SettingHelpers.GetSetting<string>("cookie"));
-                    _imagebyte = await HttpHelper.GetByteArray(_imageuri, SettingHelpers.GetSetting<string>("cookie"));
+                    if (_imageuri==null)
+                    {
+                        _imageuri = await ParseHelper.GetImageAync(uri, SettingHelpers.GetSetting<string>("cookie"));
+                    }
+                    _imagebyte = await _client.GetByteArrayAsync(_imageuri);
                     await ImageHelper.SaveCacheImage(SaveFolder, ImageIndex.ToString(), _imagebyte);
                 }
                 _image = new WeakReference(await ImageHelper.ByteArrayToBitmapImage(_imagebyte));
-                isOnLoading = false;
                 OnPropertyChanged("Image");
             }
             catch (Exception)
             {
-                isOnLoading = false;
                 isLoadFail = true;
             }
+            _isbusy = false;
+            isOnLoading = false;
         }
         public ICommand ReTryCommand
         {
@@ -96,6 +114,7 @@ namespace CosImg.ExHentai.Model
         {
             isLoadFail = false;
             _image = null;
+            _imageuri = null;
             await ImageHelper.DeleCacheImage(SaveFolder, ImageIndex.ToString());
             isDownLoaded = false;
             OnPropertyChanged("Image");
@@ -124,7 +143,11 @@ namespace CosImg.ExHentai.Model
         {
             get
             {
-                if (_image == null)
+                if (_image != null && _image.IsAlive)
+                {
+                    return (BitmapImage)_image.Target;
+                }
+                else
                 {
                     if (isDownLoaded)
                     {
@@ -132,34 +155,15 @@ namespace CosImg.ExHentai.Model
                     }
                     else
                     {
-                        GetImageBitmapImage(ImagePage);
+                        GetBitmapImage(ImagePage);
                     }
                     return null;
                 }
-                else
-                {
-                    if (_image.IsAlive)
-                    {
-                        return (BitmapImage)_image.Target;
-                    }
-                    else
-                    {
-                        if (isDownLoaded)
-                        {
-                            GetImageBitmapImage(ImageIndex);
-                        }
-                        else
-                        {
-                            GetImageBitmapImage(ImagePage);
-                        }
-                        return null;
-                    }
-                }
             }
         }
-
-
-
+        bool _isbusy;
+        HttpClient _client;
+        //WeakReference _client;
         WeakReference _image;
         private string _imageuri;
         public string ImagePage;

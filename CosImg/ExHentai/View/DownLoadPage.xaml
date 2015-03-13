@@ -27,7 +27,7 @@
                 </DataTemplate>
             </Pivot.HeaderTemplate>
             <PivotItem Header="Downloading" Margin="0">
-                <GridView x:Name="downloadGridView" SelectionMode="None" ItemsSource="{Binding DownLoadList}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" >
+                <GridView x:Name="downloadGridView" SelectionMode="None" ItemsSource="{Binding DownLoadList,Mode=OneWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" >
                     <GridView.ItemTemplate>
                         <DataTemplate>
                             <Grid Width="110" Height="146" Margin="4">

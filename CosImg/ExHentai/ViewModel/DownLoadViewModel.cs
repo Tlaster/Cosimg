@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace CosImg.ExHentai.ViewModel
 {
-    public class DownLoadViewModel:TBase.NotifyPropertyChanged
+    public class DownLoadViewModel:NotifyPropertyChanged
     {
         private List<DownLoadInfo> _completedList;
 
@@ -30,8 +30,8 @@ namespace CosImg.ExHentai.ViewModel
                     for (int i = 0; i < RemoveList.Count; i++)
                     {
                         App.DownLoadList.Remove(RemoveList[i] as DownLoadModel);
-                        OnPropertyChanged("DownLoadList");
                     }
+                    OnPropertyChanged("DownLoadList");
                 });
             }
         }
@@ -61,12 +61,9 @@ namespace CosImg.ExHentai.ViewModel
                 return _completedList;
             }
         }
+
         public List<DownLoadModel> DownLoadList
         {
-            set
-            {
-                App.DownLoadList = value;
-            }
             get
             {
                 return App.DownLoadList;

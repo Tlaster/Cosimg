@@ -106,7 +106,6 @@ namespace CosImg.ExHentai.ViewModel
                             HashString = Detail.HeaderInfo.TitleEn.GetHashedString(),
                             Name = Detail.HeaderInfo.TitleEn,
                             ItemPageLink = this._link,
-                            //ImageUri = Detail.HeaderInfo.HeaderImage,
                             ImageByte = await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage,SettingHelpers.GetSetting<string>("cookie"))
                         });
                         _favorState = true;
@@ -189,7 +188,7 @@ namespace CosImg.ExHentai.ViewModel
             {
                 return new DelegateCommand(async () =>
                 {
-                    if (App.DownLoadList!=null&&App.DownLoadList.Find((a) => { return a.HashString == Detail.HeaderInfo.TitleEn.GetHashedString(); }) != null)
+                    if (App.DownLoadList != null && App.DownLoadList.Find((a) => { return a.HashString == Detail.HeaderInfo.TitleEn.GetHashedString(); }) != null)
                     {
                         MessageDialog dialog = new MessageDialog("Is Downloading");
                         await dialog.ShowAsync();
@@ -211,15 +210,13 @@ namespace CosImg.ExHentai.ViewModel
             App.DownLoadList.Add(new DownLoadModel(this._link, this.Detail.HeaderInfo.TitleEn, await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"))));
             new ToastPrompt("Downloading").Show();
             var imgbyte = await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"));
-            var item = await FavorDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
-            if (item == null)
+            if (!_favorState)
             {
                 FavorDBHelpers.Add(new FavorModel()
                 {
                     HashString = Detail.HeaderInfo.TitleEn.GetHashedString(),
                     Name = Detail.HeaderInfo.TitleEn,
                     ItemPageLink = this._link,
-                    //ImageUri = Detail.HeaderInfo.HeaderImage,
                     ImageByte = imgbyte
                 });
             }
