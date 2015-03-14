@@ -59,7 +59,11 @@ namespace CosImg.ExHentai.Model
         private async void StartDownLoad()
         {
             random = new Random();
+#if WINDOWS_PHONE_APP
             var cachefolder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists);
+#else
+            var cachefolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists);
+#endif
             _saveFolder = await cachefolder.CreateFolderAsync(HashString, CreationCollisionOption.OpenIfExists);
             await GetImagePageListAsync();
             await DownloadFromUriList();

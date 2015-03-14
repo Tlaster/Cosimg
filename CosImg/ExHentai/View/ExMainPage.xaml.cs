@@ -88,11 +88,6 @@ namespace CosImg.ExHentai.View
             App.rootFrame.Navigate(typeof(ExSettingPage));
         }
 
-        private void favorGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            App.rootFrame.Navigate(typeof(ExDetailPage), new ExDetailViewModel((e.ClickedItem as FavorModel).ItemPageLink));
-        }
-
         private void AppBarButton_Click_2(object sender, RoutedEventArgs e)
         {
             App.rootFrame.Navigate(typeof(DownLoadPage));

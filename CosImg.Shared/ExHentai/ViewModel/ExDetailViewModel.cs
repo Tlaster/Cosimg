@@ -127,6 +127,7 @@ namespace CosImg.ExHentai.ViewModel
                 });
             }
         }
+#if WINDOWS_PHONE_APP
         public ICommand ShareCommand
         {
             get
@@ -134,17 +135,20 @@ namespace CosImg.ExHentai.ViewModel
                 return new DelegateCommand(async () =>
                 {
                     var imgbyte = await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie") + ParseHelper.unconfig);
+
                     await ImageHelper.ShareImage(imgbyte, (Detail.HeaderInfo.TitleJp == "" ? Detail.HeaderInfo.TitleEn : Detail.HeaderInfo.TitleJp) + "------" + _link);
                 });
             }
         }
+#endif
+
         public ICommand ReadCommand
         {
             get
             {
                 return new DelegateCommand(() =>
                 {
-                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn, isDownLoaded));
+                    //App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn, isDownLoaded));
                 });
             }
         }
@@ -156,7 +160,7 @@ namespace CosImg.ExHentai.ViewModel
                 return new DelegateCommand<ItemClickEventArgs>((e) =>
                 {
                     var item = e.ClickedItem as ImageListInfo;
-                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn,item.ImagePage,isDownLoaded));
+                    //App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn,item.ImagePage,isDownLoaded));
                 });
             }
         }

@@ -38,6 +38,18 @@ namespace CosImg.ExHentai.ViewModel
             }
         }
 
+        public ICommand FavorItemClick
+        {
+            get
+            {
+                return new DelegateCommand<ItemClickEventArgs>((e) =>
+                {
+                    App.rootFrame.Navigate(typeof(ExDetailPage), new ExDetailViewModel((e.ClickedItem as FavorModel).ItemPageLink));
+                });
+            }
+
+        }
+
 
         public PivotItemModel MainItemModel { get; set; }
         public SearchModel SearchItemModel { get; set; }

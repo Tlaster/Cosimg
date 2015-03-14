@@ -1,5 +1,4 @@
 ﻿using CosImg.Common;
-using CosImg.ExHentai.Common;
 using CosImg.ExHentai.Model;
 using ExHentaiLib.Common;
 using System;

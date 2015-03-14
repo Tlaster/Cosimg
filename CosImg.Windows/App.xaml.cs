@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CosImg.ExHentai.Model;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace CosImg
     sealed partial class App : Application
     {
         public static Frame rootFrame { get; set; }
+        public static List<DownLoadModel> DownLoadList;
 
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，

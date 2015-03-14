@@ -128,6 +128,7 @@ namespace CosImg.ExHentai.Model
             }
             await ImageHelper.SaveImage(Path.GetFileName(_imageuri) ?? SaveFolder + ImageIndex + ".jpg", await ImageHelper.GetCacheImage(SaveFolder, ImageIndex.ToString()));
         }
+#if WINDOWS_PHONE_APP
         public async void Share()
         {
             if (!await ImageHelper.CheckCacheImage(SaveFolder, ImageIndex.ToString()))
@@ -137,6 +138,8 @@ namespace CosImg.ExHentai.Model
             }
             await ImageHelper.ShareImage(await ImageHelper.GetCacheImage(SaveFolder, ImageIndex.ToString()));
         }
+#endif
+
 
         public BitmapImage Image
         {

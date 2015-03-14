@@ -31,6 +31,7 @@ namespace CosImg.Common
         {
             try
             {
+                var a = SettingHelpers.GetSetting<string>("cookie") + ParseHelper.unconfig;
                 var bit = await HttpHelper.GetByteArray(link, SettingHelpers.GetSetting<string>("cookie") + ParseHelper.unconfig);
                 return await ImageHelper.ByteArrayToBitmapImage(bit);
                 //using (HttpClient client = new HttpClient())

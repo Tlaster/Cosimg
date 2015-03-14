@@ -22,5 +22,25 @@
     <Compile Include="$(MSBuildThisFileDirectory)CosImg\ViewModel\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CosImg\ViewModel\MainViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CosImg\ViewModel\SelectionViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Common\DownLoadDBHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Common\FavorDBHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Model\DownLoadInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Model\DownLoadModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Model\FavorModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Model\ImageModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Model\PageListModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Model\PivotItemModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Model\SearchModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExHentai\ViewModel\ExDetailViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExHentai\ViewModel\ExMainPageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExHentai\View\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)ExHentai\View\LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

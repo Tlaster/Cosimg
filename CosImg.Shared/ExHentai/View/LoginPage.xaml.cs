@@ -25,6 +25,7 @@ namespace CosImg.ExHentai.View
     /// </summary>
     public sealed partial class LoginPage : Page
     {
+        private bool _isbusy;
         public LoginPage()
         {
             this.InitializeComponent();
@@ -32,6 +33,11 @@ namespace CosImg.ExHentai.View
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (_isbusy)
+            {
+                return;
+            }
+            _isbusy = true;
             ToastPrompt toast = new ToastPrompt("Now login,please wait", true);
             MessageDialog dialog;
             try
@@ -61,6 +67,7 @@ namespace CosImg.ExHentai.View
                 new ToastPrompt("Login Failed,Please try again").Show();
                 toast.HideWithProgressBar();
             }
+            _isbusy = false;
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

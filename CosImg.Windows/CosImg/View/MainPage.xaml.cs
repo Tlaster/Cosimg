@@ -1,13 +1,16 @@
 ﻿using CosImg.CosImg.Model;
 using CosImg.CosImg.View;
 using CosImg.CosImg.ViewModel;
+using ExHentaiLib.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TBase.RT;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -37,11 +40,29 @@ namespace CosImg
             new ImagePopUp(item).Show();
         }
 
-        private void SearchBox_QuerySubmitted(SearchBox sender, SearchBoxQuerySubmittedEventArgs args)
+        private async void SearchBox_QuerySubmitted(SearchBox sender, SearchBoxQuerySubmittedEventArgs args)
         {
+#if DEBUG
+            if (args.QueryText == "go")
+#else
             if (args.QueryText == "I AM HENYAI")
+#endif
             {
-
+                MessageDialog dialog = new MessageDialog("Sure?");
+                dialog.Commands.Add(new UICommand("Yes", (a) =>
+                {
+                    try
+                    {
+                        LogInHelper.LogCookieCheck(SettingHelpers.GetSetting<string>("cookie", true));
+                        App.rootFrame.Navigate(typeof(ExHentai.View.ExMainPage));
+                    }
+                    catch (Exception)
+                    {
+                        App.rootFrame.Navigate(typeof(ExHentai.View.LoginPage));
+                    }
+                }));
+                dialog.Commands.Add(new UICommand("No"));
+                await dialog.ShowAsync();
             }
             else
             {

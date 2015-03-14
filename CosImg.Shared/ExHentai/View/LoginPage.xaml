@@ -5,19 +5,19 @@
     xmlns:local="using:CosImg.ExHentai.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d" 
+    >
 
-    <Grid>
+    <Grid Background="{ThemeResource AppBarBackgroundThemeBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <StackPanel Margin="20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <TextBlock Style="{StaticResource MessageDialogTitleStyle}">OK Welcome,Hentai</TextBlock>
+            <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">OK Welcome,Hentai</TextBlock>
             <TextBox Name="userName" Header="User Name"/>
             <PasswordBox  Name="password" Header="Password"/>
-            <TextBlock Name="body" Style="{StaticResource MessageDialogContentStyle}" TextWrapping="Wrap">
+            <TextBlock Name="body" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">
                 But you MUST login before you use ExHentaiViewer
                 <LineBreak/>
                 Please login with your E-Hentai Forums account
