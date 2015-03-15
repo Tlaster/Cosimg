@@ -1,4 +1,6 @@
-﻿using CosImg.ExHentai.ViewModel;
+﻿using CosImg.ExHentai.Common;
+using CosImg.ExHentai.Model;
+using CosImg.ExHentai.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,21 +28,43 @@ namespace CosImg.ExHentai.View
         public ExMainPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Required;
             this.RequestedTheme = ElementTheme.Dark;
             this.DataContext = new ExMainPageViewModel();
         }
 
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            if (e.NavigationMode == NavigationMode.New)
+            {
+                while (App.rootFrame.BackStack.Count != 0)
+                {
+                    App.rootFrame.BackStack.RemoveAt(0);
+                }
+                var downloadlist = await DownLoadDBHelpers.GetList();
+                if (downloadlist != null && downloadlist.Count != 0)
+                {
+                    for (int i = 0; i < downloadlist.Count; i++)
+                    {
+                        if (App.DownLoadList == null)
+                        {
+                            App.DownLoadList = new List<DownLoadModel>();
+                        }
+                        App.DownLoadList.Add(new DownLoadModel(downloadlist[i]));
+                    }
+                }
+            }
+            var list = await FavorDBHelpers.Query();
+            list.Reverse();
+            favorGridView.ItemsSource = list;
+        }
         
 
         private void AppBarButton_Click_2(object sender, RoutedEventArgs e)
         {
 
         }
-
-
-        private void favorGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-
-        }
+          
     }
 }

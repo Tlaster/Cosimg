@@ -46,7 +46,7 @@ namespace CosImg.ExHentai.View
             if (e.NavigationMode == NavigationMode.New)
             {
                 this.RequestedTheme = ElementTheme.Dark;
-                if (App.rootFrame.BackStack.Count!=0)
+                while (App.rootFrame.BackStack.Count != 0)
                 {
                     App.rootFrame.BackStack.RemoveAt(0);
                 }

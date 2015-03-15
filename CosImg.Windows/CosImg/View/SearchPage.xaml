@@ -50,7 +50,7 @@
             <TextBlock Grid.Column="1" Text="{Binding ElementName=searchPage,Path=Title}" FontSize="{ThemeResource HubHeaderThemeFontSize}" />
         </Grid>
         <Grid Grid.Row="1">
-            <ListView  ItemsSource="{Binding ElementName=searchPage,Path=List}" SelectionMode="None" ScrollViewer.VerticalScrollBarVisibility="Hidden" FooterTemplate="{StaticResource LoadStateTemple}" IsItemClickEnabled="True" x:Name="listBox" ItemTemplate="{StaticResource GridViewItemTemple}" HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <ListView IsSwipeEnabled="False" ItemsSource="{Binding ElementName=searchPage,Path=List}" SelectionMode="None" ScrollViewer.VerticalScrollBarVisibility="Hidden" FooterTemplate="{StaticResource LoadStateTemple}" IsItemClickEnabled="True" x:Name="listBox" ItemTemplate="{StaticResource GridViewItemTemple}" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ItemsWrapGrid Orientation="Horizontal"/>

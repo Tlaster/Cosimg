@@ -38,7 +38,7 @@ namespace CosImg.CosImg.View
         private async void OnLoaded(ListModel item)
         {
             proRin.IsActive = true;
-            var htmlStr = await HttpHelper.GetReadString("http://worldcosplay.net" + item.url);
+            var htmlStr = await HttpHelper.GetString("http://worldcosplay.net" + item.url);
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(htmlStr);
             HtmlNode node;

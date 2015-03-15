@@ -16,6 +16,94 @@
         <common:SelectedIndexToCollapsedConverter x:Key="SelectedIndexToCollapsedConverter"/>
         <common:LinkToBitmapImageWitchCookieConverter x:Key="LinkToBitmapImageWitchCookieConverter"/>
         <TBaseRT:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <Style x:Key="ListBoxStyle1" TargetType="ListBox">
+        	<Setter Property="Foreground" Value="{ThemeResource ListBoxForegroundThemeBrush}"/>
+        	<Setter Property="Background" Value="{ThemeResource ListBoxBackgroundThemeBrush}"/>
+        	<Setter Property="BorderBrush" Value="{ThemeResource ListBoxBorderThemeBrush}"/>
+        	<Setter Property="BorderThickness" Value="{ThemeResource ListBoxBorderThemeThickness}"/>
+        	<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        	<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        	<Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled"/>
+        	<Setter Property="ScrollViewer.IsHorizontalRailEnabled" Value="True"/>
+        	<Setter Property="ScrollViewer.VerticalScrollMode" Value="Enabled"/>
+        	<Setter Property="ScrollViewer.IsVerticalRailEnabled" Value="True"/>
+        	<Setter Property="ScrollViewer.ZoomMode" Value="Disabled"/>
+        	<Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False"/>
+        	<Setter Property="ScrollViewer.BringIntoViewOnFocusChange" Value="True"/>
+        	<Setter Property="IsTabStop" Value="False"/>
+        	<Setter Property="TabNavigation" Value="Once"/>
+        	<Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+        	<Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+        	<Setter Property="ItemsPanel">
+        		<Setter.Value>
+        			<ItemsPanelTemplate>
+        				<VirtualizingStackPanel/>
+        			</ItemsPanelTemplate>
+        		</Setter.Value>
+        	</Setter>
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate TargetType="ListBox">
+        				<Border x:Name="LayoutRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+        					<VisualStateManager.VisualStateGroups>
+        						<VisualStateGroup x:Name="CommonStates">
+        							<VisualState x:Name="Normal"/>
+        							<VisualState x:Name="Disabled"/>
+        						</VisualStateGroup>
+        						<VisualStateGroup x:Name="FocusStates">
+        							<VisualState x:Name="Focused"/>
+        							<VisualState x:Name="Unfocused"/>
+        						</VisualStateGroup>
+        					</VisualStateManager.VisualStateGroups>
+        					<ScrollViewer x:Name="ScrollViewer" AutomationProperties.AccessibilityView="Raw" BringIntoViewOnFocusChange="{TemplateBinding ScrollViewer.BringIntoViewOnFocusChange}" HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}" IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}" IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}" Padding="{TemplateBinding Padding}" TabNavigation="{TemplateBinding TabNavigation}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}">
+        						<ItemsPresenter/>
+        					</ScrollViewer>
+        				</Border>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
+        </Style>
+        <Style x:Key="ListBoxItemStyle1" TargetType="ListBoxItem">
+        	<Setter Property="Background" Value="Transparent"/>
+        	<Setter Property="TabNavigation" Value="Local"/>
+        	<Setter Property="Padding" Value="8,10"/>
+        	<Setter Property="HorizontalContentAlignment" Value="Left"/>
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate TargetType="ListBoxItem">
+        				<Border x:Name="LayoutRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+        					<VisualStateManager.VisualStateGroups>
+        						<VisualStateGroup x:Name="CommonStates">
+        							<VisualState x:Name="Normal"/>
+        							<VisualState x:Name="PointerOver"/>
+        							<VisualState x:Name="Disabled"/>
+        							<VisualState x:Name="Pressed"/>
+        						</VisualStateGroup>
+        						<VisualStateGroup x:Name="SelectionStates">
+        							<VisualState x:Name="Unselected"/>
+        							<VisualState x:Name="Selected"/>
+        							<VisualState x:Name="SelectedUnfocused"/>
+        							<VisualState x:Name="SelectedDisabled"/>
+        							<VisualState x:Name="SelectedPointerOver"/>
+        							<VisualState x:Name="SelectedPressed"/>
+        						</VisualStateGroup>
+        						<VisualStateGroup x:Name="FocusStates">
+        							<VisualState x:Name="Focused"/>
+        							<VisualState x:Name="Unfocused"/>
+        							<VisualState x:Name="PointerFocused"/>
+        						</VisualStateGroup>
+        					</VisualStateManager.VisualStateGroups>
+        					<Grid x:Name="InnerGrid" Background="Transparent">
+        						<Rectangle x:Name="PressedBackground" Fill="{ThemeResource ListBoxItemPressedBackgroundThemeBrush}" Opacity="0"/>
+        						<ContentPresenter x:Name="ContentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+        						<Rectangle x:Name="FocusVisualWhite" Opacity="0" StrokeDashOffset=".5" StrokeEndLineCap="Square" Stroke="{ThemeResource FocusVisualWhiteStrokeThemeBrush}" StrokeDashArray="1,1"/>
+        						<Rectangle x:Name="FocusVisualBlack" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="{ThemeResource FocusVisualBlackStrokeThemeBrush}" StrokeDashArray="1,1"/>
+        					</Grid>
+        				</Border>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
+        </Style>
     </Application.Resources>
 
 </Application>

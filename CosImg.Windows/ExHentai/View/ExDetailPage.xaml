@@ -5,7 +5,10 @@
     xmlns:local="using:CosImg.ExHentai.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+
+    >
     
     <Page.Resources>
         <DataTemplate x:Key="TagListTemple">
@@ -15,20 +18,15 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="{Binding Name}" FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Center" Padding="0,8,0,0"/>
-                <GridView Grid.Column="1" ItemsSource="{Binding Value}" BorderThickness="0" Background="Transparent">
-                    <GridView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <ItemsStackPanel/>
-                        </ItemsPanelTemplate>
-                    </GridView.ItemsPanel>
-                    <GridView.ItemTemplate>
+                <ListView SelectionMode="None" IsSwipeEnabled="False" Foreground="White" Grid.Column="1" ItemsSource="{Binding Value}" BorderThickness="0" Background="Transparent">
+                    <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="White" BorderThickness="1" CornerRadius="5">
                                 <TextBlock Text="{Binding}" Margin="2" FontSize="15" HorizontalAlignment="Center"/>
                             </Border>
                         </DataTemplate>
-                    </GridView.ItemTemplate>
-                </GridView>
+                    </ListView.ItemTemplate>
+                </ListView>
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -37,10 +35,14 @@
 
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Hub>
+        <Hub Visibility="{Binding LoadMoreVis}" Margin="-10,-30,0,0">
             <Hub.HeaderTemplate>
                 <DataTemplate>
                     <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="*"/>
@@ -51,24 +53,113 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding HeaderInfo.TitleEn}" FontSize="{ThemeResource HubSectionHeaderThemeFontSize}"/>
-                            <TextBlock Text="{Binding HeaderInfo.TitleJp}" Grid.Row="1" FontSize="{ThemeResource HubSectionHeaderThemeFontSize}"/>
+                            <TextBlock Text="{Binding Detail.HeaderInfo.TitleEn}" FontSize="{ThemeResource HubSectionHeaderThemeFontSize}"/>
+                            <TextBlock Foreground="Gray" Text="{Binding Detail.HeaderInfo.TitleJp}" Grid.Row="1" FontSize="{ThemeResource HubSectionHeaderThemeFontSize}"/>
                         </Grid>
+                        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                            <Button Background="Black" BorderThickness="0" Content="Read" Command="{Binding ReadCommand}"/>
+                            <Button Background="Black" BorderThickness="0" Visibility="{Binding isDownLoaded,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" Content="DownLoad" Command="{Binding DownLoadCommand}"/>
+                            <Button Background="Black" BorderThickness="0" Visibility="{Binding isDownLoaded,Converter={StaticResource BoolToVisibilityConverter}}" Content="Dele File" Command="{Binding DeleFileCommand}"/>
+                            <Button Background="Black" BorderThickness="0" Content="{Binding FavorButtonText}" Command="{Binding FavorCommand}"/>
+                        </StackPanel>
                     </Grid>
                 </DataTemplate>
             </Hub.HeaderTemplate>
             <HubSection Header="Detail">
-
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Margin="8,16" Grid.Column="0" MaxHeight="350" MinHeight="200" Source="{Binding Result}" DataContext="{Binding Detail.HeaderInfo.HeaderImage, Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" />
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="{Binding Detail.RateValue}" FontSize="15"/>
+                            <ListView SelectionMode="None" IsSwipeEnabled="False" Foreground="White" Background="Transparent" Grid.Row="1" ItemsSource="{Binding Detail.UpLoadInfo}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Value}" FontSize="15"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
             </HubSection>
             <HubSection Header="Tags">
-
+                <DataTemplate>
+                    <ListView IsSwipeEnabled="False" SelectionMode="None" Foreground="White" Background="Transparent" ItemsSource="{Binding Detail.HeaderInfo.TagInfo}" ItemTemplate="{StaticResource TagListTemple}"/>
+                </DataTemplate>
             </HubSection>
-            <HubSection Header="Comment">
-
+            <HubSection Header="Comment" Width="600">
+                <DataTemplate>
+                    <ListView IsSwipeEnabled="False" SelectionMode="None" ItemsSource="{Binding Detail.CommentList}" HorizontalContentAlignment="Stretch">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,8">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Border Background="#7F6A6A6A" Width="600"/>
+                                    <TextBlock Text="{Binding Poster}" FontSize="15"/>
+                                    <TextBlock Margin="8,0" TextWrapping="Wrap" Grid.Row="1" Text="{Binding Content}" FontSize="15"/>
+                                    <TextBlock Foreground="Gray" Grid.Row="2" Text="{Binding Base}" FontSize="15"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </DataTemplate>
             </HubSection>
             <HubSection Header="Image">
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ComboBox SelectedItem="{Binding SelectedPage, Mode=TwoWay}" ItemsSource="{Binding PageList, Mode=OneWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="20" Text="{Binding Page}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <GridView IsSwipeEnabled="False" IsItemClickEnabled="True" Grid.Row="1" ItemsSource="{Binding Detail.ImageList, Mode=OneWay}">
+                            <GridView.HeaderTemplate>
+                                <DataTemplate>
+                                    <ProgressRing IsActive="{Binding isImageOnLoading}" Visibility="{Binding isImageOnLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                </DataTemplate>
+                            </GridView.HeaderTemplate>
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <Image Margin="4" Height="146" Width="110" DataContext="{Binding ImgeSrc, Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" Source="{Binding Result}"/>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                            <Interactivity:Interaction.Behaviors>
+                                <Core:EventTriggerBehavior EventName="ItemClick">
+                                    <Core:InvokeCommandAction Command="{Binding ImageItemClick}"/>
+                                </Core:EventTriggerBehavior>
+                            </Interactivity:Interaction.Behaviors>
+                        </GridView>
+                    </Grid>
 
+                </DataTemplate>
             </HubSection>
         </Hub>
+
+        <ProgressRing Width="50" Height="50" IsActive="{Binding isOnLoading}" Visibility="{Binding ProVis}"/>
+        <StackPanel Visibility="{Binding FailVis}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock FontSize="25" HorizontalAlignment="Center">
+				<Run Text="Load Failed"/>
+            </TextBlock>
+            <Button Command="{Binding ReTryCommand}" Content="Click To Reload"/>
+        </StackPanel>
+
     </Grid>
 </Page>

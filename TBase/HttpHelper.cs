@@ -18,7 +18,20 @@ namespace TBase
             }
             return bit;
         }
-        public static async Task<byte[]> GetByteArray(string imgUri, string cookie)
+
+        public static async Task<byte[]> GetByteArrayWithPostMethod(string link, string cookie)
+        {
+            var req = WebRequest.CreateHttp(link);
+            req.Headers["Cookie"] = cookie;
+            req.Method = "POST";
+            var res = await req.GetResponseAsync();
+            using (var resStream = res.GetResponseStream())
+            {
+                return await Converter.StreamToBytes(resStream);
+            }
+        }
+
+        public static async Task<byte[]> GetByteArray(string link, string cookie)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -27,7 +40,7 @@ namespace TBase
                 //client.DefaultRequestHeaders.AcceptEncoding.TryParseAdd("gzip, deflate");
                 //client.DefaultRequestHeaders.AcceptLanguage.TryParseAdd("en-US,en;q=0.8,zh-Hans-CN;q=0.6,zh-Hans;q=0.4,ja;q=0.2");
                 //client.DefaultRequestHeaders.UserAgent.TryParseAdd("Mozilla/5.0 (MSIE 9.0; Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
-                return await client.GetByteArrayAsync(imgUri);
+                return await client.GetByteArrayAsync(link);
             }
         }
 
@@ -80,7 +93,7 @@ namespace TBase
             return returnStr;
         }
 
-        public async static Task<string> GetReadString(string uriString)
+        public async static Task<string> GetString(string uriString)
         {
             string returnStr = "";
             using (HttpClient client = new HttpClient())

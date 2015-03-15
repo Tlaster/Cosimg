@@ -54,7 +54,7 @@ namespace CosImg.CosImg.View
         {
             proRing.IsActive = true;
             Item = e.Parameter as ListModel;
-            var htmlStr = await HttpHelper.GetReadString("http://worldcosplay.net" + Item.url);
+            var htmlStr = await HttpHelper.GetString("http://worldcosplay.net" + Item.url);
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
             doc.LoadHtml(htmlStr);
             HtmlNode node;

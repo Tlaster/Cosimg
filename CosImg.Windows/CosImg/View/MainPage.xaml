@@ -51,7 +51,7 @@
                         </Core:EventTriggerBehavior>
                     </Interactivity:Interaction.Behaviors>
                 </ComboBox>
-                <ListView Grid.Row="1" SelectionMode="None" ScrollViewer.VerticalScrollBarVisibility="Hidden" FooterTemplate="{StaticResource LoadStateTemple}" IsItemClickEnabled="True" x:Name="listBox" ItemTemplate="{StaticResource GridViewItemTemple}" ItemsSource="{Binding List, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <ListView IsSwipeEnabled="False" Grid.Row="1" SelectionMode="None" ScrollViewer.VerticalScrollBarVisibility="Hidden" FooterTemplate="{StaticResource LoadStateTemple}" IsItemClickEnabled="True" x:Name="listBox" ItemTemplate="{StaticResource GridViewItemTemple}" ItemsSource="{Binding List, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Interactivity:Interaction.Behaviors>
                         <Core:EventTriggerBehavior EventName="ItemClick">
                             <Core:InvokeCommandAction Command="{Binding ItemTapped}"/>
@@ -68,7 +68,7 @@
 
         <DataTemplate x:Key="HubContentTemple">
             <Grid>
-                <ListView SelectionMode="None" ScrollViewer.VerticalScrollBarVisibility="Hidden" FooterTemplate="{StaticResource LoadStateTemple}" IsItemClickEnabled="True" x:Name="listBox" ItemTemplate="{StaticResource GridViewItemTemple}" ItemsSource="{Binding List, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <ListView IsSwipeEnabled="False" SelectionMode="None" ScrollViewer.VerticalScrollBarVisibility="Hidden" FooterTemplate="{StaticResource LoadStateTemple}" IsItemClickEnabled="True" x:Name="listBox" ItemTemplate="{StaticResource GridViewItemTemple}" ItemsSource="{Binding List, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 	<Interactivity:Interaction.Behaviors>
                 		<Core:EventTriggerBehavior EventName="ItemClick">
                             <Core:InvokeCommandAction Command="{Binding ItemTapped}"/>

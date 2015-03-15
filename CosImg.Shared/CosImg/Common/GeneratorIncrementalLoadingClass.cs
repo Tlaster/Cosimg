@@ -27,7 +27,7 @@ namespace CosImg.CosImg.Common
         protected async override Task<IList<T>> LoadMoreItemsOverrideAsync(System.Threading.CancellationToken c, uint count)
         {
             var random = new Random();
-            var str = await HttpHelper.GetReadString(_uri + "&page=" + _nextPage + "&limit=" + _loadCount.ToString() + "&p3_photo_list=1&r=" + random.Next());
+            var str = await HttpHelper.GetString(_uri + "&page=" + _nextPage + "&limit=" + _loadCount.ToString() + "&p3_photo_list=1&r=" + random.Next());
             JsonObject jsonObj = JsonObject.Parse(str);
             var itemResult = from a in jsonObj["list"].GetArray()
                              select _generator(a);

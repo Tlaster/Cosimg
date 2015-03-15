@@ -72,7 +72,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock FontSize="30" Text="ExHentaiViewer" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Margin="8,0" Style="{ThemeResource SubheaderTextBlockStyle}" Text="ExHentaiViewer" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <Grid Grid.Column="1" Margin="0,-10,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

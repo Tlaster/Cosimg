@@ -106,7 +106,7 @@ namespace CosImg.ExHentai.ViewModel
                             HashString = Detail.HeaderInfo.TitleEn.GetHashedString(),
                             Name = Detail.HeaderInfo.TitleEn,
                             ItemPageLink = this._link,
-                            ImageByte = await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage,SettingHelpers.GetSetting<string>("cookie"))
+                            ImageByte = await HttpHelper.GetByteArrayWithPostMethod(Detail.HeaderInfo.HeaderImage,SettingHelpers.GetSetting<string>("cookie"))
                         });
                         _favorState = true;
                     }
@@ -148,7 +148,9 @@ namespace CosImg.ExHentai.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    //App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn, isDownLoaded));
+#if WINDOWS_PHONE_APP
+                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn, isDownLoaded));
+#endif
                 });
             }
         }
@@ -159,8 +161,10 @@ namespace CosImg.ExHentai.ViewModel
             {
                 return new DelegateCommand<ItemClickEventArgs>((e) =>
                 {
+#if WINDOWS_PHONE_APP
                     var item = e.ClickedItem as ImageListInfo;
-                    //App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn,item.ImagePage,isDownLoaded));
+                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn,item.ImagePage,isDownLoaded));
+#endif
                 });
             }
         }

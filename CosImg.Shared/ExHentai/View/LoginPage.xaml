@@ -11,10 +11,10 @@
     <Grid Background="{ThemeResource AppBarBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Margin="20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">OK Welcome,Hentai</TextBlock>
+            <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">Welcome</TextBlock>
             <TextBox Name="userName" Header="User Name"/>
             <PasswordBox  Name="password" Header="Password"/>
             <TextBlock Name="body" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">
@@ -23,13 +23,21 @@
                 Please login with your E-Hentai Forums account
             </TextBlock>
         </StackPanel>
-        <Grid Grid.Row="1">
+        <Grid Visibility="Collapsed"  x:Name="WIN8_BUTTON" Grid.Row="1" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Click="Button_Click" Margin="8,0" HorizontalAlignment="Stretch">Login</Button>
-            <Button Click="Button_Click_1" Margin="8,0" Grid.Column="1" HorizontalAlignment="Stretch">Cancel</Button>
+            <Button BorderThickness="0" Background="#FFC7C7C7" Click="Button_Click" Margin="8,0" HorizontalAlignment="Stretch">Login</Button>
+            <Button BorderThickness="0" Background="#FFC7C7C7" Click="Button_Click_1" Margin="8,0" Grid.Column="1" HorizontalAlignment="Stretch">Cancel</Button>
+        </Grid>
+        <Grid Visibility="Collapsed" x:Name="WP_BUTTON" Grid.Row="1" VerticalAlignment="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button BorderThickness="0" Background="#FFC7C7C7" Click="Button_Click" Margin="8,0" HorizontalAlignment="Stretch">Login</Button>
+            <Button BorderThickness="0" Background="#FFC7C7C7" Click="Button_Click_1" Margin="8,0" Grid.Column="1" HorizontalAlignment="Stretch">Cancel</Button>
         </Grid>
 
 
