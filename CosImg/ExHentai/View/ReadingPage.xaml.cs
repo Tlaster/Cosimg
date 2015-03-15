@@ -45,6 +45,7 @@ namespace CosImg.ExHentai.View
         {
             this.RequestedTheme = ElementTheme.Dark;
             this.DataContext = e.Parameter as ReadingViewModel;
+            App.CurrentPage = "ReadingPage";
             UmengSDK.UmengAnalytics.TrackPageStart("ReadingPage");
         }
 

@@ -23,6 +23,7 @@ namespace CosImg
         public static Frame rootFrame { get; private set; }
         public static List<DownLoadModel> DownLoadList;
         public static string ExitToastContent { get;set; }
+        public static string CurrentPage { get; set; }
 
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace CosImg
             MessageDialog dialog = new MessageDialog("the app is crashed,send crash reports?","Oops");
             dialog.Commands.Add(new UICommand("Yes", async (a1) =>
             {
-                await Windows.System.Launcher.LaunchUriAsync(new Uri(@"mailto:CosImg@outlook.com?subject=CosImg Crash Report&body=" + e.Message + "%0d%0a" + e.Exception.StackTrace + "%0d%0a" + e.Exception.InnerException + "%0d%0a" + e.Exception.HResult + "%0d%0a" + e.Exception.Source));
+                await Windows.System.Launcher.LaunchUriAsync(new Uri(@"mailto:CosImg@outlook.com?subject=CosImg Crash Report&body=" + e.Message + "%0d%0a" + e.Exception.StackTrace + "%0d%0a" + e.Exception.InnerException + "%0d%0a" + e.Exception.HResult + "%0d%0a" + e.Exception.Source + "%0d%0a" + CurrentPage));
             }));
             dialog.Commands.Add(new UICommand("No"));
             await dialog.ShowAsync();

@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CosImg\ViewModel\SelectionViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Common\DownLoadDBHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Common\FavorDBHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Common\FileHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Model\DownLoadInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Model\DownLoadModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Model\FavorModel.cs" />

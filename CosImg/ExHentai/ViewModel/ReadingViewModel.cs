@@ -11,6 +11,9 @@ using Windows.Security.Cryptography.Core;
 using TBase;
 using CosImg.Common;
 using TBase.RT;
+using Windows.Networking.Connectivity;
+using CosImg.ExHentai.Common;
+using System.Net.NetworkInformation;
 
 namespace CosImg.ExHentai.ViewModel
 {
@@ -39,17 +42,44 @@ namespace CosImg.ExHentai.ViewModel
 
         private async void OnLoaded()
         {
-            this.PageList = await ParseHelper.GetImagePageListAsync(Link, SettingHelpers.GetSetting<string>("cookie"));
+            isOnLoading = true;
             var temp = new List<ImageModel>();
-            for (int i = 0; i < PageList.Count; i++)
+            if (!NetworkInterface.GetIsNetworkAvailable())
             {
-                temp.Add(new ImageModel() 
+                if (_isDownLoaded)
                 {
-                    ImageIndex = i,
-                    ImagePage = PageList[i].ImagePage,
-                    SaveFolder = HeaderEn.GetHashedString(),
-                    isDownLoaded = this._isDownLoaded,
-                });
+                    CurrentState = "Now Offline,checking download file";
+                    var a = await DownLoadDBHelpers.Query(HeaderEn.GetHashedString());
+                    for (int i = 0; i < a.CurrentPage; i++)
+                    {
+                        temp.Add(new ImageModel()
+                        {
+                            ImageIndex = i,
+                            SaveFolder = HeaderEn.GetHashedString(),
+                            isDownLoaded = true,
+                        });
+                    }
+                }
+                else
+                {
+                    CurrentState = "Now Offline,Load Failed";
+                }
+            }
+            else
+            {
+                CurrentState = "Loading...";
+                this.PageList = await ParseHelper.GetImagePageListAsync(Link, SettingHelpers.GetSetting<string>("cookie"));
+                for (int i = 0; i < PageList.Count; i++)
+                {
+                    temp.Add(new ImageModel()
+                    {
+                        ImageIndex = i,
+                        ImagePage = PageList[i].ImagePage,
+                        SaveFolder = HeaderEn.GetHashedString(),
+                        isDownLoaded = this._isDownLoaded,
+                    });
+                }
+
             }
             ImageList = temp;
             OnPropertyChanged("ImageList");
@@ -58,6 +88,7 @@ namespace CosImg.ExHentai.ViewModel
                 SelectIndex = PageList.FindIndex((a) => { return a.ImagePage == _imagePage; });
                 OnPropertyChanged("SelectIndex");
             }
+            isOnLoading = false;
         }
 
 
@@ -91,6 +122,23 @@ namespace CosImg.ExHentai.ViewModel
                     ImageList[SelectIndex].Share();
                 });
             }
+        }
+
+
+        private bool _isOnLoading;
+
+        public bool isOnLoading
+        {
+            get { return _isOnLoading; }
+            set { _isOnLoading = value; OnPropertyChanged("isOnLoading"); }
+        }
+
+        private string _currentState;
+
+        public string CurrentState
+        {
+            get { return _currentState; }
+            set { _currentState = value; OnPropertyChanged("CurrentState"); }
         }
 
         public List<ImageModel> ImageList { get; set; }

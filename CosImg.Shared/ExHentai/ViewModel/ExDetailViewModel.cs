@@ -16,6 +16,8 @@ using Windows.Storage;
 using CosImg.ExHentai.Common;
 using Windows.UI.Xaml.Controls;
 using ExHentaiLib.Prop;
+using Windows.Networking.Connectivity;
+using System.Net.NetworkInformation;
 
 namespace CosImg.ExHentai.ViewModel
 {
@@ -32,32 +34,59 @@ namespace CosImg.ExHentai.ViewModel
 
         private async void OnLoaded(string link)
         {
+            isOnLoading = true;
+            string detailStr = "";
             try
             {
-                isOnLoading = true;
-                Detail = await ParseHelper.GetDetailAsync(link, SettingHelpers.GetSetting<string>("cookie"));
-                if (await FavorDBHelpers.CheckDBFile())
+                if (!NetworkInterface.GetIsNetworkAvailable())
                 {
-                    _favoritem = await FavorDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
-                    _favorState = _favoritem == null ? false : true;
-                    _downlaoditem = await DownLoadDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
-                    if (_downlaoditem!=null&&_downlaoditem.DownLoadComplete)
+                    _downlaoditem = await DownLoadDBHelpers.QueryFromLink(link);
+                    _favoritem = await FavorDBHelpers.QueryFromLink(link);
+                    if (_downlaoditem == null)
                     {
-                        isDownLoaded = true;
+                        new ToastPrompt("Now Offline").Show();
+                        throw new KeyNotFoundException();
+                    }
+                    else
+                    {
+                        detailStr = await FileHelpers.GetDetailCache(_downlaoditem.HashString);
+                        if (detailStr != null)
+                        {
+                            Detail = ParseHelper.GetDetailFromString(detailStr);
+                            new ToastPrompt("Now Offline,Loading Cache").Show();
+                        }
+                        else
+                        {
+                            new ToastPrompt("Now Offline").Show();
+                            throw new KeyNotFoundException();
+                        }
                     }
                 }
-                PageList = new List<PageListModel>();
-                for (int i = 0; i < Detail.DetailPageCount; i++)
+                else
                 {
-                    PageList.Add(new PageListModel() { Page = (i + 1).ToString(), Uri = this._link + "?p=" + i });
+                    detailStr = await HttpHelper.GetStringWithCookie(_link, SettingHelpers.GetSetting<string>("cookie") + ParseHelper.unconfig);
+                    Detail = ParseHelper.GetDetailFromString(detailStr);
+                    _favoritem = await FavorDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
+                    _downlaoditem = await DownLoadDBHelpers.Query(Detail.HeaderInfo.TitleEn.GetHashedString());
+                    PageList = new List<PageListModel>();
+                    for (int i = 0; i < Detail.DetailPageCount; i++)
+                    {
+                        PageList.Add(new PageListModel() { Page = (i + 1).ToString(), Uri = this._link + "?p=" + i });
+                    }
                 }
-                isOnLoading = false;
+                _favorState = _favoritem == null ? false : true;
+                isDownLoaded = _downlaoditem != null && _downlaoditem.DownLoadComplete ? true : false;
+                if (isDownLoaded && await FileHelpers.GetDetailCache(Detail.HeaderInfo.TitleEn.GetHashedString()) == null)
+                {
+                    await FileHelpers.SaveDetailCache(Detail.HeaderInfo.TitleEn.GetHashedString(), detailStr);
+                }
+
             }
             catch (Exception)
             {
                 isLoadFail = true;
-                isOnLoading = false;
             }
+            isOnLoading = false;
         }
 
 
@@ -215,8 +244,8 @@ namespace CosImg.ExHentai.ViewModel
             {
                 App.DownLoadList = new List<DownLoadModel>();
             }
+            await FileHelpers.SaveDetailCache(Detail.HeaderInfo.TitleEn.GetHashedString(), await HttpHelper.GetStringWithCookie(_link, SettingHelpers.GetSetting<string>("cookie") + ParseHelper.unconfig));
             App.DownLoadList.Add(new DownLoadModel(this._link, this.Detail.HeaderInfo.TitleEn, await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"))));
-            new ToastPrompt("Downloading").Show();
             var imgbyte = await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"));
             if (!_favorState)
             {
@@ -236,6 +265,7 @@ namespace CosImg.ExHentai.ViewModel
                 Imagebyte = imgbyte
             });
             _favorState = true;
+            new ToastPrompt("Downloading").Show();
             OnPropertyChanged("FavorIcon");
             OnPropertyChanged("FavorButtonText");
         }

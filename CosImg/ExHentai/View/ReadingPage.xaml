@@ -17,6 +17,10 @@
     </Page.BottomAppBar>
     
     <Grid Tapped="Grid_Tapped">
+        <StackPanel Visibility="{Binding isOnLoading,Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ProgressRing IsActive="{Binding isOnLoading}"/>
+            <TextBlock FontSize="25" Text="{Binding CurrentState}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </StackPanel>
         <FlipView SelectedIndex="{Binding SelectIndex,Mode=TwoWay}" x:Name="flipView" ItemsSource="{Binding ImageList}">
             <FlipView.ItemTemplate>
                 <DataTemplate>
@@ -26,9 +30,7 @@
                         </ScrollViewer>
                         <ProgressRing IsActive="{Binding isOnLoading}"/>
                         <StackPanel Visibility="{Binding isLoadFail,Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock FontSize="25" HorizontalAlignment="Center">
-					<Run Text="Load Failed"/>
-                            </TextBlock>
+                            <TextBlock FontSize="25" HorizontalAlignment="Center" Text="Load Failed"/>
                             <Button Command="{Binding ReTryCommand}" Content="Click To Reload"/>
                         </StackPanel>
                     </Grid>

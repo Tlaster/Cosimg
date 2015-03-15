@@ -34,6 +34,7 @@ namespace CosImg.ExHentai.View
             this.RequestedTheme = ElementTheme.Dark;
             this.DataContext = e.Parameter as ExDetailViewModel;
             UmengSDK.UmengAnalytics.TrackPageStart("ExHnetaiDetailPage");
+            App.CurrentPage = "DetailPage";
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {

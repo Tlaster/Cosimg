@@ -43,6 +43,8 @@ namespace CosImg.ExHentai.View
         /// 此参数通常用于配置页。</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+
+            App.CurrentPage = "MainPage";
             if (e.NavigationMode == NavigationMode.New)
             {
                 this.RequestedTheme = ElementTheme.Dark;

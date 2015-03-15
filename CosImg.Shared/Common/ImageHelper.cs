@@ -86,11 +86,7 @@ namespace CosImg.Common
             try
             {
 
-#if WINDOWS_PHONE_APP
                 var folder = await (await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
-#else
-                var folder = await (await ApplicationData.Current.LocalFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
-#endif
                 await folder.GetFileAsync(fileName);
                 return true;
             }

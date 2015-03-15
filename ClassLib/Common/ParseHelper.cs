@@ -73,10 +73,10 @@ namespace ExHentaiLib.Common
         public async static Task<DetailProp> GetDetailAsync(string uri, string cookie)
         {
             string htmlstring = await HttpHelper.GetStringWithCookie(uri, cookie + unconfig);
-            return String2Detail(htmlstring);
+            return GetDetailFromString(htmlstring);
         }
 
-        private static DetailProp String2Detail(string htmlstring)
+        public static DetailProp GetDetailFromString(string htmlstring)
         {
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(htmlstring);

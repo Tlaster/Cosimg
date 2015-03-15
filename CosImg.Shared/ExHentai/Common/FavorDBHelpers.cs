@@ -52,6 +52,15 @@ namespace CosImg.ExHentai.Common
             await conn.UpdateAsync(item);
         }
 
+        public static async Task<FavorModel> QueryFromLink(string link)
+        {
+            SQLiteAsyncConnection conn = await GetDBConnection();
+            var query = from item in conn.Table<FavorModel>()
+                        where item.ItemPageLink == link
+                        select item;
+            return await query.FirstOrDefaultAsync();
+        }
+
         public static async Task<FavorModel> Query(string hashStr)
         {
             SQLiteAsyncConnection conn = await GetDBConnection();
