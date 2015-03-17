@@ -130,7 +130,6 @@ namespace CosImg
                 {
                     // TODO: 从之前挂起的应用程序加载状态
                 }
-
                 // 将框架放在当前窗口中
                 Window.Current.Content = rootFrame;
             }

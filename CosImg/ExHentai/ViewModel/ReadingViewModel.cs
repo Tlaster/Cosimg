@@ -19,15 +19,15 @@ namespace CosImg.ExHentai.ViewModel
 {
     public class ReadingViewModel:TBase.NotifyPropertyChanged
     {
-        private string Link;
-        private List<ExHentaiLib.Prop.ImageListInfo> PageList;
-        private string HeaderEn;
+        private string _link;
+        private List<ExHentaiLib.Prop.ImageListInfo> _pageList;
+        private string _headerEn;
         private string _imagePage;
         private bool _isDownLoaded;
         public ReadingViewModel(string link,string headerEn,bool isDownLoaded = false)
         {
-            this.HeaderEn = headerEn;
-            this.Link = link;
+            this._headerEn = headerEn;
+            this._link = link;
             this._isDownLoaded = isDownLoaded;
             ImageList = new List<ImageModel>();
             OnLoaded();
@@ -49,13 +49,13 @@ namespace CosImg.ExHentai.ViewModel
                 if (_isDownLoaded)
                 {
                     CurrentState = "Now Offline,checking download file";
-                    var a = await DownLoadDBHelpers.Query(HeaderEn.GetHashedString());
+                    var a = await DownLoadDBHelpers.Query(_headerEn.GetHashedString());
                     for (int i = 0; i < a.CurrentPage; i++)
                     {
                         temp.Add(new ImageModel()
                         {
                             ImageIndex = i,
-                            SaveFolder = HeaderEn.GetHashedString(),
+                            SaveFolder = _headerEn.GetHashedString(),
                             isDownLoaded = true,
                         });
                     }
@@ -68,24 +68,23 @@ namespace CosImg.ExHentai.ViewModel
             else
             {
                 CurrentState = "Loading...";
-                this.PageList = await ParseHelper.GetImagePageListAsync(Link, SettingHelpers.GetSetting<string>("cookie"));
-                for (int i = 0; i < PageList.Count; i++)
+                this._pageList = await ParseHelper.GetImagePageListAsync(_link, SettingHelpers.GetSetting<string>("cookie"));
+                for (int i = 0; i < _pageList.Count; i++)
                 {
                     temp.Add(new ImageModel()
                     {
                         ImageIndex = i,
-                        ImagePage = PageList[i].ImagePage,
-                        SaveFolder = HeaderEn.GetHashedString(),
+                        ImagePage = _pageList[i].ImagePage,
+                        SaveFolder = _headerEn.GetHashedString(),
                         isDownLoaded = this._isDownLoaded,
                     });
                 }
-
             }
             ImageList = temp;
             OnPropertyChanged("ImageList");
             if (_imagePage != null)
             {
-                SelectIndex = PageList.FindIndex((a) => { return a.ImagePage == _imagePage; });
+                SelectIndex = _pageList.FindIndex((a) => { return a.ImagePage == _imagePage; });
                 OnPropertyChanged("SelectIndex");
             }
             isOnLoading = false;

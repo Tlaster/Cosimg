@@ -1,9 +1,11 @@
 ﻿using CosImg.ExHentai.Model;
+using ExHentaiLib.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TBase.RT;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -82,7 +84,35 @@ namespace CosImg
                 // 当导航堆栈尚未还原时，导航到第一页，
                 // 并通过将所需信息作为导航参数传入来配置
                 // 新页面
-                rootFrame.Navigate(typeof(MainPage), e.Arguments);
+#if DEBUG
+                try
+                {
+                    LogInHelper.LogCookieCheck(SettingHelpers.GetSetting<string>("cookie", true));
+                    App.rootFrame.Navigate(typeof(ExHentai.View.ExMainPage));
+                }
+                catch (Exception)
+                {
+                    App.rootFrame.Navigate(typeof(ExHentai.View.LoginPage));
+                }
+#else
+                if (SettingHelpers.GetSetting<bool>("ExDefault"))
+                {
+                    try
+                    {
+                        LogInHelper.LogCookieCheck(SettingHelpers.GetSetting<string>("cookie", true));
+                        App.rootFrame.Navigate(typeof(ExHentai.View.ExMainPage));
+                    }
+                    catch (Exception)
+                    {
+                        App.rootFrame.Navigate(typeof(ExHentai.View.LoginPage));
+                    }
+                }
+                else
+                {
+                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                }
+#endif
+
             }
             // 确保当前窗口处于活动状态
             Window.Current.Activate();

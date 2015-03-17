@@ -30,12 +30,24 @@ namespace CosImg.ExHentai.View
             this.InitializeComponent();
             this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Required;
             this.RequestedTheme = ElementTheme.Dark;
+            Windows.UI.ApplicationSettings.SettingsPane.GetForCurrentView().CommandsRequested += ExMainPage_CommandsRequested;
             this.DataContext = new ExMainPageViewModel();
+        }
+
+        void ExMainPage_CommandsRequested(Windows.UI.ApplicationSettings.SettingsPane sender, Windows.UI.ApplicationSettings.SettingsPaneCommandsRequestedEventArgs args)
+        {
+            Windows.UI.ApplicationSettings.SettingsCommand settings = new Windows.UI.ApplicationSettings.SettingsCommand("Settings", "Settings", (a) =>
+            {
+                var exSettings = new ExSettingsFlyout();
+                exSettings.Show();
+            });
+            args.Request.ApplicationCommands.Add(settings);
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            
             if (e.NavigationMode == NavigationMode.New)
             {
                 while (App.rootFrame.BackStack.Count != 0)
