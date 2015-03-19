@@ -5,9 +5,59 @@
     xmlns:local="using:CosImg.ExHentai.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="using:Telerik.UI.Xaml.Controls.Primitives"
     mc:Ignorable="d">
+    
+    <Page.TopAppBar>
+        <AppBar>
+            <AppBarButton Click="AppBarButton_Click" Label="Back" Icon="Back"/>
+        </AppBar>
+    </Page.TopAppBar>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+        <StackPanel Visibility="{Binding isOnLoading,Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ProgressRing IsActive="{Binding isOnLoading}"/>
+            <TextBlock FontSize="25" Text="{Binding CurrentState}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </StackPanel>
+        <toolkit:RadDataBoundListBox ItemsSource="{Binding ImageList}" ScrollViewer.HorizontalScrollBarVisibility="Visible">
+            <toolkit:RadDataBoundListBox.VirtualizationStrategyDefinition>
+                <toolkit:StackVirtualizationStrategyDefinition ReorderMode="MoveItemsDown" Orientation="Horizontal"/>
+            </toolkit:RadDataBoundListBox.VirtualizationStrategyDefinition>
+            <toolkit:RadDataBoundListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="{Binding Width}" Height="{Binding Height}">
+                        <ScrollViewer HorizontalScrollBarVisibility="Hidden" MinZoomFactor="1" ZoomMode="Enabled" MaxZoomFactor="50" VerticalScrollBarVisibility="Hidden">
+                            <Image Width="{Binding Width}" Source="{Binding Image}"/>
+                        </ScrollViewer>
+                        <ProgressRing IsActive="{Binding isOnLoading}"/>
+                        <StackPanel Visibility="{Binding isLoadFail,Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock FontSize="25" HorizontalAlignment="Center" Text="Load Failed"/>
+                            <Button Command="{Binding ReTryCommand}" Content="Click To Reload"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </toolkit:RadDataBoundListBox.ItemTemplate>
+        </toolkit:RadDataBoundListBox>
+        <!--<GridView ScrollViewer.HorizontalScrollBarVisibility="Visible"  IsSwipeEnabled="False" SelectionMode="None" ItemsSource="{Binding ImageList}">
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="{Binding Width}" Height="{Binding Height}">
+                        <ScrollViewer HorizontalScrollBarVisibility="Visible" MinZoomFactor="1" ZoomMode="Enabled" MaxZoomFactor="50">
+                            <Image Width="{Binding Width}" Source="{Binding Image}"/>
+                        </ScrollViewer>
+                        <ProgressRing IsActive="{Binding isOnLoading}"/>
+                        <StackPanel Visibility="{Binding isLoadFail,Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock FontSize="25" HorizontalAlignment="Center" Text="Load Failed"/>
+                            <Button Command="{Binding ReTryCommand}" Content="Click To Reload"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>-->
     </Grid>
 </Page>

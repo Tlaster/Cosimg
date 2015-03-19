@@ -3,6 +3,7 @@ using CosImg.ExHentai.Model;
 using ExHentaiLib.Common;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using TBase.RT;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -37,6 +38,7 @@ namespace CosImg
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
             ExitToastContent = "再按一次返回键退出程序";
             UnhandledException += App_UnhandledException;
+
 #if DEBUG
             UmengSDK.UmengAnalytics.IsDebug = true;
 #endif

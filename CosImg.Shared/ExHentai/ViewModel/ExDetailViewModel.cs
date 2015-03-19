@@ -183,6 +183,7 @@ namespace CosImg.ExHentai.ViewModel
             }
         }
 
+#if WINDOWS_PHONE_APP
         public ICommand ImageItemClick
         {
             get
@@ -191,9 +192,11 @@ namespace CosImg.ExHentai.ViewModel
                 {
                     var item = e.ClickedItem as ImageListInfo;
                     App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn, item.ImagePage, isDownLoaded));
+
                 });
             }
         }
+#endif
 
         public ICommand DeleFileCommand
         {

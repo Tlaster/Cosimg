@@ -34,6 +34,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExHentai\Model\SearchModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExHentai\ViewModel\ExDetailViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExHentai\ViewModel\ExMainPageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExHentai\ViewModel\ReadingViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExHentai\View\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>

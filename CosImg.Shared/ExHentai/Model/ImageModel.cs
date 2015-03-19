@@ -32,15 +32,29 @@ namespace CosImg.ExHentai.Model
             get { return _isLoadFail; }
             set { _isLoadFail = value; OnPropertyChanged("isLoadFail"); }
         }
-
+#if WINDOWS_APP
+        double _width = (Window.Current.Content as Frame).ActualWidth / 2;
+        public double Height
+        {
+            get
+            {
+                return (Window.Current.Content as Frame).ActualHeight;
+            }
+        }
+#else
+        double _width = (Window.Current.Content as Frame).ActualWidth;
+#endif
         public double Width
         {
             get
             {
-                return (Window.Current.Content as Frame).ActualWidth;
+                return _width;
             }
         }
-#endregion
+
+
+
+        #endregion
 
 
 
@@ -67,6 +81,7 @@ namespace CosImg.ExHentai.Model
                 return;
             }
             isOnLoading = true;
+            Debug.WriteLine("req page " + this.ImageIndex);
             try
             {
                 if (_client == null)
@@ -90,7 +105,14 @@ namespace CosImg.ExHentai.Model
                     _imagebyte = await _client.GetByteArrayAsync(_imageuri);
                     await ImageHelper.SaveCacheImage(SaveFolder, ImageIndex.ToString(), _imagebyte);
                 }
-                _image = new WeakReference(await ImageHelper.ByteArrayToBitmapImage(_imagebyte));
+                var bitimg = await ImageHelper.ByteArrayToBitmapImage(_imagebyte);
+#if WINDOWS_APP
+                double pwidth = bitimg.PixelWidth;
+                double pheight = bitimg.PixelHeight;
+                _width = pwidth / pheight * (Window.Current.Content as Frame).ActualHeight;
+                OnPropertyChanged("Width");
+#endif
+                _image = new WeakReference(bitimg);
                 OnPropertyChanged("Image");
             }
             catch (Exception)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CosImg.ExHentai.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,7 +32,12 @@ namespace CosImg.ExHentai.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            this.DataContext = e.Parameter as ReadingViewModel;
+        }
 
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            App.rootFrame.GoBack();
         }
 
     }

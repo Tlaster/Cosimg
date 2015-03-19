@@ -19,7 +19,7 @@
     <ExpressionBlendVersion>12.0.51020.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -131,7 +131,6 @@
     <Compile Include="CosImg\View\SearchPage.xaml.cs">
       <DependentUpon>SearchPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ExHentai\ViewModel\ReadingViewModel.cs" />
     <Compile Include="ExHentai\View\ExDetailPage.xaml.cs">
       <DependentUpon>ExDetailPage.xaml</DependentUpon>
     </Compile>
@@ -210,11 +209,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid+MonoTouch\HtmlAgilityPack.dll</HintPath>
     </Reference>
+    <Reference Include="Telerik.Core">
+      <HintPath>D:\TWeibo\Binaries\Windows 8.1\Telerik.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.UI.Xaml.Primitives">
+      <HintPath>D:\TWeibo\Binaries\Windows 8.1\Telerik.UI.Xaml.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="WinRTXamlToolkit">
+      <HintPath>..\packages\WinRTXamlToolkit.Windows.1.8.1.0\lib\netcore451\WinRTXamlToolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\" />
     <Folder Include="ExHentai\Common\" />
     <Folder Include="ExHentai\Model\" />
+    <Folder Include="ExHentai\ViewModel\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

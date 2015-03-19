@@ -20,7 +20,7 @@
     <AppxBundle>Auto</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>ARM</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -100,7 +100,6 @@
       <DependentUpon>SettingPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ExHentai\ViewModel\DownLoadViewModel.cs" />
-    <Compile Include="ExHentai\ViewModel\ReadingViewModel.cs" />
     <Compile Include="ExHentai\View\DownLoadPage.xaml.cs">
       <DependentUpon>DownLoadPage.xaml</DependentUpon>
     </Compile>

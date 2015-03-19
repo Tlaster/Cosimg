@@ -32,13 +32,14 @@ namespace CosImg.ExHentai.ViewModel
             ImageList = new List<ImageModel>();
             OnLoaded();
         }
-
+#if WINDOWS_PHONE_APP
         public ReadingViewModel(string link, string headerEn, string imagePage, bool isDownLoaded = false)
             : this(link, headerEn, isDownLoaded)
         {
             this._imagePage = imagePage;
         }
 
+#endif
 
         private async void OnLoaded()
         {
@@ -82,14 +83,17 @@ namespace CosImg.ExHentai.ViewModel
             }
             ImageList = temp;
             OnPropertyChanged("ImageList");
+#if WINDOWS_PHONE_APP
             if (_imagePage != null)
             {
                 SelectIndex = _pageList.FindIndex((a) => { return a.ImagePage == _imagePage; });
                 OnPropertyChanged("SelectIndex");
             }
+#endif
             isOnLoading = false;
         }
 
+#if WINDOWS_PHONE_APP
 
         public int SelectIndex { get; set; }
         public ICommand RefreshCommand
@@ -112,6 +116,7 @@ namespace CosImg.ExHentai.ViewModel
                 });
             }
         }
+
         public ICommand ShareCommand
         {
             get
@@ -122,7 +127,7 @@ namespace CosImg.ExHentai.ViewModel
                 });
             }
         }
-
+#endif
 
         private bool _isOnLoading;
 
