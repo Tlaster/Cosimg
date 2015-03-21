@@ -13,7 +13,7 @@ namespace ExHentaiLib.Common
 {
     public static class ParseHelper
     {
-        public const string unconfig = ";uconfig=tl_m-uh_y-rc_0-cats_0-xns_0-ts_l-tr_2-prn_y-dm_t-ar_0-rx_0-ry_0-ms_n-mt_n-cs_a-to_a-sa_y-oi_n-qb_n-tf_n-hp_-hk_-xl_";
+        public const string unconfig = ";uconfig=tl_m-uh_y-rc_0-cats_0-xns_0-ts_l-tr_2-prn_y-dm_t-ar_0-rx_0-ry_0-ms_n-mt_n-cs_a-to_a-pn_0-sc_0-sa_y-oi_n-qb_n-tf_n-hp_-hk_-xl_";
 
         private static int GetMaxImageCount(string Str)
         {
@@ -85,11 +85,8 @@ namespace ExHentaiLib.Common
 
         private static DetailProp HtmlNode2Detail(HtmlDocument htmldoc)
         {
-            //var Torrent = (from a in htmldoc.GetElementbyId("gd5").ChildNodes
-            //               where a.Name == "p" && a.Attributes["class"].Value == "g2"
-            //               select a.ChildNodes).ToList()[1].FindFirst("a");
             return new DetailProp
-                         {
+                         { 
                              HeaderInfo = new HeaderInfo
                                           {
                                               HeaderImage = (htmldoc.GetElementbyId("gd1").Element("img").Attributes["src"].Value),
@@ -109,7 +106,7 @@ namespace ExHentaiLib.Common
                                            {
                                                Value = a.InnerText,
                                            }).ToList(),
-                             MaxImageCount = GetMaxImageCount(htmldoc.DocumentNode.GetNodebyClassName("ip").InnerText),
+                             MaxImageCount = GetMaxImageCount(htmldoc.DocumentNode.GetNodebyClassName("gpc").InnerText),
                              DetailPageCount = htmldoc.DocumentNode.GetNodebyClassName("ptt").FirstChild.ChildNodes.Count - 2,
                              ImageList = (from a in htmldoc.GetElementbyId("gdt").ChildNodes
                                           where a.HasChildNodes
@@ -125,7 +122,7 @@ namespace ExHentaiLib.Common
                                             {
                                                 Poster = a.GetNodebyClassName("c3").InnerText,
                                                 Content = HtmlEntity.DeEntitize(a.GetNodebyClassName("c6").InnerText),
-                                                Score = a.GetNodebyClassName("c5") == null ? a.GetNodebyClassName("c4").InnerText : a.GetNodebyClassName("c5").InnerText,
+                                                Score = a.GetNodebyClassName("c5 nosel") != null ? a.GetNodebyClassName("c5 nosel").InnerText : a.GetNodebyClassName("c4 nosel") != null ? a.GetNodebyClassName("c4 nosel").InnerText : "",
                                                 Base = a.GetNodebyClassName("c7") == null ? "" : a.GetNodebyClassName("c7").InnerText,
                                             }).ToList(),
                          };

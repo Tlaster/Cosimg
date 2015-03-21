@@ -35,9 +35,8 @@ namespace ExHentaiViewer.WPF.Prop
         private async Task GetImagePageListAsync()
         {
             CurrentState = "Getting Image Count";
-            _itemInfo = await ParseHelper.GetDetailAsync(_pageUri, CookieHelper.GetCookie());
             _imagePageUri = await ParseHelper.GetImagePageListAsync(_pageUri, CookieHelper.GetCookie());
-            MaxImageCount = _itemInfo.MaxImageCount;
+            MaxImageCount = _imagePageUri.Count;
         }
         private async void StartDownLoading()
         {
@@ -113,7 +112,6 @@ namespace ExHentaiViewer.WPF.Prop
         public WebClient webClient;
         private string _currentState;
         private string _sourceUri;
-        private DetailProp _itemInfo;
         private int _downLoadProgress;
         private int _courrentDownLoadImage = 0;
         private bool _onParse = false;
