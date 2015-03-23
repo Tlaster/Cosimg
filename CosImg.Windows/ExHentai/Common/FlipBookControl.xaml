@@ -1,0 +1,204 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CosImg.ExHentai.Common">
+
+    <Style TargetType="local:FlipBookControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:FlipBookControl">
+                    <Grid 
+                        x:Name="grdContent" 
+                        Background="{TemplateBinding Background}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0"/>
+                        </Grid.ColumnDefinitions>
+                        <Image 
+                            x:Name="bookContainer" 
+                            Stretch="Fill" 
+                            Canvas.ZIndex="2" 
+                            Grid.ColumnSpan="4" 
+                            IsHitTestVisible="False" 
+                            Grid.RowSpan="3"/>
+                        <Border 
+                            Grid.Row="1" 
+                            Grid.Column="1" 
+                            BorderThickness="0"
+                            x:Name="C">
+                            <Border.Clip>
+                                <RectangleGeometry x:Name="CRect">
+                                </RectangleGeometry>
+                            </Border.Clip>
+                            <Border.RenderTransform>
+                                <CompositeTransform x:Name="transC"></CompositeTransform>
+                            </Border.RenderTransform>
+                            <ContentPresenter x:Name="CPresenter" Style="{TemplateBinding ItemContainerStyle}"
+                                              ContentTemplate="{TemplateBinding ItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"></ContentPresenter>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1" BorderThickness="0"
+                            x:Name="D">
+                            <Border.Clip>
+                                <RectangleGeometry x:Name="DRect">
+                                </RectangleGeometry>
+                            </Border.Clip>
+                            <Border.RenderTransform>
+                                <CompositeTransform x:Name="transD"></CompositeTransform>
+                            </Border.RenderTransform>
+                            <ContentPresenter x:Name="DPresenter" Style="{TemplateBinding ItemContainerStyle}"
+                                              ContentTemplate="{TemplateBinding ItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"></ContentPresenter>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1" BorderThickness="0"
+                            x:Name="E">
+                            <Border.Clip>
+                                <RectangleGeometry x:Name="ERect">
+                                </RectangleGeometry>
+                            </Border.Clip>
+                            <Border.RenderTransform>
+                                <CompositeTransform x:Name="transE"/>
+                            </Border.RenderTransform>
+                            <ContentPresenter x:Name="EPresenter" Style="{TemplateBinding ItemContainerStyle}"
+                                              ContentTemplate="{TemplateBinding ItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"></ContentPresenter>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1" BorderThickness="0"
+                            x:Name="F">
+                            <Border.Clip>
+                                <RectangleGeometry x:Name="FRect">
+                                </RectangleGeometry>
+                            </Border.Clip>
+                            <Border.RenderTransform>
+                                <CompositeTransform x:Name="transF"></CompositeTransform>
+                            </Border.RenderTransform>
+                            <ContentPresenter x:Name="FPresenter" Style="{TemplateBinding ItemContainerStyle}"
+                                              ContentTemplate="{TemplateBinding ItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"></ContentPresenter>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1" BorderThickness="0"
+                            x:Name="A">
+                            <Border.Clip>
+                                <RectangleGeometry x:Name="ARect">
+                                </RectangleGeometry>
+                            </Border.Clip>
+                            <Border.RenderTransform>
+                                <CompositeTransform x:Name="transA"></CompositeTransform>
+                            </Border.RenderTransform>
+                            <ContentPresenter x:Name="APresenter" Style="{TemplateBinding ItemContainerStyle}"
+                                              ContentTemplate="{TemplateBinding ItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"></ContentPresenter>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1"  BorderThickness="0"
+                                x:Name="B">
+                            <Border.Clip>
+                                <RectangleGeometry x:Name="BRect">
+                                </RectangleGeometry>
+                            </Border.Clip>
+                            <Border.RenderTransform>
+                                <CompositeTransform x:Name="transB"/>
+                            </Border.RenderTransform>
+                            <ContentPresenter x:Name="BPresenter" Style="{TemplateBinding ItemContainerStyle}"
+                                              ContentTemplate="{TemplateBinding ItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"></ContentPresenter>
+                        </Border>
+                        <StackPanel  Canvas.ZIndex="3"
+                            x:Name="stShadowSplitOuterLeft" 
+                            Width="43" 
+                            Opacity="0"
+                            Grid.Row="1"  
+                            Grid.Column="1"
+                            HorizontalAlignment="Left" Margin="-43,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            <StackPanel.RenderTransform>
+                                <CompositeTransform x:Name="outerLeftTrans" TranslateX="0"/>
+                            </StackPanel.RenderTransform>
+                            <StackPanel.Background>
+                                <LinearGradientBrush EndPoint="0,0" StartPoint="1,0">
+                                    <GradientStop Color="#99000000"/>
+                                    <GradientStop Color="Transparent" Offset="1"/>
+                                </LinearGradientBrush>
+                            </StackPanel.Background>
+                        </StackPanel>
+                        <StackPanel Canvas.ZIndex="3"
+                            x:Name="stShadowSplitInnerLeft" 
+                            Width="51" 
+                            Opacity="0"
+                            Grid.Row="1"  
+                            Grid.Column="1"
+                            HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5">
+                            <StackPanel.RenderTransform>
+                                <CompositeTransform x:Name="innerLeftTrans" TranslateX="0"/>
+                            </StackPanel.RenderTransform>
+                            <StackPanel.Background>
+                                <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                    <GradientStop Color="#99000000"/>
+                                    <GradientStop Color="#01FFFFFF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </StackPanel.Background>
+                        </StackPanel>
+                        <StackPanel Canvas.ZIndex="3"
+                            x:Name="stShadowSplitOuterRight" 
+                            Width="43"
+                            Opacity="0"
+                            Grid.Row="1"  
+                            Grid.Column="2"
+                            HorizontalAlignment="Right" Margin="0,0,-43,0" RenderTransformOrigin="0.5,0.5">
+                            <StackPanel.RenderTransform>
+                                <CompositeTransform x:Name="outerRightTrans" TranslateX="0"/>
+                            </StackPanel.RenderTransform>
+                            <StackPanel.Background>
+                                <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                    <GradientStop Color="#99000000"/>
+                                    <GradientStop Color="Transparent" Offset="1"/>
+                                </LinearGradientBrush>
+                            </StackPanel.Background>
+                        </StackPanel>
+                        <StackPanel  Canvas.ZIndex="3"
+                            x:Name="stShadowSplitInnerRight" 
+                            Width="51" 
+                            Opacity="0"
+                            Grid.Row="1"  
+                            Grid.Column="2"
+                            HorizontalAlignment="Right" RenderTransformOrigin="0.5,0.5">
+                            <StackPanel.RenderTransform>
+                                <CompositeTransform x:Name="innerRightTrans" TranslateX="0"/>
+                            </StackPanel.RenderTransform>
+                            <StackPanel.Background>
+                                <LinearGradientBrush EndPoint="0,0" StartPoint="1,0">
+                                    <GradientStop Color="#99000000"/>
+                                    <GradientStop Color="#01FFFFFF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </StackPanel.Background>
+                        </StackPanel>
+                        <StackPanel x:Name="stShadowMarginLeft" Width="30" HorizontalAlignment="Left"
+                    Opacity="0" Grid.Row="1" Grid.Column="1" Canvas.ZIndex="3">
+                            <StackPanel.RenderTransform>
+                                <CompositeTransform x:Name="marginLeftTrans" TranslateX="0"/>
+                            </StackPanel.RenderTransform>
+                            <StackPanel.Background>
+                                <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                    <GradientStop Color="#99000000"/>
+                                    <GradientStop Color="Transparent" Offset="1"/>
+                                </LinearGradientBrush>
+                            </StackPanel.Background>
+                        </StackPanel>
+                        <StackPanel x:Name="stShadowMarginRight" Width="30" HorizontalAlignment="Right"
+                    Opacity="0" Grid.Row="1" Grid.Column="2" Canvas.ZIndex="3">
+                            <StackPanel.RenderTransform>
+                                <CompositeTransform x:Name="marginRightTrans" TranslateX="0"/>
+                            </StackPanel.RenderTransform>
+                            <StackPanel.Background>
+                                <LinearGradientBrush EndPoint="0,0" StartPoint="1,0">
+                                    <GradientStop Color="#99000000"/>
+                                    <GradientStop Color="Transparent" Offset="1"/>
+                                </LinearGradientBrush>
+                            </StackPanel.Background>
+                        </StackPanel>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
+

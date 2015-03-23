@@ -27,6 +27,7 @@ namespace CosImg.ExHentai.View
         {
             this.InitializeComponent();
             this.RequestedTheme = ElementTheme.Dark;
+
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

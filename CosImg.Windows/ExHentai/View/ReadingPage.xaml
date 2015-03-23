@@ -4,8 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CosImg.ExHentai.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:toolkit="using:WinRTXamlToolkit.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:toolkit="using:Telerik.UI.Xaml.Controls.Primitives"
+    xmlns:common="using:CosImg.ExHentai.Common"
     mc:Ignorable="d">
     
     <Page.TopAppBar>
@@ -19,16 +20,11 @@
             <ProgressRing IsActive="{Binding isOnLoading}"/>
             <TextBlock FontSize="25" Text="{Binding CurrentState}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </StackPanel>
-        <toolkit:RadDataBoundListBox ItemsSource="{Binding ImageList}" ScrollViewer.HorizontalScrollBarVisibility="Visible">
-            <toolkit:RadDataBoundListBox.VirtualizationStrategyDefinition>
-                <toolkit:StackVirtualizationStrategyDefinition ReorderMode="MoveItemsDown" Orientation="Horizontal"/>
-            </toolkit:RadDataBoundListBox.VirtualizationStrategyDefinition>
-            <toolkit:RadDataBoundListBox.ItemTemplate>
+        <common:FlipBookControl CanScale="False" ItemsSource="{Binding ImageList}">
+            <common:FlipBookControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid Width="{Binding Width}" Height="{Binding Height}">
-                        <ScrollViewer HorizontalScrollBarVisibility="Hidden" MinZoomFactor="1" ZoomMode="Enabled" MaxZoomFactor="50" VerticalScrollBarVisibility="Hidden">
-                            <Image Width="{Binding Width}" Source="{Binding Image}"/>
-                        </ScrollViewer>
+                    <Grid>
+                        <Image Source="{Binding Image}"/>
                         <ProgressRing IsActive="{Binding isOnLoading}"/>
                         <StackPanel Visibility="{Binding isLoadFail,Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <TextBlock FontSize="25" HorizontalAlignment="Center" Text="Load Failed"/>
@@ -36,18 +32,20 @@
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
-            </toolkit:RadDataBoundListBox.ItemTemplate>
-        </toolkit:RadDataBoundListBox>
-        <!--<GridView ScrollViewer.HorizontalScrollBarVisibility="Visible"  IsSwipeEnabled="False" SelectionMode="None" ItemsSource="{Binding ImageList}">
+
+            </common:FlipBookControl.ItemTemplate>
+        </common:FlipBookControl>
+        
+        <!--<GridView x:Name="ReadingGirdView"  ScrollViewer.HorizontalScrollBarVisibility="Visible"  IsSwipeEnabled="False" SelectionMode="None" ItemsSource="{Binding ImageList}">
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <VirtualizingStackPanel/>
+                    <toolkit:WrapPanel/>
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <Grid Width="{Binding Width}" Height="{Binding Height}">
-                        <ScrollViewer HorizontalScrollBarVisibility="Visible" MinZoomFactor="1" ZoomMode="Enabled" MaxZoomFactor="50">
+                        <ScrollViewer HorizontalScrollBarVisibility="Hidden" MinZoomFactor="1" ZoomMode="Enabled" MaxZoomFactor="50" VerticalScrollBarVisibility="Hidden">
                             <Image Width="{Binding Width}" Source="{Binding Image}"/>
                         </ScrollViewer>
                         <ProgressRing IsActive="{Binding isOnLoading}"/>
