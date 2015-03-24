@@ -232,6 +232,11 @@ namespace CosImg.ExHentai.Common
         #endregion
 
         #region DependencyProperties
+
+
+
+
+
         #region DelayLoad
         public TimeSpan DelayLoad
         {
@@ -347,17 +352,17 @@ namespace CosImg.ExHentai.Common
             DependencyProperty.Register("RestoreItemAction", typeof(Action<object>), typeof(FlipBookControl), new PropertyMetadata(null));
         #endregion
 
-        #region CanScale
-        public bool CanScale
-        {
-            get { return (bool)GetValue(CanScaleProperty); }
-            set { SetValue(CanScaleProperty, value); }
-        }
+        //#region CanScale
+        //public bool CanScale
+        //{
+        //    get { return (bool)GetValue(CanScaleProperty); }
+        //    set { SetValue(CanScaleProperty, value); }
+        //}
 
-        // 能否进行放大缩小
-        public static readonly DependencyProperty CanScaleProperty =
-            DependencyProperty.Register("CanScale", typeof(bool), typeof(FlipBookControl), new PropertyMetadata(false));
-        #endregion
+        //// 能否进行放大缩小
+        //public static readonly DependencyProperty CanScaleProperty =
+        //    DependencyProperty.Register("CanScale", typeof(bool), typeof(FlipBookControl), new PropertyMetadata(false));
+        //#endregion
         #endregion
 
         #region Event
@@ -400,7 +405,7 @@ namespace CosImg.ExHentai.Common
               ManipulationModes.Scale |
               ManipulationModes.ScaleInertia |
               ManipulationModes.TranslateY;
-            grdContent.DoubleTapped += grdContent_DoubleTapped;
+            //grdContent.DoubleTapped += grdContent_DoubleTapped;
             grdContent.ManipulationDelta += FlipManipulationDelta;
             grdContent.ManipulationCompleted += FlipManipulationCompleted;
             grdContent.ManipulationStarting += FlipManipulationStarting;
@@ -420,20 +425,25 @@ namespace CosImg.ExHentai.Common
             isLoaded = true;
         }
 
-        void grdContent_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
-        {
-            _compositeTransform.CenterX = 0;
-            _compositeTransform.CenterY = 0;
-            _compositeTransform.ScaleX = 1;
-            _compositeTransform.ScaleY = 1;
-            _compositeTransform.TranslateX = 0;
-            _compositeTransform.TranslateY = 0;
-            RefreshPageByStatus();
-        }
+
+        //void grdContent_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        //{
+        //    if (CanScale)
+        //    {
+        //        _compositeTransform.CenterX = 0;
+        //        _compositeTransform.CenterY = 0;
+        //        _compositeTransform.ScaleX = 1;
+        //        _compositeTransform.ScaleY = 1;
+        //        _compositeTransform.TranslateX = 0;
+        //        _compositeTransform.TranslateY = 0;
+        //    }
+        //    e.Handled = true;
+        //}
 
         private void FlipBookControlUnLoaded(object sender, RoutedEventArgs e)
         {
             CompositionTarget.Rendering -= RenderAnimation;
+            //grdContent.DoubleTapped -= grdContent_DoubleTapped;
             grdContent.ManipulationDelta -= FlipManipulationDelta;
             grdContent.ManipulationCompleted -= FlipManipulationCompleted;
             grdContent.ManipulationStarting -= FlipManipulationStarting;
@@ -660,7 +670,7 @@ namespace CosImg.ExHentai.Common
                 });
             }
             isFlip = true;
-            CanScale = false;
+            //CanScale = false;
         }
         #endregion
 
@@ -674,12 +684,13 @@ namespace CosImg.ExHentai.Common
             var nTtranY = nextTrans.TranslateY;
             var ctranlateX = e.Cumulative.Translation.X;
             var ctranlateY = e.Cumulative.Translation.Y;
-            CanScale = Task.Run(() =>
-            {
-                if (scale != 1.0 || (Math.Abs(ctranlateX * 1.15) < Math.Abs(ctranlateY))) return true;
-                else return false;
-            }).Result;
-            if (isManipulating && !CanScale)
+            //CanScale = Task.Run(() =>
+            //{
+            //    if (scale != 1.0 || (Math.Abs(ctranlateX * 1.15) < Math.Abs(ctranlateY))) return true;
+            //    else return false;
+            //}).Result;
+            //if (isManipulating && !CanScale)
+            if (isManipulating)
             {
                 if (isNext)
                 {
@@ -772,17 +783,17 @@ namespace CosImg.ExHentai.Common
                     #endregion
                 }
             }
-            if (CanScale)
-            {
-                _previousTransform.Matrix = _transformGroup.Value;
-                Point center = _previousTransform.TransformPoint(new Point(e.Position.X, e.Position.Y));
-                _compositeTransform.CenterX = center.X;
-                _compositeTransform.CenterY = center.Y;
-                _compositeTransform.ScaleX = e.Delta.Scale;
-                _compositeTransform.ScaleY = e.Delta.Scale;
-                _compositeTransform.TranslateX = e.Delta.Translation.X;
-                _compositeTransform.TranslateY = e.Delta.Translation.Y;
-            }
+            //if (CanScale)
+            //{
+            //    _previousTransform.Matrix = _transformGroup.Value;
+            //    Point center = _previousTransform.TransformPoint(new Point(e.Position.X, e.Position.Y));
+            //    _compositeTransform.CenterX = center.X;
+            //    _compositeTransform.CenterY = center.Y;
+            //    _compositeTransform.ScaleX = e.Delta.Scale;
+            //    _compositeTransform.ScaleY = e.Delta.Scale;
+            //    _compositeTransform.TranslateX = e.Delta.Translation.X;
+            //    _compositeTransform.TranslateY = e.Delta.Translation.Y;
+            //}
         }
         #endregion
         #endregion

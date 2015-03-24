@@ -130,6 +130,8 @@ namespace CosImg.ExHentai.ViewModel
                     }
                     else
                     {
+                        ToastPrompt toast = new ToastPrompt("Now Processing", true);
+                        toast.ShowWithProgressBar();
                         FavorDBHelpers.Add(new FavorModel() 
                         { 
                             HashString = Detail.HeaderInfo.TitleEn.GetHashedString(),
@@ -138,6 +140,8 @@ namespace CosImg.ExHentai.ViewModel
                             ImageByte = await HttpHelper.GetByteArrayWithPostMethod(Detail.HeaderInfo.HeaderImage,SettingHelpers.GetSetting<string>("cookie"))
                         });
                         _favorState = true;
+                        toast.HideWithProgressBar();
+                        new ToastPrompt("Succeed").Show();
                     }
                     OnPropertyChanged("FavorIcon");
                     OnPropertyChanged("FavorButtonText");

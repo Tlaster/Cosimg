@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TBase.RT;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -27,7 +28,6 @@ namespace CosImg.ExHentai.View
         {
             this.InitializeComponent();
             this.RequestedTheme = ElementTheme.Dark;
-
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

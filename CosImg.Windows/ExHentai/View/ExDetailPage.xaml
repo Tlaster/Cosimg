@@ -32,6 +32,11 @@
     </Page.Resources>
 
 
+    <Page.TopAppBar>
+        <AppBar>
+            <AppBarButton Click="AppBarButton_Click" Label="Back" Icon="Back"/>
+        </AppBar>
+    </Page.TopAppBar>
 
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">

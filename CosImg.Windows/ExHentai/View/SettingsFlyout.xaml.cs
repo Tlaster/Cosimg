@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CosImg.Common;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,12 +25,30 @@ namespace CosImg.ExHentai.View
         {
             this.InitializeComponent();
             this.RequestedTheme = ElementTheme.Dark;
+            OnLoaded();
+        }
+
+        private async void OnLoaded()
+        {
+            CacheSizeTB.Text = string.Format("Cache Size: {0:F2} MB", await ImageHelper.GetCacheSize() / 1048576d);
             PageSwitch.IsOn = SettingHelpers.GetSetting<bool>("ExDefault");
+            FlipBookSwitch.IsOn = SettingHelpers.GetSetting<bool>("isFlipBookView");
         }
 
         private void PageSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             SettingHelpers.SetSetting<bool>("ExDefault", PageSwitch.IsOn);
+        }
+
+        private void FlipBookSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            SettingHelpers.SetSetting<bool>("isFlipBookView", FlipBookSwitch.IsOn);
+        }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            await ImageHelper.ClearCache();
+            CacheSizeTB.Text = string.Format("Cache Size: {0:F2} MB", await ImageHelper.GetCacheSize() / 1048576d);
         }
     }
 }

@@ -21,6 +21,9 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <ToggleSwitch x:Name="PageSwitch" Header="Set ExHentaiViewer as default page" OffContent="No" OnContent="Yes"/>
+
+            <TextBlock Grid.Row="1" x:Name="CacheSizeTB" FontSize="20"/>
+            <Button Grid.Row="2" Click="Button_Click" HorizontalAlignment="Stretch">Clear Cache</Button>
         </Grid>
     </Grid>
 </Page>

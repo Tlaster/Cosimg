@@ -10,21 +10,15 @@
     Title="Settings"
     d:DesignWidth="346">
 
-    <!-- 此 StackPanel 充当内容部分的垂直布局的根面板-->
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
 
-        <!-- 下列 StackPanel 定义个别内容部分-->
-
-        <!-- 第 1 部分内容-->
         <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}">
 
-            <!-- 第 1 部分正文-->
             <ToggleSwitch x:Name="PageSwitch" Toggled="PageSwitch_Toggled" Header="Set ExHentaiViewer as default page" OffContent="No" OnContent="Yes"/>
-
+            <ToggleSwitch x:Name="FlipBookSwitch" Toggled="FlipBookSwitch_Toggled" Header="Set Reading Mode" OffContent="Single Page" OnContent="Double Page"/>
 
         </StackPanel>
-
-        <!-- 根据需要在下面定义更多内容部分-->
-
+        <TextBlock x:Name="CacheSizeTB" FontSize="20"/>
+        <Button Click="Button_Click" HorizontalAlignment="Stretch">Clear Cache</Button>
     </StackPanel>
 </SettingsFlyout>

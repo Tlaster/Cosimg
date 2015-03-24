@@ -17,15 +17,19 @@ using System.Net.NetworkInformation;
 
 namespace CosImg.ExHentai.ViewModel
 {
-    public class ReadingViewModel:TBase.NotifyPropertyChanged
+    public class ReadingViewModel:LoadProps
     {
         private string _link;
         private List<ExHentaiLib.Prop.ImageListInfo> _pageList;
         private string _headerEn;
-        private string _imagePage;
         private bool _isDownLoaded;
+        private string _imagePage;
+        public bool isFlipBookView { get; set; }
+
         public ReadingViewModel(string link,string headerEn,bool isDownLoaded = false)
         {
+            isFlipBookView = SettingHelpers.GetSetting<bool>("isFlipBookView");
+            OnPropertyChanged("isFlipBookView");
             this._headerEn = headerEn;
             this._link = link;
             this._isDownLoaded = isDownLoaded;
@@ -128,14 +132,6 @@ namespace CosImg.ExHentai.ViewModel
             }
         }
 #endif
-
-        private bool _isOnLoading;
-
-        public bool isOnLoading
-        {
-            get { return _isOnLoading; }
-            set { _isOnLoading = value; OnPropertyChanged("isOnLoading"); }
-        }
 
         private string _currentState;
 

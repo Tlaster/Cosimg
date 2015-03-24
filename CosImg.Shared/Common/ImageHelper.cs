@@ -13,6 +13,7 @@ using Windows.Storage;
 using TBase.RT;
 using System.Diagnostics;
 using TBase;
+using Windows.Storage.Search;
 #if WINDOWS_PHONE_APP
 using UmengSocialSDK;
 #endif
@@ -54,7 +55,15 @@ namespace CosImg.Common
         }
 #endif
 
-
+        public static async Task<long> GetCacheSize()
+        {
+            var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists);
+            var folders = folder.CreateFileQuery(CommonFileQuery.OrderByName);
+            var fileSizeTasks = (await folders.GetFilesAsync()).Select(async file => (await file.GetBasicPropertiesAsync()).Size);
+            var sizes = await Task.WhenAll(fileSizeTasks);
+            long folderSize = sizes.Sum(l => (long)l);
+            return folderSize;
+        }
 
         public static async Task ClearCache()
         {

@@ -9,53 +9,61 @@
     xmlns:common="using:CosImg.ExHentai.Common"
     mc:Ignorable="d">
     
+    <Page.Resources>
+
+        <DataTemplate x:Key="CommonView">
+            <FlipView ItemsSource="{Binding ImageList}">
+                <FlipView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="{Binding Width}" Height="{Binding Height}">
+                            <ScrollViewer HorizontalScrollBarVisibility="Hidden" MinZoomFactor="1" ZoomMode="Enabled" MaxZoomFactor="50" VerticalScrollBarVisibility="Hidden">
+                                <Image Width="{Binding Width}" Height="{Binding Height}" Source="{Binding Image}"/>
+                            </ScrollViewer>
+                            <ProgressRing IsActive="{Binding isOnLoading}"/>
+                            <StackPanel Visibility="{Binding isLoadFail,Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock FontSize="25" HorizontalAlignment="Center" Text="Load Failed"/>
+                                <Button Command="{Binding ReTryCommand}" Content="Click To Reload"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </FlipView.ItemTemplate>
+            </FlipView>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FlipBookView">
+            <common:FlipBookControl ItemsSource="{Binding ImageList}">
+                <common:FlipBookControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                            <Image Source="{Binding Image}"/>
+                            <ProgressRing IsActive="{Binding isOnLoading}"/>
+                            <StackPanel Visibility="{Binding isLoadFail,Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock FontSize="25" HorizontalAlignment="Center" Text="Load Failed"/>
+                                <Button Command="{Binding ReTryCommand}" Content="Click To Reload"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </common:FlipBookControl.ItemTemplate>
+            </common:FlipBookControl>
+
+        </DataTemplate>
+
+        <common:ReadingViewSelector x:Key="ReadingViewSelector" CommonView="{StaticResource CommonView}" FlipBookView="{StaticResource FlipBookView}"/>
+
+    </Page.Resources>
+    
     <Page.TopAppBar>
         <AppBar>
             <AppBarButton Click="AppBarButton_Click" Label="Back" Icon="Back"/>
         </AppBar>
     </Page.TopAppBar>
 
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <ContentPresenter ContentTemplateSelector="{StaticResource ReadingViewSelector}"/>
         <StackPanel Visibility="{Binding isOnLoading,Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
             <ProgressRing IsActive="{Binding isOnLoading}"/>
             <TextBlock FontSize="25" Text="{Binding CurrentState}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </StackPanel>
-        <common:FlipBookControl CanScale="False" ItemsSource="{Binding ImageList}">
-            <common:FlipBookControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Image Source="{Binding Image}"/>
-                        <ProgressRing IsActive="{Binding isOnLoading}"/>
-                        <StackPanel Visibility="{Binding isLoadFail,Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock FontSize="25" HorizontalAlignment="Center" Text="Load Failed"/>
-                            <Button Command="{Binding ReTryCommand}" Content="Click To Reload"/>
-                        </StackPanel>
-                    </Grid>
-                </DataTemplate>
-
-            </common:FlipBookControl.ItemTemplate>
-        </common:FlipBookControl>
-        
-        <!--<GridView x:Name="ReadingGirdView"  ScrollViewer.HorizontalScrollBarVisibility="Visible"  IsSwipeEnabled="False" SelectionMode="None" ItemsSource="{Binding ImageList}">
-            <GridView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <toolkit:WrapPanel/>
-                </ItemsPanelTemplate>
-            </GridView.ItemsPanel>
-            <GridView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Width="{Binding Width}" Height="{Binding Height}">
-                        <ScrollViewer HorizontalScrollBarVisibility="Hidden" MinZoomFactor="1" ZoomMode="Enabled" MaxZoomFactor="50" VerticalScrollBarVisibility="Hidden">
-                            <Image Width="{Binding Width}" Source="{Binding Image}"/>
-                        </ScrollViewer>
-                        <ProgressRing IsActive="{Binding isOnLoading}"/>
-                        <StackPanel Visibility="{Binding isLoadFail,Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock FontSize="25" HorizontalAlignment="Center" Text="Load Failed"/>
-                            <Button Command="{Binding ReTryCommand}" Content="Click To Reload"/>
-                        </StackPanel>
-                    </Grid>
-                </DataTemplate>
-            </GridView.ItemTemplate>
-        </GridView>-->
     </Grid>
 </Page>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CosImg.Common;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,10 +39,17 @@ namespace CosImg.ExHentai.View
             this.RequestedTheme = ElementTheme.Dark;
             PageSwitch.IsOn = SettingHelpers.GetSetting<bool>("ExDefault");
         }
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        protected async override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
             SettingHelpers.SetSetting<bool>("ExDefault", PageSwitch.IsOn);
+            CacheSizeTB.Text = string.Format("Cache Size: {0:F2} MB", await ImageHelper.GetCacheSize() / 1048576d);
+        }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            await ImageHelper.ClearCache();
+            CacheSizeTB.Text = string.Format("Cache Size: {0:F2} MB", await ImageHelper.GetCacheSize() / 1048576d);
         }
     }
 }

@@ -32,8 +32,8 @@ namespace CosImg.ExHentai.Model
             get { return _isLoadFail; }
             set { _isLoadFail = value; OnPropertyChanged("isLoadFail"); }
         }
+        double _width = (Window.Current.Content as Frame).ActualWidth;
 #if WINDOWS_APP
-        double _width = (Window.Current.Content as Frame).ActualWidth / 2;
         public double Height
         {
             get
@@ -41,8 +41,6 @@ namespace CosImg.ExHentai.Model
                 return (Window.Current.Content as Frame).ActualHeight;
             }
         }
-#else
-        double _width = (Window.Current.Content as Frame).ActualWidth;
 #endif
         public double Width
         {
@@ -84,35 +82,38 @@ namespace CosImg.ExHentai.Model
             Debug.WriteLine("req page " + this.ImageIndex);
             try
             {
-                if (_client == null)
-                {
-                    _client = new HttpClient();
-                    _client.DefaultRequestHeaders.Add("Cookie", SettingHelpers.GetSetting<string>("cookie"));
-                }
-
                 byte[] _imagebyte;
                 if (await ImageHelper.CheckCacheImage(SaveFolder, ImageIndex.ToString()))
                 {
                     _imagebyte = await ImageHelper.GetCacheImage(SaveFolder, ImageIndex.ToString());
-                    
+
                 }
                 else
                 {
-                    if (_imageuri==null)
+                    if (_client == null)
+                    {
+                        _client = new HttpClient();
+                        _client.DefaultRequestHeaders.Add("Cookie", SettingHelpers.GetSetting<string>("cookie"));
+                    }
+                    if (_imageuri == null)
                     {
                         _imageuri = await ParseHelper.GetImageAync(uri, SettingHelpers.GetSetting<string>("cookie"));
                     }
-                    _imagebyte = await _client.GetByteArrayAsync(_imageuri);
+                    using (var res = await _client.GetAsync(_imageuri))
+                    {
+                        if (res.Content.Headers.Contains("Content-Disposition"))
+                        {
+                            throw new HttpRequestException();
+                        }
+                        else
+                        {
+                            _imagebyte = await res.Content.ReadAsByteArrayAsync();
+                        }
+                    }
                     await ImageHelper.SaveCacheImage(SaveFolder, ImageIndex.ToString(), _imagebyte);
+                    _client.Dispose();
                 }
-                var bitimg = await ImageHelper.ByteArrayToBitmapImage(_imagebyte);
-#if WINDOWS_APP
-                double pwidth = bitimg.PixelWidth;
-                double pheight = bitimg.PixelHeight;
-                _width = pwidth / pheight * (Window.Current.Content as Frame).ActualHeight;
-                OnPropertyChanged("Width");
-#endif
-                _image = new WeakReference(bitimg);
+                _image = new WeakReference(await ImageHelper.ByteArrayToBitmapImage(_imagebyte));
                 OnPropertyChanged("Image");
             }
             catch (Exception)
