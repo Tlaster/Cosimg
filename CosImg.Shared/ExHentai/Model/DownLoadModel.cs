@@ -21,7 +21,6 @@ namespace CosImg.ExHentai.Model
     public class DownLoadModel : DownLoadInfo
     {
         private HttpClient _client;
-        Random random;
         public StorageFolder _saveFolder { get; private set; }
         public List<ImageListInfo> _imagePageUri { get; private set; }
 
@@ -58,7 +57,7 @@ namespace CosImg.ExHentai.Model
 
         private async void StartDownLoad()
         {
-            random = new Random();
+            
 #if WINDOWS_PHONE_APP
             var cachefolder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists);
 #else
@@ -70,10 +69,8 @@ namespace CosImg.ExHentai.Model
         }
 
 
-        int retryCount = 0;
         private async Task DownloadFromUriList()
         {
-
             var item = await DownLoadDBHelpers.Query(HashString);
             for (; CurrentPage < MaxImageCount; CurrentPage++, OnPropertyChanged("CurrentPage"), item.CurrentPage = CurrentPage, DownLoadDBHelpers.Modify(item))
             {
@@ -86,6 +83,7 @@ namespace CosImg.ExHentai.Model
                     for (int i = 0; i < 5; i++)
                     {
                         Debug.WriteLine("page " + CurrentPage + " restart " + i);
+                        Random random = new Random();
                         _imagePageUri[CurrentPage].ImagePage += "&nl=" + random.Next(61, 63);
                         sourceUri = await ParseHelper.GetImageAync(_imagePageUri[CurrentPage].ImagePage, SettingHelpers.GetSetting<string>("cookie"));
                         res = await _client.GetAsync(new Uri(sourceUri));

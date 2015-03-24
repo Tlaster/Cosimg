@@ -42,6 +42,13 @@ namespace CosImg.ExHentai.View
                 exSettings.Show();
             });
             args.Request.ApplicationCommands.Add(settings);
+
+            Windows.UI.ApplicationSettings.SettingsCommand download = new Windows.UI.ApplicationSettings.SettingsCommand("Download", "Download", (a) =>
+            {
+                var exDownload = new DownLoadFlyout();
+                exDownload.Show();
+            });
+            args.Request.ApplicationCommands.Add(download);
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)

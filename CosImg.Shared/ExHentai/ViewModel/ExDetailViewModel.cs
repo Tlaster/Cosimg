@@ -236,7 +236,11 @@ namespace CosImg.ExHentai.ViewModel
                     }
                     else
                     {
+
+                        ToastPrompt toast = new ToastPrompt("Now Processing", true);
+                        toast.ShowWithProgressBar();
                         await StartDownLoad();
+                        toast.HideWithProgressBar();
                     }
                 });
             }
@@ -249,8 +253,8 @@ namespace CosImg.ExHentai.ViewModel
                 App.DownLoadList = new List<DownLoadModel>();
             }
             await FileHelpers.SaveDetailCache(Detail.HeaderInfo.TitleEn.GetHashedString(), await HttpHelper.GetStringWithCookie(_link, SettingHelpers.GetSetting<string>("cookie") + ParseHelper.unconfig));
-            App.DownLoadList.Add(new DownLoadModel(this._link, this.Detail.HeaderInfo.TitleEn, await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"))));
-            var imgbyte = await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"));
+            var imgbyte = await HttpHelper.GetByteArrayWithPostMethod(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"));
+            App.DownLoadList.Add(new DownLoadModel(this._link, this.Detail.HeaderInfo.TitleEn, imgbyte));
             if (!_favorState)
             {
                 FavorDBHelpers.Add(new FavorModel()

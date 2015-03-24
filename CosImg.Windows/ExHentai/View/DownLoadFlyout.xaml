@@ -1,0 +1,45 @@
+﻿<SettingsFlyout
+    x:Class="CosImg.ExHentai.View.DownLoadFlyout"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CosImg.ExHentai.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    IconSource="Assets/SmallLogo.png"
+    Title="DownLoad"
+    d:DesignWidth="346">
+
+    <Grid>
+        <GridView x:Name="downloadGridView" SelectionMode="None" ItemsSource="{Binding DownLoadList,Mode=OneWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" >
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="100" Height="146" Margin="4">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Image Source="{Binding ItemImage}" Stretch="Uniform"/>
+                        <Border VerticalAlignment="Bottom" Background="#BF000000">
+                            <TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding Name}" FontSize="15" MaxLines="2" TextTrimming="CharacterEllipsis" />
+                        </Border>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ProgressBar Margin="2" Maximum="{Binding MaxImageCount}" Value="{Binding CurrentPage}"/>
+                            <TextBlock Grid.Column="1">
+                                        <Run Text="{Binding CurrentPage}"/>
+                                        <Run Text="/"/>
+                                        <Run Text="{Binding MaxImageCount}"/>
+                            </TextBlock>
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+
+    </Grid>
+</SettingsFlyout>

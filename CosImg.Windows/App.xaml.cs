@@ -1,4 +1,5 @@
-﻿using CosImg.ExHentai.Model;
+﻿using CosImg.Common;
+using CosImg.ExHentai.Model;
 using ExHentaiLib.Common;
 using System;
 using System.Collections.Generic;
@@ -45,7 +46,7 @@ namespace CosImg
         /// 以打开特定文件等情况下使用其他入口点。
         /// </summary>
         /// <param name="e">有关启动请求和过程的详细信息。</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
 
 #if DEBUG
@@ -116,6 +117,17 @@ namespace CosImg
             }
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
+
+
+
+            var lastLaunchTime = SettingHelpers.GetSetting<string>("LastLaunch");
+            var a = DateTime.Today.ToString();
+            if (lastLaunchTime != DateTime.Today.ToString())
+            {
+                await ImageHelper.ClearCache();
+            }
+            SettingHelpers.SetSetting<string>("LastLaunch", DateTime.Today.ToString());
+
         }
 
         /// <summary>
