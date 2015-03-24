@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Controls;
 using ExHentaiLib.Prop;
 using Windows.Networking.Connectivity;
 using System.Net.NetworkInformation;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace CosImg.ExHentai.ViewModel
 {
@@ -25,6 +26,7 @@ namespace CosImg.ExHentai.ViewModel
     {
         private string _link;
         private bool _favorState;
+        private byte[] _headerImageByte;
 
         public ExDetailViewModel(string link)
         {
@@ -73,6 +75,9 @@ namespace CosImg.ExHentai.ViewModel
                     {
                         PageList.Add(new PageListModel() { Page = (i + 1).ToString(), Uri = this._link + "?p=" + i });
                     }
+                    _headerImageByte = await HttpHelper.GetByteArrayWithPostMethod(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"));
+                    _headerImage = await ImageHelper.ByteArrayToBitmapImage(_headerImageByte);
+                    OnPropertyChanged("HeaderImage");
                 }
                 _favorState = _favoritem == null ? false : true;
                 isDownLoaded = _downlaoditem != null && _downlaoditem.DownLoadComplete ? true : false;
@@ -121,7 +126,7 @@ namespace CosImg.ExHentai.ViewModel
         {
             get
             {
-                return new DelegateCommand( async() =>
+                return new DelegateCommand(() =>
                 {
                     if (_favorState)
                     {
@@ -137,7 +142,7 @@ namespace CosImg.ExHentai.ViewModel
                             HashString = Detail.HeaderInfo.TitleEn.GetHashedString(),
                             Name = Detail.HeaderInfo.TitleEn,
                             ItemPageLink = this._link,
-                            ImageByte = await HttpHelper.GetByteArrayWithPostMethod(Detail.HeaderInfo.HeaderImage,SettingHelpers.GetSetting<string>("cookie"))
+                            ImageByte = _headerImageByte
                         });
                         _favorState = true;
                         toast.HideWithProgressBar();
@@ -167,9 +172,7 @@ namespace CosImg.ExHentai.ViewModel
             {
                 return new DelegateCommand(async () =>
                 {
-                    var imgbyte = await HttpHelper.GetByteArray(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie") + ParseHelper.unconfig);
-
-                    await ImageHelper.ShareImage(imgbyte, (Detail.HeaderInfo.TitleJp == "" ? Detail.HeaderInfo.TitleEn : Detail.HeaderInfo.TitleJp) + "------" + _link);
+                    await ImageHelper.ShareImage(_headerImageByte, (Detail.HeaderInfo.TitleJp == "" ? Detail.HeaderInfo.TitleEn : Detail.HeaderInfo.TitleJp) + "------" + _link);
                 });
             }
         }
@@ -253,8 +256,7 @@ namespace CosImg.ExHentai.ViewModel
                 App.DownLoadList = new List<DownLoadModel>();
             }
             await FileHelpers.SaveDetailCache(Detail.HeaderInfo.TitleEn.GetHashedString(), await HttpHelper.GetStringWithCookie(_link, SettingHelpers.GetSetting<string>("cookie") + ParseHelper.unconfig));
-            var imgbyte = await HttpHelper.GetByteArrayWithPostMethod(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"));
-            App.DownLoadList.Add(new DownLoadModel(this._link, this.Detail.HeaderInfo.TitleEn, imgbyte));
+            App.DownLoadList.Add(new DownLoadModel(this._link, this.Detail.HeaderInfo.TitleEn, _headerImageByte));
             if (!_favorState)
             {
                 FavorDBHelpers.Add(new FavorModel()
@@ -262,7 +264,7 @@ namespace CosImg.ExHentai.ViewModel
                     HashString = Detail.HeaderInfo.TitleEn.GetHashedString(),
                     Name = Detail.HeaderInfo.TitleEn,
                     ItemPageLink = this._link,
-                    ImageByte = imgbyte
+                    ImageByte = _headerImageByte
                 });
             }
             DownLoadDBHelpers.Add(new DownLoadInfo()
@@ -270,7 +272,7 @@ namespace CosImg.ExHentai.ViewModel
                 PageUri = this._link,
                 Name = Detail.HeaderInfo.TitleEn,
                 HashString = Detail.HeaderInfo.TitleEn.GetHashedString(),
-                Imagebyte = imgbyte
+                Imagebyte = _headerImageByte
             });
             _favorState = true;
             new ToastPrompt("Downloading").Show();
@@ -279,6 +281,8 @@ namespace CosImg.ExHentai.ViewModel
         }
 
 
+        
+
         private bool _isDownLoaded;
 
         public bool isDownLoaded
@@ -286,7 +290,14 @@ namespace CosImg.ExHentai.ViewModel
             get { return _isDownLoaded; }
             set { _isDownLoaded = value; OnPropertyChanged("isDownLoaded"); }
         }
-
+        private BitmapImage _headerImage;
+        public BitmapImage HeaderImage
+        {
+            get
+            {
+                return _headerImage;
+            }
+        }
 
         private PageListModel _selectedPage;
 

@@ -30,9 +30,9 @@ namespace CosImg.ExHentai.View
 
         private async void OnLoaded()
         {
-            CacheSizeTB.Text = string.Format("Cache Size: {0:F2} MB", await ImageHelper.GetCacheSize() / 1048576d);
             PageSwitch.IsOn = SettingHelpers.GetSetting<bool>("ExDefault");
             FlipBookSwitch.IsOn = SettingHelpers.GetSetting<bool>("isFlipBookView");
+            CacheSizeTB.Text = string.Format("Cache Size: {0:F2} MB", await ImageHelper.GetCacheSize() / 1048576d);
         }
 
         private void PageSwitch_Toggled(object sender, RoutedEventArgs e)

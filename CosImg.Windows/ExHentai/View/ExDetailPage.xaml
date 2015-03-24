@@ -77,7 +77,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
-                        <Image Margin="8,16" Grid.Column="0" MaxHeight="350" MinHeight="200" Source="{Binding Result}" DataContext="{Binding Detail.HeaderInfo.HeaderImage, Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" />
+                        <Image Margin="8,16" Grid.Column="0" MaxHeight="350" MinHeight="200" Source="{Binding HeaderImage}"/>
                         <Grid Grid.Column="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>

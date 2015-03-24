@@ -12,9 +12,15 @@
 
     <Grid>
         <GridView x:Name="downloadGridView" SelectionMode="None" ItemsSource="{Binding DownLoadList,Mode=OneWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" >
+
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
             <GridView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Width="100" Height="146" Margin="4">
+                    <Grid Width="90" Height="146" Margin="4">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="auto"/>

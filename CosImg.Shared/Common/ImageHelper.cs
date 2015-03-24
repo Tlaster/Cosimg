@@ -55,14 +55,40 @@ namespace CosImg.Common
         }
 #endif
 
-        public static async Task<long> GetCacheSize()
+        public async static Task<ulong> GetFolderSize(Windows.Storage.StorageFolder folder)
+        {
+            ulong size = 0;
+            foreach (Windows.Storage.StorageFile thisFile in await folder.GetFilesAsync())
+            {
+                Windows.Storage.FileProperties.BasicProperties props = await thisFile.GetBasicPropertiesAsync();
+
+                size += props.Size;
+            }
+            foreach (Windows.Storage.StorageFolder thisFolder in await folder.GetFoldersAsync())
+            {
+                size += await GetFolderSize(thisFolder);
+            }
+
+            return size;
+        }
+
+        public static async Task<ulong> GetCacheSize()
         {
             var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists);
-            var folders = folder.CreateFileQuery(CommonFileQuery.OrderByName);
-            var fileSizeTasks = (await folders.GetFilesAsync()).Select(async file => (await file.GetBasicPropertiesAsync()).Size);
-            var sizes = await Task.WhenAll(fileSizeTasks);
-            long folderSize = sizes.Sum(l => (long)l);
-            return folderSize;
+            return await GetFolderSize(folder);
+
+            //if (folder.IsCommonFileQuerySupported(CommonFileQuery.OrderByName))
+            //{
+            //    StorageFileQueryResult folders = folder.CreateFileQuery(CommonFileQuery.OrderByName);
+            //    var fileSizeTasks = (await folders.GetFilesAsync()).Select(async file => (await file.GetBasicPropertiesAsync()).Size);
+            //    var sizes = await Task.WhenAll(fileSizeTasks);
+            //    return sizes.Sum(l => (long)l);
+            //}
+            //else
+            //{
+            //    var a = (await folder.GetBasicPropertiesAsync()).Size;
+            //    return (long)(await folder.GetBasicPropertiesAsync()).Size;
+            //}
         }
 
         public static async Task ClearCache()

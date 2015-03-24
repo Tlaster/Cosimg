@@ -82,7 +82,7 @@ namespace CosImg.ExHentai.View
 
         private void AppBarButton_Click_2(object sender, RoutedEventArgs e)
         {
-
+            App.rootFrame.Navigate(typeof(DownLoadedPage));
         }
           
     }

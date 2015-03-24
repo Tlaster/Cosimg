@@ -61,7 +61,7 @@
                 <AppBarButton Command="{Binding RefreshCommand}" Label="Refresh" Icon="Refresh" Visibility="{Binding PivotSelectedIndex,Converter={StaticResource SelectedIndexToVisilibityConverter},ConverterParameter=0}"/>
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="Download" Icon="Download" Click="AppBarButton_Click_2"/>
+                <AppBarButton Label="Downloaded" Icon="Download" Click="AppBarButton_Click_2"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

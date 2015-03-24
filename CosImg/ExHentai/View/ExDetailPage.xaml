@@ -77,7 +77,7 @@
 								<TextBlock TextWrapping="Wrap" Text="{Binding Detail.HeaderInfo.TitleEn}" FontSize="25"/>
 								<TextBlock Foreground="Gray" Grid.Row="1" TextWrapping="Wrap" Text="{Binding Detail.HeaderInfo.TitleJp}" FontSize="25"/>
 							</Grid>
-							<Image Margin="8,16" Grid.Row="1" MaxHeight="350" MinHeight="200" Source="{Binding Result}" DataContext="{Binding Detail.HeaderInfo.HeaderImage, Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" />
+                            <Image Margin="8,16" Grid.Row="1" MaxHeight="350" MinHeight="200" Source="{Binding HeaderImage}"/>
 							<TextBlock Grid.Row="2" Text="{Binding Detail.RateValue}" FontSize="15"/>
 							<ListView Grid.Row="3" ItemsSource="{Binding Detail.UpLoadInfo}">
 								<ListView.ItemTemplate>

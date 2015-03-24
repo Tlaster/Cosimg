@@ -61,9 +61,11 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ContentPresenter ContentTemplateSelector="{StaticResource ReadingViewSelector}"/>
-        <StackPanel Visibility="{Binding isOnLoading,Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <ProgressRing IsActive="{Binding isOnLoading}"/>
-            <TextBlock FontSize="25" Text="{Binding CurrentState}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </StackPanel>
+        <Grid Visibility="{Binding isOnLoading,Converter={StaticResource BoolToVisibilityConverter}}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <StackPanel  HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ProgressRing IsActive="{Binding isOnLoading}"/>
+                <TextBlock FontSize="25" Text="{Binding CurrentState}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>

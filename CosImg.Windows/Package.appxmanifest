@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="2c1e8e34-7047-450c-aaca-02860d570516" Publisher="CN=Jades" Version="1.0.0.0" />
+  <Identity Name="51945Tlaster.CosImg" Publisher="CN=F82B0EE7-EF8D-4515-BEAB-DD968D07D67F" Version="1.0.0.0" />
   <Properties>
-    <DisplayName>CosImg.Windows</DisplayName>
-    <PublisherDisplayName>Jades</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <DisplayName>CosImg</DisplayName>
+    <PublisherDisplayName>Tlaster</PublisherDisplayName>
+    <Logo>Assets\90x90.png</Logo>
   </Properties>
   <Prerequisites>
     <OSMinVersion>6.3.0</OSMinVersion>
@@ -15,8 +15,8 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="CosImg.Windows.App">
-      <m2:VisualElements DisplayName="CosImg.Windows" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="CosImg.Windows" ForegroundText="light" BackgroundColor="#464646">
-        <m2:SplashScreen Image="Assets\SplashScreen.png" />
+      <m2:VisualElements DisplayName="CosImg" Square150x150Logo="Assets\270x270.png" Square30x30Logo="Assets\256x256.png" Description="CosImg.Windows" ForegroundText="light" BackgroundColor="#00C0FF">
+        <m2:SplashScreen Image="Assets\1116x540.png" />
       </m2:VisualElements>
     </Application>
   </Applications>

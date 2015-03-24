@@ -15,11 +15,14 @@
     <FileAlignment>512</FileAlignment>
     <SynthesizeLinkMetadata>true</SynthesizeLinkMetadata>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>CosImg.Windows_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>CosImg.Windows_StoreKey.pfx</PackageCertificateKeyFile>
     <ExpressionBlendVersion>12.0.51020.0</ExpressionBlendVersion>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <PackageCertificateThumbprint>453D15F0E24B6B15AFE1E8248C1545CCA2A9FEB8</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -133,6 +136,9 @@
     </Compile>
     <Compile Include="ExHentai\Common\FlipBookControl.cs" />
     <Compile Include="ExHentai\Common\ReadingViewSelector.cs" />
+    <Compile Include="ExHentai\View\DownLoadedPage.xaml.cs">
+      <DependentUpon>DownLoadedPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ExHentai\View\DownLoadFlyout.xaml.cs">
       <DependentUpon>DownLoadFlyout.xaml</DependentUpon>
     </Compile>
@@ -154,14 +160,12 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="CosImg.Windows_StoreKey.pfx" />
     <None Include="CosImg.Windows_TemporaryKey.pfx" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Logo.scale-100.png" />
-    <Content Include="Assets\SmallLogo.scale-100.png" />
-    <Content Include="Assets\SplashScreen.scale-100.png" />
-    <Content Include="Assets\StoreLogo.scale-100.png" />
+    <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -184,6 +188,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="ExHentai\View\DownLoadedPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ExHentai\View\DownLoadFlyout.xaml">
       <SubType>Designer</SubType>
@@ -231,6 +239,12 @@
     <Folder Include="Common\" />
     <Folder Include="ExHentai\Model\" />
     <Folder Include="ExHentai\ViewModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\1116x540.scale-180.png" />
+    <Content Include="Assets\256x256.targetsize-256.png" />
+    <Content Include="Assets\270x270.scale-180.png" />
+    <Content Include="Assets\90x90.scale-180.png" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

@@ -34,16 +34,16 @@ namespace CosImg.ExHentai.View
         /// </summary>
         /// <param name="e">描述如何访问此页的事件数据。
         /// 此参数通常用于配置页。</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.RequestedTheme = ElementTheme.Dark;
             PageSwitch.IsOn = SettingHelpers.GetSetting<bool>("ExDefault");
+            CacheSizeTB.Text = string.Format("Cache Size: {0:F2} MB", await ImageHelper.GetCacheSize() / 1048576d);
         }
-        protected async override void OnNavigatedFrom(NavigationEventArgs e)
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
             SettingHelpers.SetSetting<bool>("ExDefault", PageSwitch.IsOn);
-            CacheSizeTB.Text = string.Format("Cache Size: {0:F2} MB", await ImageHelper.GetCacheSize() / 1048576d);
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
