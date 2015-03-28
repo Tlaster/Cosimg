@@ -45,7 +45,7 @@ namespace CosImg
 #if DEBUG
             if (args.QueryText == "go")
 #else
-            if (args.QueryText == "I AM HENYAI")
+            if (args.QueryText == "I AM HENTAI")
 #endif
             {
                 MessageDialog dialog = new MessageDialog("Sure?");

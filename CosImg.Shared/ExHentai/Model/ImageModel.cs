@@ -11,11 +11,17 @@ using TBase;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Net.Http;
+using Windows.ApplicationModel.DataTransfer;
+using Windows.Storage.Streams;
+using System.Net.NetworkInformation;
+using CosImg.ExHentai.Common;
 
 namespace CosImg.ExHentai.Model
 {
     public class ImageModel:TBase.NotifyPropertyChanged
     {
+
+
 
         #region StateModel
         private bool _isOnLoading;
@@ -54,9 +60,14 @@ namespace CosImg.ExHentai.Model
 
         #endregion
 
+#if WINDOWS_PHONE_APP
+        public ImageModel()
+        {
+            RegisterForShare();
+        }
+#endif
 
-
-        private async void GetImageBitmapImage(int ImageIndex)
+        private async void GetDownloadedImage(int ImageIndex)
         {
             isOnLoading = true;
             try
@@ -64,13 +75,13 @@ namespace CosImg.ExHentai.Model
                 byte[] _imagebyte = await ImageHelper.GetDownLoadedImage(SaveFolder, ImageIndex.ToString());
                 _image = new WeakReference(await ImageHelper.ByteArrayToBitmapImage(_imagebyte));
                 OnPropertyChanged("Image");
+                isOnLoading = false;
             }
             catch (Exception)
             {
+                isOnLoading = false;
                 GetBitmapImage(ImagePage);
             }
-
-            isOnLoading = false;
         }
         async void GetBitmapImage(string uri)
         {
@@ -82,6 +93,10 @@ namespace CosImg.ExHentai.Model
             Debug.WriteLine("req page " + this.ImageIndex);
             try
             {
+                if (ImagePage==null)
+                {
+                    throw new ArgumentNullException();
+                }
                 byte[] _imagebyte;
                 if (await ImageHelper.CheckCacheImage(SaveFolder, ImageIndex.ToString()))
                 {
@@ -110,7 +125,14 @@ namespace CosImg.ExHentai.Model
                             _imagebyte = await res.Content.ReadAsByteArrayAsync();
                         }
                     }
-                    await ImageHelper.SaveCacheImage(SaveFolder, ImageIndex.ToString(), _imagebyte);
+                    if (await DownLoadDBHelpers.CheckItemisDownloaded(SaveFolder))
+                    {
+                        await ImageHelper.SaveDownLoadedImage(SaveFolder, ImageIndex.ToString(), _imagebyte);
+                    }
+                    else
+                    {
+                        await ImageHelper.SaveCacheImage(SaveFolder, ImageIndex.ToString(), _imagebyte);
+                    }
                     _client.Dispose();
                 }
                 _image = new WeakReference(await ImageHelper.ByteArrayToBitmapImage(_imagebyte));
@@ -134,12 +156,26 @@ namespace CosImg.ExHentai.Model
         }
         public async Task Refresh()
         {
-            isLoadFail = false;
-            _image = null;
-            _imageuri = null;
-            await ImageHelper.DeleCacheImage(SaveFolder, ImageIndex.ToString());
-            isDownLoaded = false;
-            OnPropertyChanged("Image");
+            if (ImagePage==null)
+            {
+                if (NetworkInterface.GetIsNetworkAvailable())
+                {
+                    new ToastPrompt("Loading info for this page,please wait").Show();
+                }
+                else
+                {
+                    new ToastPrompt("No info for this page").Show();
+                }
+            }
+            else
+            {
+                isLoadFail = false;
+                _image = null;
+                _imageuri = null;
+                await ImageHelper.DeleCacheImage(SaveFolder, ImageIndex.ToString());
+                isDownLoaded = false;
+                OnPropertyChanged("Image");
+            }
         }
 
         public async void Save()
@@ -158,9 +194,33 @@ namespace CosImg.ExHentai.Model
             {
                 new ToastPrompt("Please wait while loading the image").Show();
                 return;
-            }
-            await ImageHelper.ShareImage(await ImageHelper.GetCacheImage(SaveFolder, ImageIndex.ToString()));
+            } 
+            DataTransferManager.ShowShareUI();
         }
+        private void RegisterForShare()
+        {
+            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
+            dataTransferManager.DataRequested += ShareHandler;
+        }
+
+        private async void ShareHandler(DataTransferManager sender, DataRequestedEventArgs e)
+        {
+            DataRequestDeferral deferral = e.Request.GetDeferral();
+            DataRequest request = e.Request;
+            var _imagebyte = await ImageHelper.GetCacheImage(SaveFolder, this.ImageIndex.ToString());
+            request.Data.Properties.Title = "Share Image";
+            InMemoryRandomAccessStream randonAcc = new InMemoryRandomAccessStream();
+            IOutputStream outputStream = randonAcc.GetOutputStreamAt(0);
+            DataWriter writer = new DataWriter(outputStream);
+            writer.WriteBytes(_imagebyte);
+            await writer.StoreAsync();
+            await writer.FlushAsync();
+            RandomAccessStreamReference streamRef = RandomAccessStreamReference.CreateFromStream(randonAcc);
+            request.Data.SetBitmap(streamRef);
+            deferral.Complete();
+        }
+
+
 #endif
 
 
@@ -176,7 +236,7 @@ namespace CosImg.ExHentai.Model
                 {
                     if (isDownLoaded)
                     {
-                        GetImageBitmapImage(ImageIndex);
+                        GetDownloadedImage(ImageIndex);
                     }
                     else
                     {

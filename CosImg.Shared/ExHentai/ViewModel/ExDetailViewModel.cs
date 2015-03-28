@@ -19,6 +19,9 @@ using ExHentaiLib.Prop;
 using Windows.Networking.Connectivity;
 using System.Net.NetworkInformation;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.ApplicationModel.DataTransfer;
+using Windows.Storage.Streams;
+using System.IO;
 
 namespace CosImg.ExHentai.ViewModel
 {
@@ -84,8 +87,8 @@ namespace CosImg.ExHentai.ViewModel
                 if (isDownLoaded && await FileHelpers.GetDetailCache(Detail.HeaderInfo.TitleEn.GetHashedString()) == null)
                 {
                     await FileHelpers.SaveDetailCache(Detail.HeaderInfo.TitleEn.GetHashedString(), detailStr);
-                }
-
+                } 
+                RegisterForShare();
             }
             catch (Exception)
             {
@@ -93,6 +96,7 @@ namespace CosImg.ExHentai.ViewModel
             }
             isOnLoading = false;
         }
+
 
 
 
@@ -165,18 +169,44 @@ namespace CosImg.ExHentai.ViewModel
                 });
             }
         }
-#if WINDOWS_PHONE_APP
         public ICommand ShareCommand
         {
             get
             {
-                return new DelegateCommand(async () =>
+                return new DelegateCommand(() =>
                 {
-                    await ImageHelper.ShareImage(_headerImageByte, (Detail.HeaderInfo.TitleJp == "" ? Detail.HeaderInfo.TitleEn : Detail.HeaderInfo.TitleJp) + "------" + _link);
+                    DataTransferManager.ShowShareUI();
                 });
             }
         }
-#endif
+
+        private void RegisterForShare()
+        {
+            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
+            dataTransferManager.DataRequested += ShareHandler;
+        }
+
+        private async void ShareHandler(DataTransferManager sender, DataRequestedEventArgs e)
+        {
+            if (_headerImageByte!=null)
+            {
+                DataRequestDeferral deferral = e.Request.GetDeferral();
+                DataRequest request = e.Request;
+                request.Data.Properties.Title = "This Hentai Item";
+                request.Data.SetText((Detail.HeaderInfo.TitleJp == "" ? Detail.HeaderInfo.TitleEn : Detail.HeaderInfo.TitleJp) + "------" + _link);
+                InMemoryRandomAccessStream randonAcc = new InMemoryRandomAccessStream();
+                IOutputStream outputStream = randonAcc.GetOutputStreamAt(0);
+                DataWriter writer = new DataWriter(outputStream);
+                writer.WriteBytes(this._headerImageByte);
+                await writer.StoreAsync();
+                await writer.FlushAsync();
+                RandomAccessStreamReference streamRef = RandomAccessStreamReference.CreateFromStream(randonAcc);
+                request.Data.SetBitmap(streamRef);
+                deferral.Complete();
+            }
+        }
+
+
 
         public ICommand ReadCommand
         {
@@ -184,13 +214,12 @@ namespace CosImg.ExHentai.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn, isDownLoaded));
+                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn));
 
                 });
             }
         }
 
-#if WINDOWS_PHONE_APP
         public ICommand ImageItemClick
         {
             get
@@ -198,12 +227,11 @@ namespace CosImg.ExHentai.ViewModel
                 return new DelegateCommand<ItemClickEventArgs>((e) =>
                 {
                     var item = e.ClickedItem as ImageListInfo;
-                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn, item.ImagePage, isDownLoaded));
+                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn, item.ImagePage));
 
                 });
             }
         }
-#endif
 
         public ICommand DeleFileCommand
         {
@@ -234,8 +262,7 @@ namespace CosImg.ExHentai.ViewModel
                 {
                     if (App.DownLoadList != null && App.DownLoadList.Find((a) => { return a.HashString == Detail.HeaderInfo.TitleEn.GetHashedString(); }) != null)
                     {
-                        MessageDialog dialog = new MessageDialog("Is Downloading");
-                        await dialog.ShowAsync();
+                        await new MessageDialog("Is Downloading").ShowAsync();
                     }
                     else
                     {
@@ -244,6 +271,7 @@ namespace CosImg.ExHentai.ViewModel
                         toast.ShowWithProgressBar();
                         await StartDownLoad();
                         toast.HideWithProgressBar();
+                        new ToastPrompt("Downloading").Show();
                     }
                 });
             }
@@ -275,7 +303,6 @@ namespace CosImg.ExHentai.ViewModel
                 Imagebyte = _headerImageByte
             });
             _favorState = true;
-            new ToastPrompt("Downloading").Show();
             OnPropertyChanged("FavorIcon");
             OnPropertyChanged("FavorButtonText");
         }

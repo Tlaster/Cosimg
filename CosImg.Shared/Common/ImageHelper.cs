@@ -1,59 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Net.Http;
-using System.Net;
 using Windows.Storage;
 using TBase.RT;
-using System.Diagnostics;
 using TBase;
-using Windows.Storage.Search;
-#if WINDOWS_PHONE_APP
-using UmengSocialSDK;
-#endif
 
 namespace CosImg.Common
 {
     public static class ImageHelper
     {
-#if WINDOWS_PHONE_APP
-        public static async Task ShareImage(byte[] imagebyte, string content = "分享图片")
-        {
-            UmengPicture picture = new UmengPicture(imagebyte, content);
-            List<UmengClient> clients = new List<UmengClient>() 
-                    { 
-                        new SinaWeiboClient("549eb88bfd98c51269000c35"), 
-                        new RenrenClient("549eb88bfd98c51269000c35"), 
-                        new QzoneClient("549eb88bfd98c51269000c35"),
-                        new TencentWeiboClient("549eb88bfd98c51269000c35"), 
-                        new DoubanClient("549eb88bfd98c51269000c35"),
-                    };
-            UmengClient umengClient = new MultiClient(clients);
-            var res = await umengClient.SharePictureAsync(picture);
-            switch (res.Status)
-            {
-                case ShareStatus.UserCanceled:
-                case ShareStatus.Unsupported:
-                case ShareStatus.Error:
-                    new ToastPrompt("分享失败").Show();
-                    break;
-                case ShareStatus.OAuthExpired:
-                    new ToastPrompt("分享失败，授权失效").Show();
-                    break;
-                case ShareStatus.Success:
-                    new ToastPrompt("分享成功").Show();
-                    break;
-                default:
-                    break;
-            }
-        }
-#endif
 
         public async static Task<ulong> GetFolderSize(Windows.Storage.StorageFolder folder)
         {
@@ -185,6 +143,16 @@ namespace CosImg.Common
         }
 
 
+        public static async Task SaveDownLoadedImage(string folderName, string fileName, byte[] imagebyte)
+        {
+#if WINDOWS_PHONE_APP
+            var folder = await (await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+#else
+            var folder = await (await ApplicationData.Current.LocalFolder.CreateFolderAsync("download", CreationCollisionOption.OpenIfExists)).GetFolderAsync(folderName);
+#endif
+            var file = await folder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+            await Windows.Storage.FileIO.WriteBytesAsync(file, imagebyte);
+        }
         public static async Task SaveCacheImage(string folderName, string fileName, byte[] imagebyte)
         {
             var cachefolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists);

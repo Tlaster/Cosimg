@@ -20,7 +20,7 @@
     <AppxBundle>Auto</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>ARM</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -127,18 +127,6 @@
     <Content Include="Assets\120x120.scale-240.png" />
     <Content Include="Assets\170x170.scale-240.png" />
     <Content Include="Assets\360x360.scale-240.png" />
-    <Content Include="UmImages\location.png" />
-    <Content Include="UmImages\share.png" />
-    <Content Include="UmImages\sns\douban.png" />
-    <Content Include="UmImages\sns\facebook.png" />
-    <Content Include="UmImages\sns\qzone.png" />
-    <Content Include="UmImages\sns\renren.png" />
-    <Content Include="UmImages\sns\sina.png" />
-    <Content Include="UmImages\sns\tencent.png" />
-    <Content Include="UmImages\sns\twitter.png" />
-    <Content Include="UmImages\sns\wechat.png" />
-    <Content Include="UmImages\sns\wxcircle.png" />
-    <Content Include="UmImages\sns\sms.png" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="StoreManifest.xml" />
   </ItemGroup>
@@ -191,9 +179,6 @@
     </Reference>
     <Reference Include="UmengAnalyticsUniversal">
       <HintPath>..\packages\UmengAnalytics.2.0.2\lib\wpa81\UmengAnalyticsUniversal.dll</HintPath>
-    </Reference>
-    <Reference Include="UmengSocialWP.Winrt">
-      <HintPath>..\packages\UmengSocialWP.2.0.2\lib\wpa\UmengSocialWP.Winrt.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -12,7 +12,7 @@
         <CommandBar>
             <AppBarButton Icon="Refresh" Label="Refresh" Command="{Binding RefreshCommand}" CommandParameter="{Binding ElementName=flipView}"/>
             <AppBarButton Icon="Save" Label="Save" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=flipView}"/>
-            <AppBarButton Icon="Shuffle" Label="Share" Command="{Binding ShareCommand}" CommandParameter="{Binding ElementName=flipView}"/>
+            <AppBarButton Visibility="Collapsed" Icon="Shuffle" Label="Share" Command="{Binding ShareCommand}" CommandParameter="{Binding ElementName=flipView}"/>
         </CommandBar>
     </Page.BottomAppBar>
     

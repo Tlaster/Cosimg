@@ -66,6 +66,8 @@
                             <Button Background="Black" BorderThickness="0" Visibility="{Binding isDownLoaded,Converter={StaticResource BoolToVisibilityConverter},ConverterParameter=true}" Content="DownLoad" Command="{Binding DownLoadCommand}"/>
                             <Button Background="Black" BorderThickness="0" Visibility="{Binding isDownLoaded,Converter={StaticResource BoolToVisibilityConverter}}" Content="Dele File" Command="{Binding DeleFileCommand}"/>
                             <Button Background="Black" BorderThickness="0" Content="{Binding FavorButtonText}" Command="{Binding FavorCommand}"/>
+                            <Button Background="Black" BorderThickness="0" Content="Share" Command="{Binding ShareCommand}"/>
+
                         </StackPanel>
                     </Grid>
                 </DataTemplate>

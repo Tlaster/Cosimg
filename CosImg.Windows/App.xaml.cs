@@ -117,7 +117,8 @@ namespace CosImg
             }
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
-
+            string g = "1427368235538";
+            var b = g.GetHashedString();
 
 
             var lastLaunchTime = SettingHelpers.GetSetting<string>("LastLaunch");

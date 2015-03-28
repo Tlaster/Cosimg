@@ -26,80 +26,85 @@ namespace CosImg.ExHentai.ViewModel
         private string _imagePage;
         public bool isFlipBookView { get; set; }
 
-        public ReadingViewModel(string link,string headerEn,bool isDownLoaded = false)
+        public ReadingViewModel(string link,string headerEn)
         {
             isFlipBookView = SettingHelpers.GetSetting<bool>("isFlipBookView");
             OnPropertyChanged("isFlipBookView");
             this._headerEn = headerEn;
             this._link = link;
-            this._isDownLoaded = isDownLoaded;
             ImageList = new List<ImageModel>();
             OnLoaded();
         }
-#if WINDOWS_PHONE_APP
-        public ReadingViewModel(string link, string headerEn, string imagePage, bool isDownLoaded = false)
-            : this(link, headerEn, isDownLoaded)
+        public ReadingViewModel(string link, string headerEn, string imagePage)
+            : this(link, headerEn)
         {
             this._imagePage = imagePage;
         }
-
-#endif
 
         private async void OnLoaded()
         {
             isOnLoading = true;
             var temp = new List<ImageModel>();
-            if (!NetworkInterface.GetIsNetworkAvailable())
+            if (await DownLoadDBHelpers.CheckItemisDownloaded(this._headerEn.GetHashedString()))
             {
-                if (_isDownLoaded)
-                {
-                    CurrentState = "Now Offline,checking download file";
-                    var a = await DownLoadDBHelpers.Query(_headerEn.GetHashedString());
-                    for (int i = 0; i < a.CurrentPage; i++)
-                    {
-                        temp.Add(new ImageModel()
-                        {
-                            ImageIndex = i,
-                            SaveFolder = _headerEn.GetHashedString(),
-                            isDownLoaded = true,
-                        });
-                    }
-                }
-                else
-                {
-                    CurrentState = "Now Offline,Load Failed";
-                }
-            }
-            else
-            {
-                CurrentState = "Loading...";
-                this._pageList = await ParseHelper.GetImagePageListAsync(_link, SettingHelpers.GetSetting<string>("cookie"));
-                for (int i = 0; i < _pageList.Count; i++)
+                CurrentState = "Now Offline,checking download file";
+                var a = await DownLoadDBHelpers.Query(_headerEn.GetHashedString());
+                for (int i = 0; i < a.CurrentPage; i++)
                 {
                     temp.Add(new ImageModel()
                     {
                         ImageIndex = i,
-                        ImagePage = _pageList[i].ImagePage,
                         SaveFolder = _headerEn.GetHashedString(),
-                        isDownLoaded = this._isDownLoaded,
+                        isDownLoaded = true,
                     });
+                }
+            }
+            else
+            {
+                if (!NetworkInterface.GetIsNetworkAvailable())
+                {
+                    CurrentState = "Now Offline,Load Failed";
+                }
+                else
+                {
+                    CurrentState = "Loading...";
+                    this._pageList = await ParseHelper.GetImagePageListAsync(_link, SettingHelpers.GetSetting<string>("cookie"));
+                    for (int i = 0; i < _pageList.Count; i++)
+                    {
+                        temp.Add(new ImageModel()
+                        {
+                            ImageIndex = i,
+                            ImagePage = _pageList[i].ImagePage,
+                            SaveFolder = _headerEn.GetHashedString(),
+                            isDownLoaded = this._isDownLoaded,
+                        });
+                    }
                 }
             }
             ImageList = temp;
             OnPropertyChanged("ImageList");
-#if WINDOWS_PHONE_APP
             if (_imagePage != null)
             {
                 SelectIndex = _pageList.FindIndex((a) => { return a.ImagePage == _imagePage; });
                 OnPropertyChanged("SelectIndex");
             }
-#endif
             isOnLoading = false;
+            if (await DownLoadDBHelpers.CheckItemisDownloaded(this._headerEn.GetHashedString())&&NetworkInterface.GetIsNetworkAvailable())
+            {
+                Task.Run( async() =>
+                {
+                    this._pageList = await ParseHelper.GetImagePageListAsync(_link, SettingHelpers.GetSetting<string>("cookie"));
+                    for (int i = 0; i < _pageList.Count; i++)
+                    {
+                        ImageList[i].ImagePage = _pageList[i].ImagePage;
+                    }
+                });
+            }
         }
 
+        public int SelectIndex { get; set; }
 #if WINDOWS_PHONE_APP
 
-        public int SelectIndex { get; set; }
         public ICommand RefreshCommand
         {
             get

@@ -21,9 +21,9 @@ using Windows.Storage.Streams;
 using System.Threading.Tasks;
 using System.Net;
 using Windows.Web.Http;
-using UmengSocialSDK;
 using CosImg.Common;
 using HtmlAgilityPack;
+using Windows.ApplicationModel.DataTransfer;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 
@@ -70,6 +70,7 @@ namespace CosImg.CosImg.View
             BitmapImage img = new BitmapImage(new Uri(link));
             ImageByte = await HttpHelper.GetByteArray(node.Attributes["src"].Value);
             this.BigImage.Source = await ImageHelper.ByteArrayToBitmapImage(ImageByte);
+            RegisterForShare();
             proRing.IsActive = false;
         }
 
@@ -80,9 +81,34 @@ namespace CosImg.CosImg.View
             {
                 new ToastPrompt("Please Wait While The Image Is Loading").Show();
                 return;
-            }
-            await ImageHelper.ShareImage(ImageByte);
+            } 
+            DataTransferManager.ShowShareUI();
         }
+        private void RegisterForShare()
+        {
+            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
+            dataTransferManager.DataRequested += ShareHandler;
+        }
+
+        private async void ShareHandler(DataTransferManager sender, DataRequestedEventArgs e)
+        {
+            if (ImageByte != null)
+            {
+                DataRequestDeferral deferral = e.Request.GetDeferral();
+                DataRequest request = e.Request;
+                request.Data.Properties.Title = "分享图片";
+                InMemoryRandomAccessStream randonAcc = new InMemoryRandomAccessStream();
+                IOutputStream outputStream = randonAcc.GetOutputStreamAt(0);
+                DataWriter writer = new DataWriter(outputStream);
+                writer.WriteBytes(this.ImageByte);
+                await writer.StoreAsync();
+                await writer.FlushAsync();
+                RandomAccessStreamReference streamRef = RandomAccessStreamReference.CreateFromStream(randonAcc);
+                request.Data.SetBitmap(streamRef);
+                deferral.Complete();
+            }
+        }
+
 
         private async void AppBarButton_Click(object sender, RoutedEventArgs e)
         {

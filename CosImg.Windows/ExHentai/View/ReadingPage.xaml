@@ -12,7 +12,7 @@
     <Page.Resources>
 
         <DataTemplate x:Key="CommonView">
-            <FlipView ItemsSource="{Binding ImageList}">
+            <FlipView SelectedIndex="{Binding SelectIndex}" ItemsSource="{Binding ImageList}">
                 <FlipView.ItemTemplate>
                     <DataTemplate>
                         <Grid Width="{Binding Width}" Height="{Binding Height}">
@@ -36,7 +36,7 @@
                     <DataTemplate>
                         <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                             <Image Source="{Binding Image}"/>
-                            <ProgressRing IsActive="{Binding isOnLoading}"/>
+                            <ProgressRing Height="50" Width="50" IsActive="{Binding isOnLoading}"/>
                             <StackPanel Visibility="{Binding isLoadFail,Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <TextBlock FontSize="25" HorizontalAlignment="Center" Text="Load Failed"/>
                                 <Button Command="{Binding ReTryCommand}" Content="Click To Reload"/>
@@ -63,7 +63,7 @@
         <ContentPresenter ContentTemplateSelector="{StaticResource ReadingViewSelector}"/>
         <Grid Visibility="{Binding isOnLoading,Converter={StaticResource BoolToVisibilityConverter}}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <StackPanel  HorizontalAlignment="Center" VerticalAlignment="Center">
-                <ProgressRing IsActive="{Binding isOnLoading}"/>
+                <ProgressRing Width="50" Height="50" IsActive="{Binding isOnLoading}"/>
                 <TextBlock FontSize="25" Text="{Binding CurrentState}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </StackPanel>
         </Grid>

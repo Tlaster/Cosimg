@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="CosImg.Windows.App">
-      <m2:VisualElements DisplayName="CosImg" Square150x150Logo="Assets\270x270.png" Square30x30Logo="Assets\256x256.png" Description="CosImg.Windows" ForegroundText="light" BackgroundColor="#00C0FF">
+      <m2:VisualElements DisplayName="CosImg" Square150x150Logo="Assets\270x270.png" Square30x30Logo="Assets\54x54.png" Description="CosImg.Windows" ForegroundText="light" BackgroundColor="#EE3E75">
         <m2:SplashScreen Image="Assets\1116x540.png" />
       </m2:VisualElements>
     </Application>

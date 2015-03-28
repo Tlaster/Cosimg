@@ -63,6 +63,16 @@ namespace CosImg.ExHentai.Common
             return await query.FirstOrDefaultAsync();
         }
 
+
+        public static async Task<bool> CheckItemisDownloaded(string hashStr)
+        {
+            SQLiteAsyncConnection conn = await GetDBConnection();
+            var query = from item in conn.Table<DownLoadInfo>()
+                        where item.HashString == hashStr && item.DownLoadComplete
+                        select item;
+            var result = await query.FirstOrDefaultAsync();
+            return result != default(DownLoadInfo);
+        }
         public static async Task<DownLoadInfo> Query(string hashStr)
         {
             SQLiteAsyncConnection conn = await GetDBConnection();
