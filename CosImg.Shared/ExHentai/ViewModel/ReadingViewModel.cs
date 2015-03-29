@@ -83,15 +83,20 @@ namespace CosImg.ExHentai.ViewModel
             }
             ImageList = temp;
             OnPropertyChanged("ImageList");
-            if (_imagePage != null)
+            if (_imagePage != null && _pageList != null)
             {
                 SelectIndex = _pageList.FindIndex((a) => { return a.ImagePage == _imagePage; });
                 OnPropertyChanged("SelectIndex");
             }
             isOnLoading = false;
-            if (await DownLoadDBHelpers.CheckItemisDownloaded(this._headerEn.GetHashedString())&&NetworkInterface.GetIsNetworkAvailable())
+            await GetImageList();
+        }
+
+        private async Task GetImageList()
+        {
+            if (await DownLoadDBHelpers.CheckItemisDownloaded(this._headerEn.GetHashedString()) && NetworkInterface.GetIsNetworkAvailable())
             {
-                Task.Run( async() =>
+                Task.Run(async () =>
                 {
                     this._pageList = await ParseHelper.GetImagePageListAsync(_link, SettingHelpers.GetSetting<string>("cookie"));
                     for (int i = 0; i < _pageList.Count; i++)
@@ -102,7 +107,10 @@ namespace CosImg.ExHentai.ViewModel
             }
         }
 
+
+
         public int SelectIndex { get; set; }
+
 #if WINDOWS_PHONE_APP
 
         public ICommand RefreshCommand

@@ -304,6 +304,26 @@ namespace CosImg.ExHentai.Common
 
         #endregion
 
+
+
+        public int SelectedIndex
+        {
+            get { return (int)GetValue(SelectedIndexProperty); }
+            set { SetValue(SelectedIndexProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SelectedIndex.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectedIndexProperty =
+            DependencyProperty.Register("SelectedIndex", typeof(int), typeof(FlipBookControl), new PropertyMetadata(0,OnSelectedIndexChangeCallBack));
+
+        private static void OnSelectedIndexChangeCallBack(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var ctrl = (d as FlipBookControl);
+            ctrl.JumpToPage();
+        }
+
+
+
         #region PageIndex
         public int PageIndex
         {
@@ -469,27 +489,27 @@ namespace CosImg.ExHentai.Common
 
         public async void InitPages()
         {
-            if (!isInit && PageIndex == 0 && this.Items.Count > 0)
+            if (!isInit && PageIndex == 0 && this.Items.Count > PageIndex)
             {
                 await Task.Delay(DelayLoad);
                 List<object> needLoadItems = new List<object>();
                 //第一次加载 载入4页
-                CPresenter.DataContext = this.Items[0];
-                needLoadItems.Add(Items[0]);
-                if (this.Items.Count > 1)
+                CPresenter.DataContext = this.Items[PageIndex];
+                needLoadItems.Add(Items[PageIndex]);
+                if (this.Items.Count > PageIndex + 1)
                 {
-                    DPresenter.DataContext = this.Items[1];
-                    needLoadItems.Add(Items[1]);
+                    DPresenter.DataContext = this.Items[PageIndex + 1];
+                    needLoadItems.Add(Items[PageIndex + 1]);
                 }
-                if (this.Items.Count > 2)
+                if (this.Items.Count > PageIndex + 2)
                 {
-                    EPresenter.DataContext = this.Items[2];
-                    needLoadItems.Add(Items[2]);
+                    EPresenter.DataContext = this.Items[PageIndex + 2];
+                    needLoadItems.Add(Items[PageIndex + 2]);
                 }
-                if (this.Items.Count > 3)
+                if (this.Items.Count > PageIndex + 3)
                 {
-                    FPresenter.DataContext = this.Items[3];
-                    needLoadItems.Add(Items[3]);
+                    FPresenter.DataContext = this.Items[PageIndex + 3];
+                    needLoadItems.Add(Items[PageIndex + 3]);
                 }
                 if (null != NeedLoadingItem)
                     NeedLoadingItem(this, new FlipLoadArgs(needLoadItems, false));
@@ -692,8 +712,8 @@ namespace CosImg.ExHentai.Common
             //if (isManipulating && !CanScale)
             if (isManipulating)
             {
-                if (isNext)
-                {
+                if (isNext)                {
+
                     #region 下一页
                     var rightTopNect = rightTopPage.Clip.Rect;
                     var nextRect = nextPage.Clip.Rect;
@@ -932,15 +952,52 @@ namespace CosImg.ExHentai.Common
         #endregion
 
         #region Method
+
+        private void JumpToPage()
+        {
+            Status = 0;
+            RefreshPageByStatus();
+            isLoaded = false;
+            PageIndex = SelectedIndex;
+            CPresenter.DataContext = this.Items[PageIndex];
+            if (this.Items.Count > PageIndex + 1)
+            {
+                DPresenter.DataContext = this.Items[PageIndex + 1];
+            }
+            if (this.Items.Count > PageIndex + 2)
+            {
+                EPresenter.DataContext = this.Items[PageIndex + 2];
+            }
+            if (this.Items.Count > PageIndex + 3)
+            {
+                FPresenter.DataContext = this.Items[PageIndex + 3];
+            }
+            if (PageIndex - 1 >= 0 && Items.Count > PageIndex - 1)
+            {
+                BPresenter.DataContext = this.Items[PageIndex - 1];
+            }
+            if (PageIndex - 2 >= 0 && Items.Count > PageIndex - 2)
+            {
+                APresenter.DataContext = this.Items[PageIndex - 2];
+            }
+
+            isLoaded = true;
+        }
+
         #region LoadPageContentByPageIndex
         private void LoadPageContentByPageIndex(int PageIndex, bool isNextOrPrev, ContentPresenter firstPresenter, ContentPresenter secondPresenter)
         {
-            List<object> needLoadItems = new List<object>();
+            List<object> needLoadItems = new List<object>(); 
             if (isNextOrPrev)
             {
                 //加载下一页模板
+
+
                 if (PageIndex + 2 < this.Items.Count)
                 {
+
+                    //EPresenter.DataContext = this.Items[PageIndex + 2];
+                    //needLoadItems.Add(Items[PageIndex + 2]);
                     firstPresenter.Content = null;
                     firstPresenter.DataContext = null;
                     object item = null;
@@ -954,6 +1011,8 @@ namespace CosImg.ExHentai.Common
                 else firstPresenter.DataContext = null;
                 if (PageIndex + 3 < this.Items.Count)
                 {
+                    //FPresenter.DataContext = this.Items[PageIndex + 3];
+                    //needLoadItems.Add(Items[PageIndex + 3]);
                     object item = null;
                     secondPresenter.Content = null;
                     secondPresenter.DataContext = null;
@@ -1081,8 +1140,6 @@ namespace CosImg.ExHentai.Common
                 presenters.Add(rightTopPage.Child as ContentPresenter);
                 presenters.Add(nextPage.Child as ContentPresenter);
             }
-            Debug.WriteLine("presenter0Name:" + presenters[0].Name);
-            Debug.WriteLine("presenter1Name:" + presenters[1].Name);
             return presenters;
         }
         #endregion

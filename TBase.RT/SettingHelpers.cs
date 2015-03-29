@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 
 namespace TBase.RT
 {
@@ -25,7 +26,7 @@ namespace TBase.RT
             settings.Values.Add(settingName, setValue);
         }
 
-        public static T GetSetting<T>(string settingName ,bool isThrowException = false)
+        public static T GetSetting<T>(string settingName, bool isThrowException = false)
         {
             var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
             T chackValue = default(T);
@@ -43,20 +44,6 @@ namespace TBase.RT
             return chackValue;
         }
 
-        public static bool GetSetting(string settingName, string onValue)
-        {
-            var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            string chackValue = "";
-            if (settings.Values.ContainsKey(settingName))
-            {
-                chackValue = (string)settings.Values[settingName];
-            }
-            else
-            {
-                return false;
-            }
-            return chackValue.Equals(onValue) ? true : false;
-        }
 
     }
 }

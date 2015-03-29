@@ -31,7 +31,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="FlipBookView">
-            <common:FlipBookControl ItemsSource="{Binding ImageList}">
+            <common:FlipBookControl SelectedIndex="{Binding SelectIndex}" ItemsSource="{Binding ImageList}">
                 <common:FlipBookControl.ItemTemplate>
                     <DataTemplate>
                         <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
