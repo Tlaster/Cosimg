@@ -84,13 +84,7 @@ namespace CosImg.ExHentai.ViewModel
             }
             ImageList = temp;
             OnPropertyChanged("ImageList");
-            /*
-            if (_imageIndex != null && _pageList != null)
-            {
-                SelectIndex = _pageList.FindIndex((a) => { return a.ImagePage == _imageIndex; });
-                OnPropertyChanged("SelectIndex");
-            }
-             */
+
             if (_imageIndex != null && ImageList != null)
             {
                 int numericalIndex = 0;
@@ -100,7 +94,6 @@ namespace CosImg.ExHentai.ViewModel
                 OnPropertyChanged("SelectIndex");
             }
             isOnLoading = false;
-            // await GetImageList();
         }
 
         private async Task GetImageList()
