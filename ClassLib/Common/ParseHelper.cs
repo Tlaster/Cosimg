@@ -104,7 +104,7 @@ namespace ExHentaiLib.Common
                              UpLoadInfo = (from a in htmldoc.GetElementbyId("gdd").FirstChild.ChildNodes
                                            select new UpLoadInfo
                                            {
-                                               Value = a.InnerText,
+                                               Value = HtmlEntity.DeEntitize(a.InnerText),
                                            }).ToList(),
                              MaxImageCount = GetMaxImageCount(htmldoc.DocumentNode.GetNodebyClassName("gpc").InnerText),
                              DetailPageCount = htmldoc.DocumentNode.GetNodebyClassName("ptt").FirstChild.ChildNodes.Count - 2,
@@ -120,7 +120,7 @@ namespace ExHentaiLib.Common
                                             where a.HasChildNodes && a.FirstChild.Name == "div"
                                             select new CommentInfo
                                             {
-                                                Poster = a.GetNodebyClassName("c3").InnerText,
+                                                Poster = HtmlEntity.DeEntitize(a.GetNodebyClassName("c3").InnerText),
                                                 Content = HtmlEntity.DeEntitize(a.GetNodebyClassName("c6").InnerText),
                                                 Score = a.GetNodebyClassName("c5 nosel") != null ? a.GetNodebyClassName("c5 nosel").InnerText : a.GetNodebyClassName("c4 nosel") != null ? a.GetNodebyClassName("c4 nosel").InnerText : "",
                                                 Base = a.GetNodebyClassName("c7") == null ? "" : a.GetNodebyClassName("c7").InnerText,
