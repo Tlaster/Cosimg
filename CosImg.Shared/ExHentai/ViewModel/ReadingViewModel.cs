@@ -23,7 +23,7 @@ namespace CosImg.ExHentai.ViewModel
         private List<ExHentaiLib.Prop.ImageListInfo> _pageList;
         private string _headerEn;
         private bool _isDownLoaded;
-        private string _imagePage;
+        private string _imageIndex;
         public bool isFlipBookView { get; set; }
 
         public ReadingViewModel(string link,string headerEn)
@@ -35,10 +35,10 @@ namespace CosImg.ExHentai.ViewModel
             ImageList = new List<ImageModel>();
             OnLoaded();
         }
-        public ReadingViewModel(string link, string headerEn, string imagePage)
+        public ReadingViewModel(string link, string headerEn, string imageIndex)
             : this(link, headerEn)
         {
-            this._imagePage = imagePage;
+            this._imageIndex = imageIndex;
         }
 
         private async void OnLoaded()
@@ -58,6 +58,7 @@ namespace CosImg.ExHentai.ViewModel
                         isDownLoaded = true,
                     });
                 }
+                await GetImageList();
             }
             else
             {
@@ -83,13 +84,23 @@ namespace CosImg.ExHentai.ViewModel
             }
             ImageList = temp;
             OnPropertyChanged("ImageList");
-            if (_imagePage != null && _pageList != null)
+            /*
+            if (_imageIndex != null && _pageList != null)
             {
-                SelectIndex = _pageList.FindIndex((a) => { return a.ImagePage == _imagePage; });
+                SelectIndex = _pageList.FindIndex((a) => { return a.ImagePage == _imageIndex; });
+                OnPropertyChanged("SelectIndex");
+            }
+             */
+            if (_imageIndex != null && ImageList != null)
+            {
+                int numericalIndex = 0;
+                try { numericalIndex = Convert.ToInt32(_imageIndex) - 1; } catch (Exception) { }
+                if (numericalIndex < 0 || numericalIndex >= ImageList.Count()) numericalIndex = 0;
+                SelectIndex = numericalIndex;
                 OnPropertyChanged("SelectIndex");
             }
             isOnLoading = false;
-            await GetImageList();
+            // await GetImageList();
         }
 
         private async Task GetImageList()

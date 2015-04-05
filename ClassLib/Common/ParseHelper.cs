@@ -113,6 +113,7 @@ namespace ExHentaiLib.Common
                                           select new ImageListInfo
                                           {
                                               ImageName = (a.InnerText),
+                                              ImageIndex = a.FirstChild.FirstChild.Attributes["alt"].Value,
                                               ImgeSrc = a.FirstChild.FirstChild.Attributes["src"].Value,
                                               ImagePage = (a.FirstChild.Attributes["href"].Value) + "?",
                                           }).ToList(),
