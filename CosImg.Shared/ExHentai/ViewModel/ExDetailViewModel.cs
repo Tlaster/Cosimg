@@ -58,6 +58,7 @@ namespace CosImg.ExHentai.ViewModel
                         if (detailStr != null)
                         {
                             Detail = ParseHelper.GetDetailFromString(detailStr);
+                            HeaderImage = Detail.HeaderInfo.HeaderImage;
                             new ToastPrompt("Now Offline,Loading Cache").Show();
                         }
                         else
@@ -78,9 +79,8 @@ namespace CosImg.ExHentai.ViewModel
                     {
                         PageList.Add(new PageListModel() { Page = (i + 1).ToString(), Uri = this._link + "?p=" + i });
                     }
-                    _headerImageByte = await HttpHelper.GetByteArrayWithPostMethod(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"));
-                    _headerImage = await ImageHelper.ByteArrayToBitmapImage(_headerImageByte);
-                    OnPropertyChanged("HeaderImage");
+                    _headerImageByte = await HttpHelper.GetByteArrayWith("GET", Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"));
+                    HeaderImage = Detail.HeaderInfo.HeaderImage;
                 }
                 _favorState = _favoritem == null ? false : true;
                 isDownLoaded = _downlaoditem != null && _downlaoditem.DownLoadComplete ? true : false;
@@ -227,7 +227,7 @@ namespace CosImg.ExHentai.ViewModel
                 return new DelegateCommand<ItemClickEventArgs>((e) =>
                 {
                     var item = e.ClickedItem as ImageListInfo;
-                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn, item.ImagePage));
+                    App.rootFrame.Navigate(typeof(ReadingPage), new ReadingViewModel(this._link, this.Detail.HeaderInfo.TitleEn, item.ImageIndex));
 
                 });
             }
@@ -317,12 +317,15 @@ namespace CosImg.ExHentai.ViewModel
             get { return _isDownLoaded; }
             set { _isDownLoaded = value; OnPropertyChanged("isDownLoaded"); }
         }
-        private BitmapImage _headerImage;
-        public BitmapImage HeaderImage
+
+        private string _headerImage;
+        public string HeaderImage
         {
-            get
+            get { return _headerImage; }
+            set
             {
-                return _headerImage;
+                _headerImage = value;
+                OnPropertyChanged("HeaderImage");
             }
         }
 

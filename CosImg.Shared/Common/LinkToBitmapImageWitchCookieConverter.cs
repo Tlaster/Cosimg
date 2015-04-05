@@ -25,18 +25,19 @@ namespace CosImg.Common
         {
             throw new NotImplementedException();
         }
+
         private async Task<BitmapImage> GetImage(string link)
         {
             try
             {
-                return await ImageHelper.ByteArrayToBitmapImage(await HttpHelper.GetByteArrayWithPostMethod(link, SettingHelpers.GetSetting<string>("cookie") + ParseHelper.unconfig));
-
+                return await ImageHelper.ByteArrayToBitmapImage(
+                    await HttpHelper.GetByteArrayWith(
+                    "GET", link, SettingHelpers.GetSetting<string>("cookie") + ParseHelper.unconfig));
             }
             catch (Exception)
             {
                 return new BitmapImage();
             }
-
         }
     }
 }

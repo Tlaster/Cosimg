@@ -134,6 +134,7 @@ namespace CosImg.ExHentai.Model
                         await ImageHelper.SaveCacheImage(SaveFolder, ImageIndex.ToString(), _imagebyte);
                     }
                     _client.Dispose();
+                    _client = null;
                 }
                 _image = new WeakReference(await ImageHelper.ByteArrayToBitmapImage(_imagebyte));
                 OnPropertyChanged("Image");

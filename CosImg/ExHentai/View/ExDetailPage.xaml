@@ -69,15 +69,15 @@
 								<RowDefinition Height="auto"/>
 								<RowDefinition Height="auto"/>
 							</Grid.RowDefinitions>
-							<Grid>
-								<Grid.RowDefinitions>
-									<RowDefinition Height="*"/>
-									<RowDefinition Height="*"/>
-								</Grid.RowDefinitions>
-								<TextBlock TextWrapping="Wrap" Text="{Binding Detail.HeaderInfo.TitleEn}" FontSize="25"/>
-								<TextBlock Foreground="Gray" Grid.Row="1" TextWrapping="Wrap" Text="{Binding Detail.HeaderInfo.TitleJp}" FontSize="25"/>
-							</Grid>
-                            <Image Margin="8,16" Grid.Row="1" MaxHeight="350" MinHeight="200" Source="{Binding HeaderImage}"/>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock TextWrapping="Wrap" Text="{Binding Detail.HeaderInfo.TitleEn}" FontSize="25"/>
+                                <TextBlock Foreground="Gray" Grid.Row="1" TextWrapping="Wrap" Text="{Binding Detail.HeaderInfo.TitleJp}" FontSize="25"/>
+                            </Grid>
+                            <Image Margin="8,16" Grid.Row="1" MaxHeight="350" MinHeight="200" DataContext="{Binding HeaderImage, Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" Source="{Binding Result}" />
 							<TextBlock Grid.Row="2" Text="{Binding Detail.RateValue}" FontSize="15"/>
 							<ListView Grid.Row="3" ItemsSource="{Binding Detail.UpLoadInfo}">
 								<ListView.ItemTemplate>

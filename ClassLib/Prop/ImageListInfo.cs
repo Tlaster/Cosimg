@@ -10,6 +10,8 @@ namespace ExHentaiLib.Prop
     {
         public string ImageName { get; set; }
 
+        public string ImageIndex { get; set; }
+
         public string ImgeSrc { get; set; }
 
         public string ImagePage { get; set; }
