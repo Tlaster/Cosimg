@@ -78,7 +78,7 @@ namespace CosImg.ExHentai.ViewModel
                     {
                         PageList.Add(new PageListModel() { Page = (i + 1).ToString(), Uri = this._link + "?p=" + i });
                     }
-                    _headerImageByte = await HttpHelper.GetByteArrayWithPostMethod(Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"));
+                    _headerImageByte = await HttpHelper.GetByteArrayWith("GET", Detail.HeaderInfo.HeaderImage, SettingHelpers.GetSetting<string>("cookie"));
                     _headerImage = await ImageHelper.ByteArrayToBitmapImage(_headerImageByte);
                     OnPropertyChanged("HeaderImage");
                 }

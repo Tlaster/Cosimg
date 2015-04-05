@@ -19,11 +19,11 @@ namespace TBase
             return bit;
         }
 
-        public static async Task<byte[]> GetByteArrayWithPostMethod(string link, string cookie)
+        public static async Task<byte[]> GetByteArrayWith(string method, string link, string cookie)
         {
             var req = WebRequest.CreateHttp(link);
             req.Headers["Cookie"] = cookie;
-            req.Method = "GET";
+            req.Method = method;
             var res = await req.GetResponseAsync();
             using (var resStream = res.GetResponseStream())
             {
