@@ -23,7 +23,7 @@ namespace TBase
         {
             var req = WebRequest.CreateHttp(link);
             req.Headers["Cookie"] = cookie;
-            req.Method = "POST";
+            req.Method = "GET";
             var res = await req.GetResponseAsync();
             using (var resStream = res.GetResponseStream())
             {
