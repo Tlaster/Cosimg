@@ -712,7 +712,8 @@ namespace CosImg.ExHentai.Common
             //if (isManipulating && !CanScale)
             if (isManipulating)
             {
-                if (isNext)                {
+                if (isNext)                
+                {
 
                     #region 下一页
                     var rightTopNect = rightTopPage.Clip.Rect;

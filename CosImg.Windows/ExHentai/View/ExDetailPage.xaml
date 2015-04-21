@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
-
+    xmlns:toolkit="using:WinRTXamlToolkit.Controls"
     >
     
     <Page.Resources>
@@ -26,6 +26,11 @@
                             </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <toolkit:WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
                 </ListView>
             </Grid>
         </DataTemplate>
@@ -67,7 +72,6 @@
                             <Button Background="Black" BorderThickness="0" Visibility="{Binding isDownLoaded,Converter={StaticResource BoolToVisibilityConverter}}" Content="Dele File" Command="{Binding DeleFileCommand}"/>
                             <Button Background="Black" BorderThickness="0" Content="{Binding FavorButtonText}" Command="{Binding FavorCommand}"/>
                             <Button Background="Black" BorderThickness="0" Content="Share" Command="{Binding ShareCommand}"/>
-
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
@@ -79,7 +83,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
-                        <Image Margin="8,16" Grid.Column="0" MaxHeight="350" MinHeight="200" Source="{Binding HeaderImage}"/>
+                        <Image Margin="8,16" Grid.Column="0" MaxHeight="350" MinHeight="200" DataContext="{Binding HeaderImage, Converter={StaticResource LinkToBitmapImageWitchCookieConverter}}" Source="{Binding Result}"/>
                         <Grid Grid.Column="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
@@ -97,7 +101,7 @@
                     </Grid>
                 </DataTemplate>
             </HubSection>
-            <HubSection Header="Tags">
+            <HubSection Header="Tags" MaxWidth="600">
                 <DataTemplate>
                     <ListView IsSwipeEnabled="False" SelectionMode="None" Foreground="White" Background="Transparent" ItemsSource="{Binding Detail.HeaderInfo.TagInfo}" ItemTemplate="{StaticResource TagListTemple}"/>
                 </DataTemplate>

@@ -105,36 +105,34 @@ namespace CosImg.ExHentai.Model
                 }
                 else
                 {
-                    if (_client == null)
+                    using (HttpClient _client = new HttpClient())
                     {
-                        _client = new HttpClient();
-                        _client.DefaultRequestHeaders.Add("Cookie", SettingHelpers.GetSetting<string>("cookie"));
-                    }
-                    if (_imageuri == null)
-                    {
-                        _imageuri = await ParseHelper.GetImageAync(uri, SettingHelpers.GetSetting<string>("cookie"));
-                    }
-                    using (var res = await _client.GetAsync(_imageuri))
-                    {
-                        if (res.Content.Headers.Contains("Content-Disposition"))
+                        _client.Timeout = TimeSpan.FromSeconds(20d);
+                        _client.DefaultRequestHeaders.Add("Cookie", SettingHelpers.GetSetting<string>("cookie")); 
+                        if (_imageuri == null)
                         {
-                            throw new HttpRequestException();
+                            _imageuri = await ParseHelper.GetImageAync(uri, SettingHelpers.GetSetting<string>("cookie"));
+                        }
+                        using (var res = await _client.GetAsync(_imageuri))
+                        {
+                            if (res.Content.Headers.Contains("Content-Disposition"))
+                            {
+                                throw new HttpRequestException();
+                            }
+                            else
+                            {
+                                _imagebyte = await res.Content.ReadAsByteArrayAsync();
+                            }
+                        }
+                        if (await DownLoadDBHelpers.CheckItemisDownloaded(SaveFolder))
+                        {
+                            await ImageHelper.SaveDownLoadedImage(SaveFolder, ImageIndex.ToString(), _imagebyte);
                         }
                         else
                         {
-                            _imagebyte = await res.Content.ReadAsByteArrayAsync();
+                            await ImageHelper.SaveCacheImage(SaveFolder, ImageIndex.ToString(), _imagebyte);
                         }
                     }
-                    if (await DownLoadDBHelpers.CheckItemisDownloaded(SaveFolder))
-                    {
-                        await ImageHelper.SaveDownLoadedImage(SaveFolder, ImageIndex.ToString(), _imagebyte);
-                    }
-                    else
-                    {
-                        await ImageHelper.SaveCacheImage(SaveFolder, ImageIndex.ToString(), _imagebyte);
-                    }
-                    _client.Dispose();
-                    _client = null;
                 }
                 _image = new WeakReference(await ImageHelper.ByteArrayToBitmapImage(_imagebyte));
                 OnPropertyChanged("Image");
@@ -188,6 +186,7 @@ namespace CosImg.ExHentai.Model
             }
             await ImageHelper.SaveImage(Path.GetFileName(_imageuri) ?? SaveFolder + ImageIndex + ".jpg", await ImageHelper.GetCacheImage(SaveFolder, ImageIndex.ToString()));
         }
+
 #if WINDOWS_PHONE_APP
         public async void Share()
         {
@@ -247,7 +246,7 @@ namespace CosImg.ExHentai.Model
                 }
             }
         }
-        HttpClient _client;
+        //HttpClient _client;
         //WeakReference _client;
         WeakReference _image;
         private string _imageuri;

@@ -192,6 +192,7 @@
   <AccountPackageIdentityNames>
     <MainPackageIdentityName>51945Tlaster.CosImgBeta</MainPackageIdentityName>
     <MainPackageIdentityName>51945Tlaster.IT</MainPackageIdentityName>
+    <MainPackageIdentityName>51945Tlaster.29023F521D69</MainPackageIdentityName>
     <MainPackageIdentityName>51945Tlaster.6330CD7B2126</MainPackageIdentityName>
     <MainPackageIdentityName>51945Tlaster.4368968E00214</MainPackageIdentityName>
   </AccountPackageIdentityNames>
@@ -199,7 +200,7 @@
     <PackageInfo>
       <OsMinVersion>6.3.0.0</OsMinVersion>
       <PackageArchitecture>arm</PackageArchitecture>
-      <PackageMaxArchitectureVersion>0.0.0.19</PackageMaxArchitectureVersion>
+      <PackageMaxArchitectureVersion>1.0.0.0</PackageMaxArchitectureVersion>
     </PackageInfo>
   </PackageInfoList>
 </StoreAssociation>

@@ -356,8 +356,25 @@
   <AccountPackageIdentityNames>
     <MainPackageIdentityName>51945Tlaster.CosImgBeta</MainPackageIdentityName>
     <MainPackageIdentityName>51945Tlaster.IT</MainPackageIdentityName>
+    <MainPackageIdentityName>51945Tlaster.29023F521D69</MainPackageIdentityName>
     <MainPackageIdentityName>51945Tlaster.6330CD7B2126</MainPackageIdentityName>
     <MainPackageIdentityName>51945Tlaster.4368968E00214</MainPackageIdentityName>
   </AccountPackageIdentityNames>
-  <PackageInfoList LandingUrl="https://appdev.microsoft.com:443/StorePortals/Developer/Catalog/ReleaseAnchor/9e0c1ab5-ad3d-4d67-9ae7-a04393b29726" />
+  <PackageInfoList LandingUrl="https://appdev.microsoft.com:443/StorePortals/Developer/Catalog/ReleaseAnchor/9e0c1ab5-ad3d-4d67-9ae7-a04393b29726">
+    <PackageInfo>
+      <OsMinVersion>6.3.0.0</OsMinVersion>
+      <PackageArchitecture>arm</PackageArchitecture>
+      <PackageMaxArchitectureVersion>1.0.0.0</PackageMaxArchitectureVersion>
+    </PackageInfo>
+    <PackageInfo>
+      <OsMinVersion>6.3.0.0</OsMinVersion>
+      <PackageArchitecture>x64</PackageArchitecture>
+      <PackageMaxArchitectureVersion>1.0.0.0</PackageMaxArchitectureVersion>
+    </PackageInfo>
+    <PackageInfo>
+      <OsMinVersion>6.3.0.0</OsMinVersion>
+      <PackageArchitecture>x86</PackageArchitecture>
+      <PackageMaxArchitectureVersion>1.0.0.0</PackageMaxArchitectureVersion>
+    </PackageInfo>
+  </PackageInfoList>
 </StoreAssociation>

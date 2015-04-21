@@ -7,6 +7,7 @@
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
     x:Class="CosImg.ExHentai.View.ExDetailPage"
     mc:Ignorable="d"
+    xmlns:toolkit="using:WinRTXamlToolkit.Controls"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
@@ -18,14 +19,14 @@
         		</Grid.ColumnDefinitions>
         		<TextBlock Grid.Column="0" Text="{Binding Name}" FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Center" Padding="0,8,0,0"/>
         		<GridView Grid.Column="1" ItemsSource="{Binding Value}" BorderThickness="0" Background="Transparent">
-        			<GridView.ItemsPanel>
-        				<ItemsPanelTemplate>
-        					<ItemsStackPanel/>
-        				</ItemsPanelTemplate>
-        			</GridView.ItemsPanel>
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <toolkit:WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
         			<GridView.ItemTemplate>
         				<DataTemplate>
-        					<Border BorderBrush="{ThemeResource PhoneForegroundBrush}" BorderThickness="1" CornerRadius="5">
+        					<Border Margin="4" BorderBrush="{ThemeResource PhoneForegroundBrush}" BorderThickness="1" CornerRadius="5">
         						<TextBlock Text="{Binding}" Margin="2" FontSize="15" HorizontalAlignment="Center"/>
         					</Border>
         				</DataTemplate>
